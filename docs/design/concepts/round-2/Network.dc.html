@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — концепт 1: Сеть агентов</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#06060B}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.uc-marquee{animation:ucMarquee 38s linear infinite}
+</style>
+</helmet>
+<div style="background: #06060B; color: #FFFFFF; font-family: 'Onest', system-ui, sans-serif; overflow: hidden;">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 22px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+<a href="#top" aria-label="UpCore — на главную"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 26px; width: auto; display: block;"></a>
+<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 15px;">
+<a href="#agents" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 14px;">Агенты</a>
+<a href="#dash" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 14px;">Возможности</a>
+<a href="#method" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 14px;">Методология</a>
+<a href="#blog" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 14px;">Блог</a>
+<a href="#about" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 14px;">О компании</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 10px;">
+<a href="#en" style="color: rgba(255,255,255,0.8); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 12px 8px;">RU · EN</a>
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 12px; background: #63D5FF; color: #06060B; font-weight: 700; text-decoration: none;">Регистрация</a>
+</div>
+</header>
+
+<!-- HERO -->
+<section id="top" style="max-width: 1320px; margin: 0 auto; padding: 40px 32px 56px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 26px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">4 ИИ-АГЕНТА · 1 ПЛАТФОРМА · 0 ОТЧЁТОВ</div>
+<h1 style="margin: 0; font-size: clamp(40px, 5vw, 74px); line-height: 1.02; letter-spacing: -0.035em; font-weight: 800;">Ваш код анализирует команда <span style="color: #63D5FF;">ИИ-агентов</span></h1>
+<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.76); max-width: 560px;">Подключите GitHub или GitLab — цифровой тимлид UpCore прочитает каждый MR и раздаст работу четырём агентам: оценка, ИИ-эффективность, проекты и наставничество.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 14px; background: #63D5FF; color: #06060B; font-weight: 700; font-size: 17px; text-decoration: none;">Подключить репозиторий</a>
+<a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.24); color: #FFFFFF; font-weight: 600; font-size: 17px; text-decoration: none;">Заказать аудит</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 28px; padding-top: 8px;">
+<div><div style="font-size: 32px; font-weight: 800; color: #63D5FF;">96%</div><div style="font-size: 14px; color: rgba(255,255,255,0.66);">от экспертной оценки</div></div>
+<div><div style="font-size: 32px; font-weight: 800;">1500+</div><div style="font-size: 14px; color: rgba(255,255,255,0.66);">разработчиков посчитано</div></div>
+<div><div style="font-size: 32px; font-weight: 800;">50+</div><div style="font-size: 14px; color: rgba(255,255,255,0.66);">факторов в каждом MR</div></div>
+</div>
+</div>
+
+<!-- Animated agent network -->
+<div style="flex: 1.25 1 560px; min-width: 0;">
+<svg viewBox="0 0 760 540" role="img" aria-label="Схема: код из GitHub, GitLab и ИИ-агента разработчика попадает в ядро UpCore и распределяется четырём агентам" style="width: 100%; height: auto; display: block;">
+<defs>
+<radialGradient id="ucCoreGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#63D5FF" stop-opacity="0.45"></stop><stop offset="100%" stop-color="#63D5FF" stop-opacity="0"></stop></radialGradient>
+</defs>
+<!-- links in -->
+<path d="M140 110 C 230 110, 240 270, 298 270" fill="none" stroke="rgba(99,213,255,0.28)" stroke-width="1.5"></path>
+<path d="M140 270 L 298 270" fill="none" stroke="rgba(99,213,255,0.28)" stroke-width="1.5"></path>
+<path d="M140 430 C 230 430, 240 270, 298 270" fill="none" stroke="rgba(99,213,255,0.28)" stroke-width="1.5"></path>
+<!-- links out -->
+<path d="M422 270 C 490 270, 480 90, 538 90" fill="none" stroke="rgba(99,213,255,0.35)" stroke-width="1.5"></path>
+<path d="M422 270 C 490 270, 480 210, 538 210" fill="none" stroke="rgba(155,140,255,0.35)" stroke-width="1.5"></path>
+<path d="M422 270 C 490 270, 480 330, 538 330" fill="none" stroke="rgba(242,193,78,0.35)" stroke-width="1.5"></path>
+<path d="M422 270 C 490 270, 480 450, 538 450" fill="none" stroke="rgba(83,192,77,0.35)" stroke-width="1.5"></path>
+
+<!-- sources -->
+<g font-family="JetBrains Mono, monospace" font-size="14" fill="#FFFFFF">
+<rect x="20" y="88" width="120" height="44" rx="12" fill="#11111A" stroke="rgba(255,255,255,0.16)"></rect><text x="80" y="115" text-anchor="middle">GitHub</text>
+<rect x="20" y="248" width="120" height="44" rx="12" fill="#11111A" stroke="rgba(255,255,255,0.16)"></rect><text x="80" y="275" text-anchor="middle">GitLab</text>
+<rect x="20" y="408" width="120" height="44" rx="12" fill="#11111A" stroke="rgba(255,255,255,0.16)"></rect><text x="80" y="428" text-anchor="middle" font-size="12">агент</text><text x="80" y="443" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">промпты</text>
+</g>
+
+<!-- MR packets flowing in -->
+<g><rect x="-18" y="-9" width="36" height="18" rx="5" fill="#63D5FF"></rect><text x="0" y="4" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#06060B">MR</text><animateMotion dur="3s" repeatCount="indefinite" path="M140 110 C 230 110, 240 270, 298 270"></animateMotion></g>
+<g><rect x="-18" y="-9" width="36" height="18" rx="5" fill="#63D5FF"></rect><text x="0" y="4" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#06060B">MR</text><animateMotion dur="3s" begin="1s" repeatCount="indefinite" path="M140 270 L 298 270"></animateMotion></g>
+<g><rect x="-22" y="-9" width="44" height="18" rx="5" fill="#9B8CFF"></rect><text x="0" y="4" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#06060B">PROMPT</text><animateMotion dur="3s" begin="2s" repeatCount="indefinite" path="M140 430 C 230 430, 240 270, 298 270"></animateMotion></g>
+<g><rect x="-18" y="-9" width="36" height="18" rx="5" fill="#63D5FF" opacity="0.7"></rect><text x="0" y="4" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="600" fill="#06060B">MR</text><animateMotion dur="3s" begin="1.6s" repeatCount="indefinite" path="M140 110 C 230 110, 240 270, 298 270"></animateMotion></g>
+
+<!-- core -->
+<circle cx="360" cy="270" r="120" fill="url(#ucCoreGlow)"></circle>
+<circle cx="360" cy="270" r="62" fill="none" stroke="#63D5FF" stroke-opacity="0.6"><animate attributeName="r" values="62;84;62" dur="3s" repeatCount="indefinite"></animate><animate attributeName="stroke-opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"></animate></circle>
+<circle cx="360" cy="270" r="80" fill="none" stroke="rgba(99,213,255,0.5)" stroke-dasharray="3 9"><animateTransform attributeName="transform" type="rotate" from="0 360 270" to="360 360 270" dur="24s" repeatCount="indefinite"></animateTransform></circle>
+<circle cx="360" cy="270" r="62" fill="#11111A" stroke="#63D5FF" stroke-width="1.5"></circle>
+<g transform="translate(345 239) scale(0.098)"><path fill="#63D5FF" d="M340.243 410.873C322.404 436.777 298.363 465.078 268.118 495.774L166.429 598.984C149.417 616.251 135.926 628.481 125.958 635.674C116.005 643.826 105.711 645.5 95.078 640.695C84.4595 636.849 69.8902 625.803 51.3702 607.556L9.90889 566.705L249.7 322.254L0.000749597 79.9674L43.9849 35.3256C61.4698 17.5791 75.6986 6.54952 86.6712 2.23669C96.6839 -2.07669 106.793 -0.151217 116.998 8.01309C126.716 15.6972 140.347 28.1827 157.893 45.4695L271.54 157.442C294.446 180.011 314.443 200.659 331.531 219.385C348.146 238.591 359.968 258.274 366.999 278.434C373.542 298.114 374.78 322.343 370.134 347.567C365.05 375.17 358.57 385.448 340.243 410.873Z"></path></g>
+<text x="360" y="372" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="rgba(255,255,255,0.7)">50+ факторов · AST</text>
+
+<!-- outgoing signals -->
+<circle r="5" fill="#63D5FF"><animateMotion dur="2.4s" repeatCount="indefinite" path="M422 270 C 490 270, 480 90, 538 90"></animateMotion></circle>
+<circle r="5" fill="#9B8CFF"><animateMotion dur="2.4s" begin="0.6s" repeatCount="indefinite" path="M422 270 C 490 270, 480 210, 538 210"></animateMotion></circle>
+<circle r="5" fill="#F2C14E"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M422 270 C 490 270, 480 330, 538 330"></animateMotion></circle>
+<circle r="5" fill="#53C04D"><animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite" path="M422 270 C 490 270, 480 450, 538 450"></animateMotion></circle>
+
+<!-- agents -->
+<g font-family="Onest, sans-serif">
+<circle cx="560" cy="90" r="22" fill="#11111A" stroke="#63D5FF" stroke-width="2"></circle><circle cx="560" cy="90" r="7" fill="#63D5FF"><animate attributeName="opacity" values="1;0.35;1" dur="2.4s" repeatCount="indefinite"></animate></circle>
+<text x="596" y="84" font-size="17" font-weight="700" fill="#FFFFFF">Grade</text><text x="596" y="105" font-size="13" fill="#63D5FF">Senior · 8.5 / 10</text>
+<circle cx="560" cy="210" r="22" fill="#11111A" stroke="#9B8CFF" stroke-width="2"></circle><circle cx="560" cy="210" r="7" fill="#9B8CFF"><animate attributeName="opacity" values="1;0.35;1" dur="2.4s" begin="0.6s" repeatCount="indefinite"></animate></circle>
+<text x="596" y="204" font-size="17" font-weight="700" fill="#FFFFFF">AI</text><text x="596" y="225" font-size="13" fill="#B9AEFF">46% MR сделано с ИИ</text>
+<circle cx="560" cy="330" r="22" fill="#11111A" stroke="#F2C14E" stroke-width="2"></circle><circle cx="560" cy="330" r="7" fill="#F2C14E"><animate attributeName="opacity" values="1;0.35;1" dur="2.4s" begin="1.2s" repeatCount="indefinite"></animate></circle>
+<text x="596" y="324" font-size="17" font-weight="700" fill="#FFFFFF">Projects</text><text x="596" y="345" font-size="13" fill="#F2C14E">бюджет по коду, ч и ₽</text>
+<circle cx="560" cy="450" r="22" fill="#11111A" stroke="#53C04D" stroke-width="2"></circle><circle cx="560" cy="450" r="7" fill="#53C04D"><animate attributeName="opacity" values="1;0.35;1" dur="2.4s" begin="1.8s" repeatCount="indefinite"></animate></circle>
+<text x="596" y="444" font-size="17" font-weight="700" fill="#FFFFFF">Mentor</text><text x="596" y="465" font-size="13" fill="#7FDB7A">план развития: 3 темы</text>
+</g>
+</svg>
+</div>
+</section>
+
+<!-- Live ticker -->
+<div aria-label="Лента событий агентов" style="border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); background: #0B0B12; overflow: hidden;">
+<div class="uc-marquee" style="display: flex; width: max-content; gap: 48px; padding: 16px 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: rgba(255,255,255,0.78); white-space: nowrap;">
+<span><span style="color: #63D5FF;">●</span> !2639 оценён · 1.6 ч UpCore · эффективность 100%</span>
+<span><span style="color: #53C04D;">●</span> Лукьянов Александр → новый грейд Senior</span>
+<span><span style="color: #E86565;">●</span> красная зона: 2 человека второй месяц подряд</span>
+<span><span style="color: #9B8CFF;">●</span> 37 из 488 MR сделаны с ИИ</span>
+<span><span style="color: #F2C14E;">●</span> сэкономлено 114 ч ручного ревью · +228 тыс. ₽</span>
+<span><span style="color: #63D5FF;">●</span> проведено авто-ревью 457 из 488 MR</span>
+<span><span style="color: #63D5FF;">●</span> !2639 оценён · 1.6 ч UpCore · эффективность 100%</span>
+<span><span style="color: #53C04D;">●</span> Лукьянов Александр → новый грейд Senior</span>
+<span><span style="color: #E86565;">●</span> красная зона: 2 человека второй месяц подряд</span>
+<span><span style="color: #9B8CFF;">●</span> 37 из 488 MR сделаны с ИИ</span>
+<span><span style="color: #F2C14E;">●</span> сэкономлено 114 ч ручного ревью · +228 тыс. ₽</span>
+<span><span style="color: #63D5FF;">●</span> проведено авто-ревью 457 из 488 MR</span>
+</div>
+</div>
+
+<!-- DASHBOARDS -->
+<section id="dash" style="max-width: 1320px; margin: 0 auto; padding: 96px 32px;">
+<h2 style="margin: 0 0 12px; font-size: clamp(32px, 3.4vw, 52px); letter-spacing: -0.03em; font-weight: 800; line-height: 1.05;">Что видят агенты</h2>
+<p style="margin: 0 0 40px; font-size: 18px; color: rgba(255,255,255,0.72); max-width: 620px; line-height: 1.5;">Живые экраны платформы на демо-данных компании Dex.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 16px;">
+
+<!-- Company -->
+<article style="flex: 2 1 620px; min-width: 0; border-radius: 24px; background: #11111A; border: 1px solid rgba(255,255,255,0.08); padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;"><h3 style="margin: 0; font-size: 20px;">Компания · октябрь 2026</h3><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.6);">Dex-outsource · 14 специалистов</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center;">
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+<figure style="margin: 0; text-align: center;"><svg viewBox="0 0 110 110" width="110" height="110" role="img" aria-label="Время на задачи 71%"><circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="55" cy="55" r="44" fill="none" stroke="#63D5FF" stroke-width="9" stroke-linecap="round" stroke-dasharray="196.3 276.5" transform="rotate(-90 55 55)"></circle><text x="55" y="61" text-anchor="middle" font-family="Onest" font-size="22" font-weight="800" fill="#FFFFFF">71%</text></svg><figcaption style="font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px;">время на задачи</figcaption></figure>
+<figure style="margin: 0; text-align: center;"><svg viewBox="0 0 110 110" width="110" height="110" role="img" aria-label="Эффективность 100%"><circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="55" cy="55" r="44" fill="none" stroke="#53C04D" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.5 276.5" transform="rotate(-90 55 55)"></circle><text x="55" y="61" text-anchor="middle" font-family="Onest" font-size="22" font-weight="800" fill="#FFFFFF">100%</text></svg><figcaption style="font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px;">эффективность</figcaption></figure>
+<figure style="margin: 0; text-align: center;"><svg viewBox="0 0 110 110" width="110" height="110" role="img" aria-label="MR с ИИ 8%"><circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"></circle><circle cx="55" cy="55" r="44" fill="none" stroke="#9B8CFF" stroke-width="9" stroke-linecap="round" stroke-dasharray="22.1 276.5" transform="rotate(-90 55 55)"></circle><text x="55" y="61" text-anchor="middle" font-family="Onest" font-size="22" font-weight="800" fill="#FFFFFF">8%</text></svg><figcaption style="font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px;">MR с ИИ (37/488)</figcaption></figure>
+</div>
+<div style="flex: 1 1 280px; min-width: 0;">
+<div style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 8px;">Динамика эффективности: компания vs рынок</div>
+<svg viewBox="0 0 320 130" role="img" aria-label="Эффективность компании выросла с 35% в январе до 100% в октябре, рынок около 62%" style="width: 100%; height: auto;">
+<line x1="10" y1="51.8" x2="310" y2="51.8" stroke="#F2C14E" stroke-dasharray="4 4" stroke-width="1.5"></line>
+<polyline points="15,91.5 45,80.5 75,88.2 105,71.7 135,73.9 165,67.3 195,59.6 225,57.4 255,28.8 285,10" fill="none" stroke="#63D5FF" stroke-width="3" stroke-linejoin="round"></polyline>
+<circle cx="285" cy="10" r="5" fill="#63D5FF"></circle>
+<text x="15" y="124" font-family="Onest" font-size="10" fill="rgba(255,255,255,0.6)">янв</text><text x="275" y="124" font-family="Onest" font-size="10" fill="rgba(255,255,255,0.6)">окт</text><text x="200" y="46" font-family="Onest" font-size="10" fill="#F2C14E">рынок</text>
+</svg>
+</div>
+</div>
+</article>
+
+<!-- Level radar -->
+<article style="flex: 1 1 380px; min-width: 0; border-radius: 24px; background: #11111A; border: 1px solid rgba(255,255,255,0.08); padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><h3 style="margin: 0; font-size: 20px;">Уровень работы</h3><span style="font-size: 22px; font-weight: 800; color: #63D5FF;">Senior 8.5</span></div>
+<svg viewBox="0 0 300 300" role="img" aria-label="Радар уровня по 10 осям: эффективность 10, задачи 6.8, качество кода 7.5, код-ревью 7.7, архитектура 3.1, сложность кода 5.2, технологии 6.4, тех-мэтч 9.5, результирующий код 9.1, баги 5.1" style="width: 100%; height: auto; max-width: 340px; align-self: center;">
+<polygon points="150.0,40.0 214.7,61.0 254.6,116.0 254.6,184.0 214.7,239.0 150.0,260.0 85.3,239.0 45.4,184.0 45.4,116.0 85.3,61.0" fill="none" stroke="rgba(255,255,255,0.12)"></polygon>
+<polygon points="150.0,67.5 198.5,83.3 228.5,124.5 228.5,175.5 198.5,216.7 150.0,232.5 101.5,216.7 71.5,175.5 71.5,124.5 101.5,83.3" fill="none" stroke="rgba(255,255,255,0.35)" stroke-dasharray="4 4"></polygon>
+<polygon points="150.0,95.0 182.3,105.5 202.3,133.0 202.3,167.0 182.3,194.5 150.0,205.0 117.7,194.5 97.7,167.0 97.7,133.0 117.7,105.5" fill="none" stroke="rgba(255,255,255,0.12)"></polygon>
+<polygon points="150.0,40.0 194.0,89.5 228.5,124.5 230.6,176.2 170.0,177.6 150.0,207.2 108.6,207.0 50.6,182.3 54.8,119.1 117.0,104.6" fill="rgba(99,213,255,0.22)" stroke="#63D5FF" stroke-width="2"></polygon>
+<g font-family="Onest" font-size="10" fill="rgba(255,255,255,0.72)" text-anchor="middle">
+<text x="150" y="28">Эффективность</text><text x="236" y="46">Задачи</text><text x="274" y="104">Качество</text><text x="276" y="198">Ревью</text><text x="236" y="262">Архитектура</text><text x="150" y="282">Сложность</text><text x="64" y="262">Технологии</text><text x="26" y="198">Тех-мэтч</text><text x="26" y="104">Результат</text><text x="64" y="46">Баги</text>
+</g>
+</svg>
+<div style="font-size: 13px; color: rgba(255,255,255,0.66);">Пунктир — уровень Senior. Лукьянов Александр, UpCore Backend</div>
+</article>
+
+<!-- Timesheet -->
+<article style="flex: 1 1 460px; min-width: 0; border-radius: 24px; background: #11111A; border: 1px solid rgba(255,255,255,0.08); padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+<h3 style="margin: 0; font-size: 20px;">Табель, который заполняется сам</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px;">
+<div><div style="color: rgba(255,255,255,0.6);">Календарное</div><div style="font-size: 24px; font-weight: 800;">29 ч</div></div>
+<div><div style="color: rgba(255,255,255,0.6);">Jira</div><div style="font-size: 24px; font-weight: 800;">43 ч</div></div>
+<div><div style="color: rgba(255,255,255,0.6);">Время UpCore</div><div style="font-size: 24px; font-weight: 800; color: #63D5FF;">113 ч</div></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Пн 5</span><span style="padding: 4px; border-radius: 6px; background: rgba(255,255,255,0.08);">W 7h</span><span style="padding: 4px; border-radius: 6px; background: rgba(99,213,255,0.2); color: #A8E8FF;">MR ×4</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Вт 6</span><span style="padding: 4px; border-radius: 6px; background: rgba(255,255,255,0.08);">W 10h</span><span style="padding: 4px; border-radius: 6px; background: rgba(99,213,255,0.2); color: #A8E8FF;">MR ×3</span><span style="padding: 4px; border-radius: 6px; background: rgba(155,140,255,0.2); color: #CFC7FF;">C ×1</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Ср 7</span><span style="padding: 4px; border-radius: 6px; background: rgba(255,255,255,0.08);">W 8h</span><span style="padding: 4px; border-radius: 6px; background: rgba(99,213,255,0.2); color: #A8E8FF;">MR ×3</span><span style="padding: 4px; border-radius: 6px; background: rgba(155,140,255,0.2); color: #CFC7FF;">C ×2</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Чт 8</span><span style="padding: 4px; border-radius: 6px; background: rgba(255,255,255,0.08);">W 10h</span><span style="padding: 4px; border-radius: 6px; background: rgba(99,213,255,0.2); color: #A8E8FF;">MR ×1</span><span style="padding: 4px; border-radius: 6px; background: rgba(155,140,255,0.2); color: #CFC7FF;">C ×1</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Пт 9</span><span style="padding: 4px; border-radius: 6px; background: rgba(255,255,255,0.08);">W 8h</span><span style="padding: 4px; border-radius: 6px; background: rgba(155,140,255,0.2); color: #CFC7FF;">C ×3</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Сб 10</span><span style="color: rgba(255,255,255,0.45);">—</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px;"><span style="color: rgba(255,255,255,0.6);">Вс 11</span><span style="color: rgba(255,255,255,0.45);">—</span></div>
+</div>
+<div style="font-size: 13px; color: rgba(255,255,255,0.66);">W — ворклог Jira, MR — merge request, C — коммит. Неделя 05–11 октября.</div>
+</article>
+
+<!-- Conclusions -->
+<article style="flex: 1 1 380px; min-width: 0; border-radius: 24px; background: #11111A; border: 1px solid rgba(255,255,255,0.08); padding: 28px; display: flex; flex-direction: column; gap: 12px;">
+<h3 style="margin: 0 0 4px; font-size: 20px;">Выводы агента</h3>
+<div style="padding: 14px 16px; border-radius: 14px; background: rgba(99,213,255,0.08); font-size: 15px; line-height: 1.5;">Авто-ревью: <b>457 из 488 MR</b>. Сэкономлено <b>114 ч</b> ручного ревью.</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: rgba(232,101,101,0.1); font-size: 15px; line-height: 1.5;">Красная зона: <b>2 человека</b> второй месяц подряд, потери <b>−542,5 тыс. ₽</b>.</div>
+<div style="padding: 14px 16px; border-radius: 14px; background: rgba(83,192,77,0.1); font-size: 15px; line-height: 1.5;">Рост: Лукьянов Александр — <b>Senior</b>, +6 позиций в рейтинге.</div>
+</article>
+
+<!-- Rating -->
+<article style="flex: 1 1 460px; min-width: 0; border-radius: 24px; background: #11111A; border: 1px solid rgba(255,255,255,0.08); padding: 28px; display: flex; flex-direction: column; gap: 14px;">
+<h3 style="margin: 0; font-size: 20px;">Рейтинг команды · UpCore Backend</h3>
+<div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 120px 48px; gap: 10px; align-items: center; font-size: 14px;"><span style="color: rgba(255,255,255,0.6);">1</span><span>Ярослав Землинский</span><span style="height: 8px; border-radius: 4px; background: #53C04D;"></span><span style="text-align: right;">100%</span></div>
+<div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 120px 48px; gap: 10px; align-items: center; font-size: 14px;"><span style="color: rgba(255,255,255,0.6);">2</span><span>Макс Тонкоглас</span><span style="height: 8px; border-radius: 4px; background: #53C04D;"></span><span style="text-align: right;">100%</span></div>
+<div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 120px 48px; gap: 10px; align-items: center; font-size: 14px;"><span style="color: rgba(255,255,255,0.6);">3</span><span>Лукьянов Александр</span><span style="height: 8px; border-radius: 4px; background: #53C04D;"></span><span style="text-align: right;">100%</span></div>
+<div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 120px 48px; gap: 10px; align-items: center; font-size: 14px;"><span style="color: rgba(255,255,255,0.6);">5</span><span>Александр Ткаченко</span><span style="height: 8px; border-radius: 4px; background: linear-gradient(90deg, #F2C14E 72%, rgba(255,255,255,0.08) 72%);"></span><span style="text-align: right;">72%</span></div>
+<div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 120px 48px; gap: 10px; align-items: center; font-size: 14px;"><span style="color: rgba(255,255,255,0.6);">7</span><span>Алексей Петровский</span><span style="height: 8px; border-radius: 4px; background: linear-gradient(90deg, #E86565 4%, rgba(255,255,255,0.08) 4%);"></span><span style="text-align: right; color: #F08A8A;">2%</span></div>
+</article>
+</div>
+</section>
+
+<!-- AGENTS / products -->
+<section id="agents" style="max-width: 1320px; margin: 0 auto; padding: 0 32px 96px;">
+<h2 style="margin: 0 0 36px; font-size: clamp(32px, 3.4vw, 52px); letter-spacing: -0.03em; font-weight: 800; line-height: 1.05;">Четыре агента — четыре продукта</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+<a href="#grade" style="border-radius: 24px; padding: 28px; background: #11111A; border: 1px solid rgba(99,213,255,0.35); color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="width: 14px; height: 14px; border-radius: 50%; background: #63D5FF;"></span><span style="font-size: 26px; font-weight: 800;">UpCore Grade</span><span style="color: rgba(255,255,255,0.74); line-height: 1.5;">Рейтинг эффективности и грейд-уровень каждого специалиста по анализу MR.</span><span style="color: #63D5FF; font-weight: 600;">Подробнее →</span></a>
+<a href="#ai" style="border-radius: 24px; padding: 28px; background: #11111A; border: 1px solid rgba(155,140,255,0.35); color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="width: 14px; height: 14px; border-radius: 50%; background: #9B8CFF;"></span><span style="font-size: 26px; font-weight: 800;">UpCore AI</span><span style="color: rgba(255,255,255,0.74); line-height: 1.5;">Авто-детект ИИ-кода и сбор промптов: кто вайбкодит и насколько эффективно.</span><span style="color: #B9AEFF; font-weight: 600;">Подробнее →</span></a>
+<a href="#projects" style="border-radius: 24px; padding: 28px; background: #11111A; border: 1px solid rgba(242,193,78,0.35); color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="width: 14px; height: 14px; border-radius: 50%; background: #F2C14E;"></span><span style="font-size: 26px; font-weight: 800;">UpCore Projects</span><span style="color: rgba(255,255,255,0.74); line-height: 1.5;">Эффективность проектов, контроль подрядчиков, бюджет проекта по коду.</span><span style="color: #F2C14E; font-weight: 600;">Подробнее →</span></a>
+<a href="#mentor" style="border-radius: 24px; padding: 28px; background: #11111A; border: 1px solid rgba(83,192,77,0.35); color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="width: 14px; height: 14px; border-radius: 50%; background: #53C04D;"></span><span style="font-size: 26px; font-weight: 800;">UpCore Mentor</span><span style="color: rgba(255,255,255,0.74); line-height: 1.5;">ИИ-наставник: где проседает эффективность и как стать сильнее.</span><span style="color: #7FDB7A; font-weight: 600;">Подробнее →</span></a>
+</div>
+</section>
+
+<!-- METHOD -->
+<section id="method" style="max-width: 1320px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="border-radius: 32px; background: #0B0B12; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+<div style="flex: 0 1 auto;"><div style="font-size: clamp(88px, 10vw, 160px); font-weight: 800; line-height: 0.9; letter-spacing: -0.05em; color: #63D5FF;">96%</div><div style="font-size: 20px; margin-top: 10px;">от экспертной оценки</div></div>
+<ol style="flex: 1 1 480px; min-width: 0; margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; font-size: 17px; line-height: 1.5; color: rgba(255,255,255,0.82);">
+<li>Каждый MR раскладывается на 50+ факторов: стек, сложность, место в архитектуре, результирующий код.</li>
+<li>Оценка строится по 100+ задачам подряд — на дистанции статистика сглаживает аномалии.</li>
+<li>Ядро — детерминированная математика, модели калибруются под каждый стек. ИИ-агенты работают поверх.</li>
+<li>Модели проверены на 1500+ разработчиках, а каждый вывод можно проверить до строчки кода.</li>
+</ol>
+</div>
+</section>
+
+<section style="max-width: 1320px; margin: 0 auto; padding: 0 32px 72px;">
+<div style="border-radius: 32px; background: #63D5FF; color: #06060B; padding: clamp(32px, 5vw, 64px); display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between;">
+<h2 style="margin: 0; flex: 1 1 520px; font-size: clamp(30px, 3.4vw, 50px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">Запустите агентов на своём репозитории</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;"><a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 14px; background: #06060B; color: #FFFFFF; font-weight: 700; text-decoration: none;">Регистрация</a><a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 14px; border: 1.5px solid #06060B; color: #06060B; font-weight: 700; text-decoration: none;">office@dex-it.ru</a></div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid rgba(255,255,255,0.08);"><div style="max-width: 1320px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: rgba(255,255,255,0.7);"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (985) 848-35-55 · @upcore_ai</span></div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3600}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
