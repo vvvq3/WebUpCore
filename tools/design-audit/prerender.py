@@ -6,6 +6,18 @@ import re, sys, os, html
 SRC, OUT = sys.argv[1], sys.argv[2]
 REPO = '/home/user/WebUpCore'
 BLOBS = {
+    'f43be9baafd8829d6b16ffe80acc1058': REPO + '/docs/brand/logo.svg',
+    'b75df264cd5b3518da714c1bfe73295a': REPO + '/docs/brand/logo-dark.svg',
+    'bafb77824e1d39daa3b420922830060f': REPO + '/docs/reference/demo/slides/star.jpg',
+    'd8917cd1a1d057105dfc6c6f648403a0': REPO + '/docs/reference/demo/slides/company.jpg',
+    '078b103a94164c4d026935ab418de02e': REPO + '/docs/reference/demo/slides/efficiency.jpg',
+    '8e065b6e6d912548df6ac04a1d4801aa': REPO + '/docs/reference/demo/slides/timesheet.jpg',
+    '1b955fad8df5479c19c6d27c0152e677': REPO + '/docs/reference/demo/slides/eye.jpg',
+    '15b42da0691260ad6b49fb37e4d648bf': REPO + '/docs/reference/demo/slides/rating.jpg',
+    'd4215a5dcf98764dc2068afdfb82ca2f': REPO + '/docs/reference/demo/slides/quality.jpg',
+    '00ee65e2d395b5fdbfdbabcfe4a1b3ef': REPO + '/docs/reference/demo/slides/techmap.jpg',
+    '93d0ed58db776563015d10b8660132e6': REPO + '/docs/reference/demo/video/teaser.mp4',
+    'dd9427e92ed40645720e9a95710530d7': REPO + '/docs/reference/demo/video/poster.jpg',
     'd4c2740f35d5c35e496626ba187a1752': REPO + '/docs/brand/logo.svg',
     '75fbf6048ce4882bb5f39aa3202b0f6d': REPO + '/docs/brand/logo-dark.svg',
     'afdf675f8bedfead15e609fdb13aa49b': REPO + '/docs/reference/demo/slides/star.jpg',
