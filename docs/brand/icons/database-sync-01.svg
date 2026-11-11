@@ -1,0 +1,12 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(1.1667 30.8336) scale(1 -1)">
+  <g>
+  <ellipse cx="10.6667" cy="4" rx="10.6667" ry="4" transform="matrix(1 0 0 -1 1.5 28.1673)" stroke="#63D5FF" stroke-width="3"/>
+  <path d="M5.5 16.3779C6.30211 16.1368 7.19911 15.9382 8.16667 15.7913" stroke="#63D5FF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M5.5 7.04457C6.30211 6.80345 7.19911 6.60488 8.16667 6.45801" stroke="#63D5FF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M14.8333 10.1675L16.3484 8.21372C17.1107 11.0582 20.0352 12.7462 22.8803 11.984C24.3367 11.5939 25.49 10.6373 26.1667 9.41498M28.1667 3.50252L26.6516 5.45367C25.8892 2.60923 22.9647 0.921204 20.1196 1.68337C18.697 2.06446 17.5636 2.98594 16.8811 4.16771" stroke="#63D5FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22.8333 24.1673V16.1564M1.5 24.1673L1.5 5.4751C1.5 3.4325 5.57158 1.74701 10.8333 1.50062" stroke="#63D5FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1.5 14.834C1.5 12.7782 5.57158 11.0819 10.8333 10.834" stroke="#63D5FF" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</g>
+</svg>
