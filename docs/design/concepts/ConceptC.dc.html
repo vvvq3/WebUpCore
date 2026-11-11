@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — концепт C: Рентген кода</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif;">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+<a href="#top" aria-label="UpCore — на главную"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 26px; width: auto; display: block;"></a>
+<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 28px; font-size: 15px;">
+<a href="#products" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">Grade</a>
+<a href="#products" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">AI</a>
+<a href="#products" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">Projects</a>
+<a href="#products" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">Mentor</a>
+<a href="#method" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">Методология</a>
+<a href="#blog" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px 0;">Блог</a>
+</nav>
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 10px; border: 1px solid #63D5FF; color: #63D5FF; font-weight: 700; text-decoration: none;">Регистрация →</a>
+</header>
+
+<!-- HERO -->
+<section id="top" style="max-width: 1320px; margin: 0 auto; padding: 72px 40px 88px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #63D5FF; margin-bottom: 24px;">UpCore / цифровой тимлид</div>
+<h1 style="margin: 0; font-size: clamp(48px, 8vw, 128px); line-height: 0.95; letter-spacing: -0.045em; font-weight: 800; max-width: 1180px;">Код — лучший отчёт<span style="color: #63D5FF;">.</span></h1>
+<div style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 36px; align-items: flex-end; justify-content: space-between;">
+<p style="margin: 0; flex: 1 1 460px; max-width: 620px; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.5; color: rgba(255,255,255,0.8);">Мы просвечиваем каждый Merge Request насквозь и переводим его в реально затраченное время. Без отчётов, тайм-трекеров и субъективных оценок.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 54px; padding: 0 28px; border-radius: 12px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px; text-decoration: none;">Подключить GitHub / GitLab</a>
+<a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 54px; padding: 0 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); color: #FFFFFF; font-weight: 600; font-size: 17px; text-decoration: none;">Аудит проекта</a>
+</div>
+</div>
+
+<!-- X-ray: code -> annotations -> result -->
+<div style="margin-top: 64px; display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch;">
+<div style="flex: 3 1 560px; min-width: 0; border-radius: 20px; background: #12111C; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.75;">
+<div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.65);"><span>!2639 · DP-3513 Обновление оценки багов</span><span>Лукьянов Александр</span></div>
+<div style="overflow-x: auto;">
+<div style="min-width: 620px; padding: 12px 0;">
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px; color: rgba(255,255,255,0.45);"><span>41</span><span>public static class CalculateBugLevel</span><span></span></div>
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px; background: rgba(99,213,255,0.10);"><span style="color: #63D5FF;">+42</span><span>  var density = bugs / (lines / 1000.0);</span><span style="color: #63D5FF;">◆ ядро · вес высокий</span></div>
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px; background: rgba(99,213,255,0.10);"><span style="color: #63D5FF;">+43</span><span>  return MapValueAttentionZone(density, opts);</span><span style="color: #63D5FF;">◆ когн. сложность 11.9</span></div>
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px; background: rgba(83,192,77,0.08);"><span style="color: #6FD66A;">+44</span><span>  // AttentionZoneOptions → BugMetricsOptions</span><span style="color: rgba(255,255,255,0.55);">○ шум · 0 ч</span></div>
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px; background: rgba(232,101,101,0.08);"><span style="color: #F08A8A;">−45</span><span style="color: rgba(255,255,255,0.6);">  var old = LegacyBugLevel(mr);</span><span style="color: rgba(255,255,255,0.55);">○ удалено · свой код</span></div>
+<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) 200px; padding: 0 20px;"><span style="color: #6FD66A;">+46</span><span>  public static int MaxScore =&gt; 10;</span><span style="color: rgba(255,255,255,0.55);">○ периферия</span></div>
+</div>
+</div>
+</div>
+<div style="flex: 2 1 340px; min-width: 0; border-radius: 20px; background: #63D5FF; color: #0D0C15; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;">РЕЗУЛЬТАТ РЕНТГЕНА</div>
+<div style="display: flex; flex-direction: column; gap: 14px;">
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(13,12,21,0.2); padding-bottom: 10px;"><span style="font-size: 16px;">Время UpCore</span><span style="font-size: 32px; font-weight: 800;">1.6 ч</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(13,12,21,0.2); padding-bottom: 10px;"><span style="font-size: 16px;">Календарное время MR</span><span style="font-size: 32px; font-weight: 800;">0.7 ч</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(13,12,21,0.2); padding-bottom: 10px;"><span style="font-size: 16px;">Результирующий код</span><span style="font-size: 32px; font-weight: 800;">100%</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 16px;">Эффективность</span><span style="font-size: 32px; font-weight: 800;">100%</span></div>
+</div>
+<div style="font-size: 14px; line-height: 1.45;">Оценено моделью m1 v.1489 · Backend, C#</div>
+</div>
+</div>
+</section>
+
+<!-- PRODUCTS as editorial list -->
+<section id="products" style="max-width: 1320px; margin: 0 auto; padding: 0 40px 96px;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: flex-end; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.14);">
+<h2 style="margin: 0; font-size: clamp(34px, 4vw, 60px); letter-spacing: -0.035em; font-weight: 800; line-height: 1;">Одна платформа — четыре ответа</h2>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: rgba(255,255,255,0.66);">общий анализ кода · общие данные</span>
+</div>
+<a href="#grade" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; text-decoration: none;">
+<span style="flex: 0 0 90px; font-family: 'JetBrains Mono', monospace; color: #63D5FF; font-size: 16px;">01</span>
+<span style="flex: 1 1 280px; font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em;">Grade</span>
+<span style="flex: 2 1 420px; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.78);">Насколько эффективен и какого уровня каждый специалист? Рейтинг и грейд по анализу MR.</span>
+<span style="flex: 0 0 auto; font-size: 24px; color: #63D5FF;">→</span>
+</a>
+<a href="#ai" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; text-decoration: none;">
+<span style="flex: 0 0 90px; font-family: 'JetBrains Mono', monospace; color: #63D5FF; font-size: 16px;">02</span>
+<span style="flex: 1 1 280px; font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em;">AI</span>
+<span style="flex: 2 1 420px; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.78);">Окупается ли ИИ? Авто-детект ИИ-кода и промпт-коллектор показывают, кто вайбкодит и с какой отдачей.</span>
+<span style="flex: 0 0 auto; font-size: 24px; color: #63D5FF;">→</span>
+</a>
+<a href="#projects" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; text-decoration: none;">
+<span style="flex: 0 0 90px; font-family: 'JetBrains Mono', monospace; color: #63D5FF; font-size: 16px;">03</span>
+<span style="flex: 1 1 280px; font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em;">Projects</span>
+<span style="flex: 2 1 420px; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.78);">Сколько на самом деле стоит проект? Бюджет по коду, контроль подрядчиков, прогноз сроков.</span>
+<span style="flex: 0 0 auto; font-size: 24px; color: #63D5FF;">→</span>
+</a>
+<a href="#mentor" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; text-decoration: none;">
+<span style="flex: 0 0 90px; font-family: 'JetBrains Mono', monospace; color: #63D5FF; font-size: 16px;">04</span>
+<span style="flex: 1 1 280px; font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em;">Mentor</span>
+<span style="flex: 2 1 420px; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.78);">Как команде стать сильнее? ИИ-наставник находит, где проседает эффективность, и даёт рекомендации.</span>
+<span style="flex: 0 0 auto; font-size: 24px; color: #63D5FF;">→</span>
+</a>
+</section>
+
+<!-- METHOD / 96% -->
+<section id="method" style="max-width: 1320px; margin: 0 auto; padding: 0 40px 96px;">
+<div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start;">
+<div style="flex: 1 1 420px; min-width: 0;">
+<div style="font-size: clamp(110px, 14vw, 220px); line-height: 0.82; font-weight: 800; letter-spacing: -0.06em; color: #63D5FF;">96%</div>
+<div style="font-size: clamp(22px, 2vw, 30px); font-weight: 700; margin-top: 16px; letter-spacing: -0.01em;">точность от экспертной оценки</div>
+</div>
+<div style="flex: 1 1 520px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 32px;">
+<div style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 16px;"><div style="font-size: 32px; font-weight: 800;">50+</div><div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5; margin-top: 6px;">факторов в каждом MR: стек, сложность, архитектура, результирующий код</div></div>
+<div style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 16px;"><div style="font-size: 32px; font-weight: 800;">100+</div><div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5; margin-top: 6px;">задач подряд в каждой оценке — статистика вместо одного мнения</div></div>
+<div style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 16px;"><div style="font-size: 32px; font-weight: 800;">AST</div><div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5; margin-top: 6px;">полный граф связей проекта: ядро весит больше периферии</div></div>
+<div style="border-top: 1px solid rgba(255,255,255,0.18); padding-top: 16px;"><div style="font-size: 32px; font-weight: 800;">1500+</div><div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5; margin-top: 6px;">разработчиков, на которых откалиброваны модели</div></div>
+</div>
+</div>
+</section>
+
+<!-- BLOG teaser -->
+<section id="blog" style="max-width: 1320px; margin: 0 auto; padding: 0 40px 96px;">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;"><h2 style="margin: 0; font-size: 32px; letter-spacing: -0.02em;">Из блога</h2><a href="#blog" style="text-decoration: none; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center;">Все статьи →</a></div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px;">
+<a href="#post-goodhart" style="flex: 1 1 300px; min-width: 0; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); padding: 24px; color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">Методология</span><span style="font-size: 22px; font-weight: 700; line-height: 1.25;">Закон Гудхарта в эпоху ИИ: почему старые метрики программистов мертвы</span></a>
+<a href="#post-ai" style="flex: 1 1 300px; min-width: 0; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); padding: 24px; color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">UpCore AI</span><span style="font-size: 22px; font-weight: 700; line-height: 1.25;">Как измерить эффективность ИИ в разработке</span></a>
+<a href="#post-vendor" style="flex: 1 1 300px; min-width: 0; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12); padding: 24px; color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">UpCore Projects</span><span style="font-size: 22px; font-weight: 700; line-height: 1.25;">Акт на 1500 часов: как проверить ИТ-подрядчика и не переплатить</span></a>
+</div>
+</section>
+
+<section style="border-top: 1px solid rgba(255,255,255,0.1);">
+<div style="max-width: 1320px; margin: 0 auto; padding: 72px 40px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: center;">
+<h2 style="margin: 0; flex: 1 1 560px; font-size: clamp(34px, 4.4vw, 68px); letter-spacing: -0.04em; font-weight: 800; line-height: 1;">Просветите свой репозиторий<span style="color: #63D5FF;">.</span></h2>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 54px; padding: 0 28px; border-radius: 12px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px; text-decoration: none;">Регистрация</a>
+<a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 54px; padding: 0 28px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); color: #FFFFFF; font-weight: 600; font-size: 17px; text-decoration: none;">office@dex-it.ru</a>
+</div>
+</div>
+</section>
+
+<footer style="max-width: 1320px; margin: 0 auto; padding: 24px 40px 48px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: rgba(255,255,255,0.7);">
+<img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 22px; width: auto;">
+<span>Продукт компании Dex · RU / EN</span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
