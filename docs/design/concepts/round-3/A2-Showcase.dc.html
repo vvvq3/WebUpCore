@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — A2 Витрина</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucDraw{0%{stroke-dashoffset:100;fill-opacity:0}40%{stroke-dashoffset:0;fill-opacity:0}55%,90%{stroke-dashoffset:0;fill-opacity:.22}100%{stroke-dashoffset:0;fill-opacity:0}}
+@keyframes ucSwapA{0%,42%{opacity:1}50%,94%{opacity:0}100%{opacity:1}}
+@keyframes ucSwapB{0%,42%{opacity:0}50%,94%{opacity:1}100%{opacity:0}}
+@keyframes ucGrow{0%{transform:scaleX(0)}35%,92%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+@keyframes ucCell{0%,10%{opacity:.08}18%,92%{opacity:1}100%{opacity:.08}}
+@keyframes ucMove{0%,8%{left:0%}30%,40%{left:50%}62%,92%{left:100%}100%{left:0%}}
+@keyframes ucPop{0%,55%{opacity:0;transform:scale(.6)}62%,92%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes ucOrbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.uc-in{animation:ucIn .55s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-draw{stroke-dasharray:100;animation:ucDraw 8s ease-in-out infinite}
+.uc-swapA{animation:ucSwapA 8s ease-in-out infinite}
+.uc-swapB{animation:ucSwapB 8s ease-in-out infinite}
+.uc-grow{transform-origin:left;animation:ucGrow 8s ease-out infinite}
+.uc-cell{animation:ucCell 8s ease-out infinite}
+.uc-move{animation:ucMove 8s ease-in-out infinite}
+.uc-pop{animation:ucPop 8s ease-out infinite}
+.uc-orbit{animation:ucOrbit 30s linear infinite}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; overflow: hidden;">
+
+<header style="max-width: 1280px; margin: 0 auto; padding: 24px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between;">
+<a href="#top" aria-label="UpCore — на главную"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 28px; width: auto; display: block;"></a>
+<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 5px; border-radius: 16px; background: rgba(255,255,255,0.06); font-size: 15px;">
+<a href="#products" style="color: #FFFFFF; text-decoration: none; padding: 10px 14px;">Продукты</a>
+<a href="#method" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 14px;">Методология</a>
+<a href="#security" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 14px;">Безопасность</a>
+<a href="#blog" style="color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 14px;">Блог</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 12px;"><a href="#en" style="color: rgba(255,255,255,0.78); text-decoration: none; font-size: 14px; padding: 12px 8px;">EN</a><a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none;">Регистрация</a></div>
+</header>
+
+<!-- HERO centered + wide showcase -->
+<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px;">
+<svg aria-hidden="true" class="uc-orbit" viewBox="0 0 400 400" style="position: absolute; top: -160px; left: 50%; margin-left: -400px; width: 800px; height: 800px; opacity: 0.35; pointer-events: none;"><circle cx="200" cy="200" r="190" fill="none" stroke="#63D5FF" stroke-opacity="0.35" stroke-dasharray="2 10"></circle><circle cx="200" cy="10" r="4" fill="#63D5FF"></circle></svg>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; letter-spacing: 0.04em; position: relative;">UPCORE · ЦИФРОВОЙ ТИМЛИД</div>
+<h1 style="position: relative; margin: 0; font-size: clamp(42px, 5.6vw, 84px); line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; max-width: 1040px;">Вся правда о разработке — <span style="color: #63D5FF;">в вашем коде</span></h1>
+<p style="position: relative; margin: 0; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.5; color: rgba(255,255,255,0.78); max-width: 720px;">UpCore превращает каждый MR в часы, грейд, ROI от ИИ и бюджет проекта. Посмотрите, как это выглядит в продукте.</p>
+<div style="position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 16px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px; text-decoration: none;">Подключить GitHub / GitLab</a>
+<a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF; font-weight: 600; font-size: 17px; text-decoration: none;">Заказать аудит</a>
+</div>
+
+<div role="tablist" aria-label="Экраны продукта" style="position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 28px; padding: 6px; border-radius: 16px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08);">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="8">
+<sc-if value="{{s.active}}" hint-placeholder-val="{{false}}"><button type="button" role="tab" aria-selected="true" onClick="{{s.pick}}" style="position: relative; overflow: hidden; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 0; background: #63D5FF; color: #0D0C15; font: 700 14px Onest, sans-serif; cursor: pointer;">{{s.key}}<span class="uc-prog" style="position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: #0D0C15; opacity: 0.35;"></span></button></sc-if>
+<sc-if value="{{s.inactive}}" hint-placeholder-val="{{true}}"><button type="button" role="tab" aria-selected="false" onClick="{{s.pick}}" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 0; background: transparent; color: rgba(255,255,255,0.82); font: 600 14px Onest, sans-serif; cursor: pointer;">{{s.key}}</button></sc-if>
+</sc-for>
+</div>
+
+<div style="position: relative; width: 100%; max-width: 1180px; border-radius: 22px; padding: 10px; background: linear-gradient(180deg, rgba(99,213,255,0.5), rgba(99,213,255,0.05)); box-shadow: 0 60px 160px rgba(99,213,255,0.18);">
+<div style="border-radius: 14px; overflow: hidden; background: #12111C;">
+<div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #1A1925;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #E86565;"></span><span style="width: 10px; height: 10px; border-radius: 50%; background: #F2C14E;"></span><span style="width: 10px; height: 10px; border-radius: 50%; background: #53C04D;"></span><span style="margin-left: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.66);">app.up-core.ru — {{cur.title}}</span></div>
+<div style="position: relative; aspect-ratio: 16 / 9; background: #FFFFFF; overflow: hidden;">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="1">
+<sc-if value="{{s.active}}" hint-placeholder-val="{{true}}"><img class="uc-in" src="{{s.src}}" alt="{{s.title}}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;"></sc-if>
+</sc-for>
+</div>
+</div>
+</div>
+<p style="margin: 0; font-size: 16px; color: rgba(255,255,255,0.75);"><b style="color: #FFFFFF;">{{cur.title}}</b> — {{cur.caption}}</p>
+</section>
+
+<!-- facts -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+<div style="border-radius: 24px; background: #1A1925; padding: 24px;"><div style="font-size: 44px; font-weight: 800; color: #63D5FF;">96%</div><div style="color: rgba(255,255,255,0.74);">от экспертной оценки</div></div>
+<div style="border-radius: 24px; background: #1A1925; padding: 24px;"><div style="font-size: 44px; font-weight: 800;">1500+</div><div style="color: rgba(255,255,255,0.74);">разработчиков посчитано</div></div>
+<div style="border-radius: 24px; background: #1A1925; padding: 24px;"><div style="font-size: 44px; font-weight: 800;">+14%</div><div style="color: rgba(255,255,255,0.74);">эффективности за 3 месяца</div></div>
+<div style="border-radius: 24px; background: #1A1925; padding: 24px;"><div style="font-size: 44px; font-weight: 800;">1 сек</div><div style="color: rgba(255,255,255,0.74);">на авто-ревью MR</div></div>
+</div>
+</section>
+
+<!-- PRODUCTS 2x2 -->
+<section id="products" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<h2 style="margin: 0 0 36px; font-size: clamp(32px, 3.6vw, 56px); letter-spacing: -0.03em; line-height: 1.04; font-weight: 800; text-align: center;">Четыре продукта на одной платформе</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 20px;">
+
+<!-- Grade -->
+<article style="border-radius: 36px; background: #12111C; border: 1px solid rgba(99,213,255,0.5); overflow: hidden; display: flex; flex-direction: column;">
+<div style="padding: 28px 28px 0; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; min-height: 300px; background: rgba(99,213,255,0.05);">
+<svg viewBox="0 0 300 300" role="img" aria-label="Звезда грейда рисуется по ходу оценки" style="width: 260px; height: auto;">
+<polygon points="150.0,40.0 214.7,61.0 254.6,116.0 254.6,184.0 214.7,239.0 150.0,260.0 85.3,239.0 45.4,184.0 45.4,116.0 85.3,61.0" fill="none" stroke="rgba(255,255,255,0.12)"></polygon>
+<polygon points="150.0,67.5 198.5,83.3 228.5,124.5 228.5,175.5 198.5,216.7 150.0,232.5 101.5,216.7 71.5,175.5 71.5,124.5 101.5,83.3" fill="none" stroke="rgba(255,255,255,0.4)" stroke-dasharray="4 4"></polygon>
+<polygon class="uc-draw" pathLength="100" points="150.0,40.0 194.0,89.5 228.5,124.5 230.6,176.2 170.0,177.6 150.0,207.2 108.6,207.0 50.6,182.3 54.8,119.1 117.0,104.6" fill="#63D5FF" stroke="#63D5FF" stroke-width="2.5" stroke-linejoin="round"></polygon>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 6px; text-align: left;"><span style="font-size: 13px; color: rgba(255,255,255,0.6);">грейд</span><span style="display: grid; font-size: 36px; font-weight: 800;"><span class="uc-swapA" style="grid-area: 1 / 1; color: #F2C14E;">Middle+</span><span class="uc-swapB" style="grid-area: 1 / 1; color: #63D5FF;">Senior</span></span><span style="display: grid; font-size: 20px; font-weight: 700;"><span class="uc-swapA" style="grid-area: 1 / 1;">7.2 / 10</span><span class="uc-swapB" style="grid-area: 1 / 1;">8.5 / 10 ↑</span></span></div>
+</div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">01 / GRADE</span><h3 style="margin: 0; font-size: 30px; letter-spacing: -0.02em;">Автоматическая оценка специалиста</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5; font-size: 17px;">Рейтинг эффективности и грейд-уровень по анализу MR — звезда сильных и слабых сторон по 10 осям.</p><a href="#grade" style="font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center;">Подробнее →</a></div>
+</article>
+
+<!-- AI -->
+<article style="border-radius: 36px; background: #13111F; border: 1px solid rgba(155,140,255,0.5); overflow: hidden; display: flex; flex-direction: column;">
+<div style="padding: 32px 32px 8px; min-height: 300px; background: rgba(155,140,255,0.06); display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.66);"><span>прирост эффективности с ИИ</span><span><span style="color: rgba(255,255,255,0.5);">■</span> без ИИ <span style="color: #9B8CFF; margin-left: 8px;">■</span> с ИИ</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; font-size: 15px;"><span>Senior</span><b style="color: #7FDB7A;">+50–100%</b></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.16); width: 50%;"></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.05);"><div class="uc-grow" style="width: 100%; height: 100%; border-radius: 5px; background: #9B8CFF;"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; font-size: 15px;"><span>Middle</span><b>0…+20%</b></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.16); width: 50%;"></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.05);"><div class="uc-grow" style="width: 60%; height: 100%; border-radius: 5px; background: #9B8CFF; animation-delay: .3s;"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; font-size: 15px;"><span>Junior</span><b style="color: #F08A8A;">до −50%</b></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.16); width: 50%;"></div><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.05);"><div class="uc-grow" style="width: 25%; height: 100%; border-radius: 5px; background: #E86565; animation-delay: .6s;"></div></div></div>
+</div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #B9AEFF;">02 / AI</span><h3 style="margin: 0; font-size: 30px; letter-spacing: -0.02em;">Оценка эффективности ИИ</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5; font-size: 17px;">Авто-детект ИИ-кода и сбор промптов агентом на машине разработчика: кто вайбкодит и насколько это окупается.</p><a href="#ai" style="font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #B9AEFF;">Подробнее →</a></div>
+</article>
+
+<!-- Projects -->
+<article style="border-radius: 36px; background: #15130F; border: 1px solid rgba(242,193,78,0.5); overflow: hidden; display: flex; flex-direction: column;">
+<div style="padding: 32px; min-height: 300px; background: rgba(242,193,78,0.05); display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: center;">
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(8, 22px); gap: 5px;">
+<span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 0s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .05s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .1s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #63D5FF; animation-delay: .15s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .2s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .25s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .3s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .35s;"></span>
+<span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .4s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #63D5FF; animation-delay: .45s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .5s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .55s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #E86565; animation-delay: .6s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .65s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .7s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #63D5FF; animation-delay: .75s;"></span>
+<span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .8s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .85s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .9s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: .95s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #63D5FF; animation-delay: 1s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.05s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #E86565; animation-delay: 1.1s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.15s;"></span>
+<span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.2s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.25s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #63D5FF; animation-delay: 1.3s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.35s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.4s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.45s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.5s;"></span><span class="uc-cell" style="height: 22px; border-radius: 4px; background: #F2C14E; animation-delay: 1.55s;"></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: 13px; color: rgba(255,255,255,0.62);">бюджет проекта по коду</span><span style="display: grid; font-size: 34px; font-weight: 800;"><span class="uc-swapA" style="grid-area: 1 / 1; color: rgba(255,255,255,0.5);">считаем…</span><span class="uc-swapB" style="grid-area: 1 / 1; color: #F2C14E;">10 127 ч</span></span><span style="font-size: 13px; color: rgba(255,255,255,0.62);">UpCore Backend · октябрь</span><span class="uc-pop" style="margin-top: 6px; padding: 8px 12px; border-radius: 10px; background: rgba(232,101,101,0.14); color: #F08A8A; font-weight: 700; font-size: 15px;">акт 160 ч → по коду 40 ч</span></div>
+</div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #F2C14E;">03 / PROJECTS</span><h3 style="margin: 0; font-size: 30px; letter-spacing: -0.02em;">Эффективность проектов</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5; font-size: 17px;">Оценка бюджетов и контроль подрядчиков. Разовый аудит — считаем бюджет всего проекта по коду.</p><a href="#projects" style="font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #F2C14E;">Подробнее →</a></div>
+</article>
+
+<!-- Mentor -->
+<article style="border-radius: 36px; background: #0F1510; border: 1px solid rgba(83,192,77,0.5); overflow: hidden; display: flex; flex-direction: column;">
+<div style="padding: 40px 36px; min-height: 300px; background: rgba(83,192,77,0.05); display: flex; flex-direction: column; justify-content: center; gap: 28px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.66);">путь развития · Лукьянов Александр</div>
+<div style="position: relative; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.12); margin: 0 10px;">
+<span style="position: absolute; left: 0; top: -7px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: #0F1510; border: 2px solid rgba(255,255,255,0.5);"></span>
+<span style="position: absolute; left: 50%; top: -7px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: #0F1510; border: 2px solid #F2C14E;"></span>
+<span style="position: absolute; left: 100%; top: -7px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: #0F1510; border: 2px solid #53C04D;"></span>
+<span class="uc-move" style="position: absolute; top: -11px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: #53C04D; box-shadow: 0 0 20px 4px rgba(83,192,77,0.6);"></span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; font-size: 14px;">
+<div><b>Middle</b><div style="color: rgba(255,255,255,0.66); line-height: 1.45;">качество кода 5.5</div></div>
+<div style="text-align: center;"><b style="color: #F2C14E;">Middle+</b><div style="color: rgba(255,255,255,0.66); line-height: 1.45;">меньше переделок MR</div></div>
+<div style="text-align: right;"><b style="color: #7FDB7A;">Senior</b><div style="color: rgba(255,255,255,0.66); line-height: 1.45;">качество 7.5 · ревью</div></div>
+</div>
+</div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 12px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #7FDB7A;">04 / MENTOR</span><h3 style="margin: 0; font-size: 30px; letter-spacing: -0.02em;">ИИ-наставник</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5; font-size: 17px;">По задачам, промптам и коду показывает, где проседает эффективность, и даёт рекомендации, как расти.</p><a href="#mentor" style="font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #7FDB7A;">Подробнее →</a></div>
+</article>
+</div>
+</section>
+
+<section id="method" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+<div style="flex: 0 1 auto;"><div style="font-size: clamp(88px, 10vw, 152px); font-weight: 800; color: #63D5FF; line-height: 0.9; letter-spacing: -0.04em;">96%</div><div style="font-size: 20px; margin-top: 8px;">от экспертной оценки</div></div>
+<p style="flex: 1 1 440px; min-width: 0; margin: 0; font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82);">Каждый MR — 50+ факторов, каждая оценка — 100+ задач подряд, граф архитектуры проекта и модели, откалиброванные на 1500+ разработчиках. Ядро — детерминированная математика, поверх — ИИ-агенты для ревью и наставничества.</p>
+</div>
+</section>
+
+<section id="security" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 72px;">
+<div style="border-radius: 40px; background: #63D5FF; color: #0D0C15; padding: clamp(32px, 5vw, 64px); display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between;">
+<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 50px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">Подключите репозиторий — первые оценки сегодня</h2><p style="margin: 12px 0 0; font-size: 17px; color: rgba(13,12,21,0.78);">SaaS, локальный агент или on-premise в вашем контуре.</p></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;"><a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 16px; background: #0D0C15; color: #FFFFFF; font-weight: 700; text-decoration: none;">Регистрация</a><a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 16px; border: 1.5px solid #0D0C15; color: #0D0C15; font-weight: 700; text-decoration: none;">office@dex-it.ru</a></div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.7);"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · office@dex-it.ru · @upcore_ai</span></div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4300}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { idx: 0 }; }
+  slidesData() {
+    return [
+      { key: 'Звезда грейда', title: 'Уровень', caption: 'звезда грейда по 10 осям и динамика роста', src: '/_blob/afdf675f8bedfead15e609fdb13aa49b' },
+      { key: 'Компания', title: 'Дашборд компании', caption: 'эффективность, ИИ, проекты, грейды', src: '/_blob/9cba81e6ca23a0c1263f23c20f8003d1' },
+      { key: 'Эффективность', title: 'Эффективность специалиста', caption: 'создано ценности в часах и рублях', src: '/_blob/6c6353e4a251a57072c1e2bf94de7c76' },
+      { key: 'Табель', title: 'Табель', caption: 'Jira, MR и коммиты в одном календаре', src: '/_blob/13400136e70882d874f7a2528f15026e' },
+      { key: 'Глаз', title: '«Глаз»', caption: 'разбор каждого MR до строчки кода', src: '/_blob/40525ebf8d2111c88f08ef46f71635b4' },
+      { key: 'Рейтинг', title: 'Рейтинг сотрудников', caption: 'по компании, стеку и проекту', src: '/_blob/d7c8fafeeb9ade6b82b3400769fbe356' },
+      { key: 'Качество', title: 'ИИ-ревью кода', caption: 'дефекты по тяжести и блокам качества', src: '/_blob/2696bde9510556b393f5f92bee142467' },
+      { key: 'Тех-карта', title: 'Тех-карта проекта', caption: 'технологии, уровни и мэтч команды', src: '/_blob/43a5f658acd56dde7b15581b6f106e43' }
+    ];
+  }
+  componentDidMount() { this.start(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  start() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.setState((st) => ({ idx: ((st.idx || 0) + 1) % 8 })), 4500);
+  }
+  renderVals() {
+    const data = this.slidesData();
+    const idx = (this.state && this.state.idx) || 0;
+    const slides = data.map((s, i) => Object.assign({}, s, { active: i === idx, inactive: i !== idx, pick: () => { this.setState({ idx: i }); this.start(); } }));
+    return { slides, cur: data[idx] };
+  }
+}
+</script>
+</body>
+</html>

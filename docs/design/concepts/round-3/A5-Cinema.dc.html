@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — A5 Кинотеатр</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucIn{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
+@keyframes ucProg{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+@keyframes ucLevel{0%{stroke-dashoffset:276.5}45%,92%{stroke-dashoffset:41.5}100%{stroke-dashoffset:276.5}}
+@keyframes ucSwapA{0%,42%{opacity:1}50%,94%{opacity:0}100%{opacity:1}}
+@keyframes ucSwapB{0%,42%{opacity:0}50%,94%{opacity:1}100%{opacity:0}}
+@keyframes ucEq{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@keyframes ucRise{0%{transform:scaleY(0)}40%,92%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+@keyframes ucLit{0%,100%{background:rgba(83,192,77,.08);color:rgba(255,255,255,.75)}12%,30%{background:#53C04D;color:#0D0C15}}
+@keyframes ucNote{0%,20%{opacity:0;transform:translateY(6px)}28%,85%{opacity:1;transform:none}100%{opacity:0}}
+.uc-in{animation:ucIn .7s ease-out both}
+.uc-prog{transform-origin:top;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-level{stroke-dasharray:276.5;animation:ucLevel 8s ease-out infinite}
+.uc-swapA{animation:ucSwapA 8s ease-in-out infinite}
+.uc-swapB{animation:ucSwapB 8s ease-in-out infinite}
+.uc-eq{transform-origin:bottom;animation:ucEq 1.6s ease-in-out infinite}
+.uc-rise{transform-origin:bottom;animation:ucRise 8s ease-out infinite}
+.uc-lit{animation:ucLit 6s ease-in-out infinite}
+.uc-note{opacity:0;animation:ucNote 4.5s ease-out infinite}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; overflow: hidden;">
+
+<header style="max-width: 1320px; margin: 0 auto; padding: 24px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between;">
+<a href="#top" aria-label="UpCore — на главную"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 28px; width: auto; display: block;"></a>
+<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 15px;">
+<a href="#products" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px;">Продукты</a>
+<a href="#method" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px;">Методология</a>
+<a href="#security" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px;">Безопасность</a>
+<a href="#blog" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px;">Блог</a>
+<a href="#about" style="color: rgba(255,255,255,0.82); text-decoration: none; padding: 12px;">О компании</a>
+</nav>
+<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none;">Регистрация</a>
+</header>
+
+<!-- HERO -->
+<section id="top" style="max-width: 1320px; margin: 0 auto; padding: 32px 32px 40px;">
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between;">
+<h1 style="flex: 1 1 640px; margin: 0; font-size: clamp(42px, 5.8vw, 92px); line-height: 0.98; letter-spacing: -0.04em; font-weight: 800;">Смотрите на разработку <span style="color: #63D5FF;">глазами данных</span></h1>
+<div style="flex: 1 1 320px; max-width: 420px; display: flex; flex-direction: column; gap: 18px;">
+<p style="margin: 0; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.78);">Цифровой тимлид UpCore проверяет каждый MR и собирает всё в живые дашборды: от звезды грейда до бюджета проекта.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;"><a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 16px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none;">Подключить репозиторий</a><a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF; font-weight: 600; text-decoration: none;">Аудит</a></div>
+</div>
+</div>
+
+<div style="margin-top: 48px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center;">
+<div style="flex: 3 1 680px; min-width: 0; position: relative;">
+<div aria-hidden="true" style="position: absolute; left: 8%; right: 8%; bottom: -40px; height: 120px; background: radial-gradient(ellipse at center, rgba(99,213,255,0.35), rgba(99,213,255,0) 70%);"></div>
+<div style="position: relative; transform: perspective(1800px) rotateX(10deg); transform-origin: center bottom; border-radius: 20px; padding: 8px; background: #1A1925; border: 1px solid rgba(99,213,255,0.45); box-shadow: 0 50px 120px rgba(0,0,0,0.6);">
+<div style="position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #FFFFFF;">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="1">
+<sc-if value="{{s.active}}" hint-placeholder-val="{{true}}"><img class="uc-in" src="{{s.src}}" alt="{{s.title}}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block;"></sc-if>
+</sc-for>
+<div class="uc-scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 3px; background: #63D5FF; box-shadow: 0 0 22px 6px rgba(99,213,255,0.6);"></div>
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="1">
+<sc-if value="{{s.active}}" hint-placeholder-val="{{true}}"><div class="uc-note" style="position: absolute; right: 16px; bottom: 16px; padding: 10px 14px; border-radius: 12px; background: rgba(13,12,21,0.88); color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 13px; border: 1px solid rgba(99,213,255,0.5);"><span style="color: #63D5FF;">upcore ›</span> {{s.note}}</div></sc-if>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div role="tablist" aria-label="Экраны продукта" style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="8">
+<sc-if value="{{s.active}}" hint-placeholder-val="{{false}}"><button type="button" role="tab" aria-selected="true" onClick="{{s.pick}}" style="position: relative; display: flex; gap: 14px; align-items: baseline; width: 100%; min-height: 48px; padding: 10px 14px 10px 18px; border: 0; border-radius: 12px; background: rgba(99,213,255,0.1); color: #FFFFFF; text-align: left; cursor: pointer; font-family: 'Onest', sans-serif;"><span style="position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; background: rgba(99,213,255,0.25);"><span class="uc-prog" style="display: block; width: 100%; height: 100%; background: #63D5FF; border-radius: 2px;"></span></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #63D5FF;">{{s.num}}</span><span style="font-size: 16px; font-weight: 700;">{{s.title}}</span></button></sc-if>
+<sc-if value="{{s.inactive}}" hint-placeholder-val="{{true}}"><button type="button" role="tab" aria-selected="false" onClick="{{s.pick}}" style="display: flex; gap: 14px; align-items: baseline; width: 100%; min-height: 48px; padding: 10px 14px 10px 18px; border: 0; border-radius: 12px; background: transparent; color: rgba(255,255,255,0.72); text-align: left; cursor: pointer; font-family: 'Onest', sans-serif;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.5);">{{s.num}}</span><span style="font-size: 16px; font-weight: 600;">{{s.title}}</span></button></sc-if>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- stats band -->
+<section style="border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); margin-top: 56px;">
+<div style="max-width: 1320px; margin: 0 auto; padding: 28px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+<div><span style="font-size: 40px; font-weight: 800; color: #63D5FF;">96%</span><div style="color: rgba(255,255,255,0.7); font-size: 15px;">от экспертной оценки</div></div>
+<div><span style="font-size: 40px; font-weight: 800;">1500+</span><div style="color: rgba(255,255,255,0.7); font-size: 15px;">разработчиков посчитано</div></div>
+<div><span style="font-size: 40px; font-weight: 800;">50+</span><div style="color: rgba(255,255,255,0.7); font-size: 15px;">факторов в каждом MR</div></div>
+<div><span style="font-size: 40px; font-weight: 800;">+14%</span><div style="color: rgba(255,255,255,0.7); font-size: 15px;">эффективности за 3 месяца</div></div>
+</div>
+</section>
+
+<!-- PRODUCTS: 4 tall columns -->
+<section id="products" style="max-width: 1320px; margin: 0 auto; padding: 96px 32px;">
+<h2 style="margin: 0 0 36px; font-size: clamp(32px, 3.6vw, 56px); letter-spacing: -0.03em; line-height: 1.04; font-weight: 800; max-width: 780px;">Четыре продукта на одной платформе</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px;">
+
+<article style="border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.55); overflow: hidden; display: flex; flex-direction: column;">
+<div style="height: 260px; display: flex; align-items: center; justify-content: center; background: rgba(99,213,255,0.06); position: relative;">
+<svg viewBox="0 0 110 110" width="170" height="170" role="img" aria-label="Уровень работы растёт до 8.5 из 10"><circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"></circle><circle class="uc-level" cx="55" cy="55" r="44" fill="none" stroke="#63D5FF" stroke-width="8" stroke-linecap="round" transform="rotate(-90 55 55)"></circle></svg>
+<div style="position: absolute; text-align: center;"><div style="display: grid; font-size: 34px; font-weight: 800;"><span class="uc-swapA" style="grid-area: 1 / 1;">7.2</span><span class="uc-swapB" style="grid-area: 1 / 1; color: #63D5FF;">8.5</span></div><div style="display: grid; font-size: 14px; font-weight: 700;"><span class="uc-swapA" style="grid-area: 1 / 1; color: #F2C14E;">Middle+</span><span class="uc-swapB" style="grid-area: 1 / 1; color: #63D5FF;">Senior</span></div></div>
+</div>
+<div style="padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">01 / GRADE</span><h3 style="margin: 0; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1;">Оценка специалиста</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5;">Рейтинг эффективности и грейд-уровень по анализу MR.</p><a href="#grade" style="margin-top: auto; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center;">Подробнее →</a></div>
+</article>
+
+<article style="border-radius: 32px; background: #13111F; border: 1px solid rgba(155,140,255,0.55); overflow: hidden; display: flex; flex-direction: column;">
+<div style="height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: rgba(155,140,255,0.07);">
+<div aria-hidden="true" style="display: flex; gap: 6px; align-items: flex-end; height: 110px;">
+<span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: 0s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .2s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #B9AEFF; animation-delay: .4s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .1s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .5s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #B9AEFF; animation-delay: .3s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .7s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .25s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #B9AEFF; animation-delay: .6s;"></span><span class="uc-eq" style="width: 12px; height: 100%; border-radius: 4px; background: #9B8CFF; animation-delay: .15s;"></span>
+</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.72); text-align: center;">12 ИИ-сессий · 8.1 ч · 1.1 млн токенов</div>
+</div>
+<div style="padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #B9AEFF;">02 / AI</span><h3 style="margin: 0; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1;">Эффективность ИИ</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5;">Авто-детект ИИ-кода и промпт-коллектор: кто вайбкодит и с какой отдачей.</p><a href="#ai" style="margin-top: auto; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #B9AEFF;">Подробнее →</a></div>
+</article>
+
+<article style="border-radius: 32px; background: #15130F; border: 1px solid rgba(242,193,78,0.55); overflow: hidden; display: flex; flex-direction: column;">
+<div style="height: 260px; display: flex; align-items: flex-end; justify-content: center; gap: 28px; padding-bottom: 28px; background: rgba(242,193,78,0.05);">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><b style="font-size: 18px;">160 ч</b><span class="uc-rise" style="width: 56px; height: 150px; border-radius: 10px 10px 4px 4px; background: rgba(255,255,255,0.3);"></span><span style="font-size: 13px; color: rgba(255,255,255,0.7);">акт</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><b style="font-size: 18px; color: #F2C14E;">40 ч</b><span class="uc-rise" style="width: 56px; height: 38px; border-radius: 10px 10px 4px 4px; background: #F2C14E; animation-delay: .5s;"></span><span style="font-size: 13px; color: rgba(255,255,255,0.7);">по коду</span></div>
+<div style="align-self: center; padding: 8px 12px; border-radius: 10px; background: rgba(232,101,101,0.16); color: #F08A8A; font-weight: 800;">−75%</div>
+</div>
+<div style="padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #F2C14E;">03 / PROJECTS</span><h3 style="margin: 0; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1;">Эффективность проектов</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5;">Бюджеты и контроль подрядчиков. Разовый аудит: бюджет всего проекта по коду.</p><a href="#projects" style="margin-top: auto; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #F2C14E;">Подробнее →</a></div>
+</article>
+
+<article style="border-radius: 32px; background: #0F1510; border: 1px solid rgba(83,192,77,0.55); overflow: hidden; display: flex; flex-direction: column;">
+<div style="height: 260px; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 24px; background: rgba(83,192,77,0.05);">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.72);">топ-3 технологии для роста</div>
+<span class="uc-lit" style="padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 15px; animation-delay: 0s;">Multithreading Advanced · 9</span>
+<span class="uc-lit" style="padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 15px; animation-delay: 2s;">EF Advanced · 8</span>
+<span class="uc-lit" style="padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 15px; animation-delay: 4s;">EF Metadata · 8</span>
+<div style="font-size: 13px; color: rgba(255,255,255,0.7);">тех-мэтч с проектом: 95%</div>
+</div>
+<div style="padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #7FDB7A;">04 / MENTOR</span><h3 style="margin: 0; font-size: 26px; letter-spacing: -0.02em; line-height: 1.1;">ИИ-наставник</h3><p style="margin: 0; color: rgba(255,255,255,0.76); line-height: 1.5;">Где проседает эффективность и как стать сильнее — по задачам, промптам и коду.</p><a href="#mentor" style="margin-top: auto; font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #7FDB7A;">Подробнее →</a></div>
+</article>
+</div>
+</section>
+
+<section id="method" style="max-width: 1320px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+<div><div style="font-size: clamp(88px, 10vw, 152px); font-weight: 800; color: #63D5FF; line-height: 0.9; letter-spacing: -0.04em;">96%</div><div style="font-size: 20px; margin-top: 8px;">от экспертной оценки</div></div>
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 12px; font-size: 18px; line-height: 1.5; color: rgba(255,255,255,0.82);"><p style="margin: 0;">50+ факторов в каждом MR и 100+ задач подряд в каждой оценке — статистика вместо мнения одного лида.</p><p style="margin: 0;">Граф архитектуры проекта, детерминированные модели под каждый стек, калибровка на 1500+ разработчиках.</p></div>
+</div>
+</section>
+
+<section id="security" style="max-width: 1320px; margin: 0 auto; padding: 0 32px 72px;">
+<div style="border-radius: 40px; background: #63D5FF; color: #0D0C15; padding: clamp(32px, 5vw, 64px); display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between;">
+<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 50px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">Посмотрите на свою команду глазами данных</h2><p style="margin: 12px 0 0; font-size: 17px; color: rgba(13,12,21,0.8);">SaaS через GitHub и GitLab, локальный агент или on-premise.</p></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;"><a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 16px; background: #0D0C15; color: #FFFFFF; font-weight: 700; text-decoration: none;">Регистрация</a><a href="mailto:office@dex-it.ru" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 16px; border: 1.5px solid #0D0C15; color: #0D0C15; font-weight: 700; text-decoration: none;">office@dex-it.ru</a></div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1320px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.7);"><img src="/_blob/d4c2740f35d5c35e496626ba187a1752" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (985) 848-35-55 · @upcore_ai</span></div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4300}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { idx: 0 }; }
+  slidesData() {
+    return [
+      { title: 'Звезда грейда', note: 'Middle+ → Senior · 7.2 → 8.5', src: '/_blob/afdf675f8bedfead15e609fdb13aa49b' },
+      { title: 'Дашборд компании', note: 'эффективность 100% · +17.8 млн ₽', src: '/_blob/9cba81e6ca23a0c1263f23c20f8003d1' },
+      { title: 'Эффективность', note: 'создано 959 тыс. ₽ при потенциале 352', src: '/_blob/6c6353e4a251a57072c1e2bf94de7c76' },
+      { title: 'Табель', note: 'Jira 172 ч · UpCore 480 ч', src: '/_blob/13400136e70882d874f7a2528f15026e' },
+      { title: '«Глаз»', note: 'MR !2627 · 28.1 ч UpCore · 100%', src: '/_blob/40525ebf8d2111c88f08ef46f71635b4' },
+      { title: 'Рейтинг сотрудников', note: 'по компании, стеку и проекту', src: '/_blob/d7c8fafeeb9ade6b82b3400769fbe356' },
+      { title: 'ИИ-ревью кода', note: 'качество 6.0 → 8.0 после ревью', src: '/_blob/2696bde9510556b393f5f92bee142467' },
+      { title: 'Тех-карта проекта', note: 'мэтч команды 78%', src: '/_blob/43a5f658acd56dde7b15581b6f106e43' }
+    ];
+  }
+  componentDidMount() { this.start(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+  start() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.setState((st) => ({ idx: ((st.idx || 0) + 1) % 8 })), 4500);
+  }
+  renderVals() {
+    const data = this.slidesData();
+    const idx = (this.state && this.state.idx) || 0;
+    const slides = data.map((s, i) => Object.assign({}, s, { num: '0' + (i + 1), active: i === idx, inactive: i !== idx, pick: () => { this.setState({ idx: i }); this.start(); } }));
+    return { slides };
+  }
+}
+</script>
+</body>
+</html>
