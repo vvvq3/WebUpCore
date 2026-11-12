@@ -546,9 +546,53 @@ def core_v2(n):
     inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 440px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card_style, right)
     return section(inner, 'core')
 
+RED, RED_T = '#E86565', '#F08A8A'
+RED_STRIPES = 'repeating-linear-gradient(135deg, rgba(232,101,101,0.95) 0 6px, rgba(232,101,101,0.55) 6px 12px)'
+
+def core_v3(n):
+    """Раунд 12: левая часть «Сердце 4» с новым заголовком; правая — 3 представления часов, потери красным."""
+    lab = '<div style="%s font-size: 12px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 12px;">УНИКАЛЬНАЯ МЕХАНИКА UPCORE</div>' % MONO
+    left = (lab + '<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">UpCore не считает строчки кода, а вычисляет его <span style="color: #63D5FF;">реальную ценность</span></h2>'
+            '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 500px;">В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.</p>')
+    noise = ''.join('<span style="text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.85); color: rgba(255,255,255,0.55); font-size: 15px; white-space: nowrap;">%s</span>' % e(x)
+                    for x in ['2 400 строк', '37 коммитов', '18 закрытых задач'])
+    top = ('<div><div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">обычные метрики — «выглядит продуктивно»</div>'
+           '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px;">%s</div></div>') % (MONO, noise)
+    bottom = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">'
+              '<span style="font-size: 17px;">Эффективность <b style="color: #63D5FF;">50%%</b></span>'
+              '<span style="font-size: 17px; color: %s; font-weight: 700;">−150 тыс. ₽ в месяц <span style="font-weight: 400; color: rgba(255,255,255,0.7);">— переплата за одного разработчика</span></span></div>') % RED_T
+    legend = lambda c, a, b: ('<div style="display: flex; align-items: center; gap: 10px; min-width: 0;"><span aria-hidden="true" style="flex: 0 0 auto; width: 14px; height: 14px; border-radius: 4px; background: %s;"></span>'
+                              '<span style="font-size: 15px; color: rgba(255,255,255,0.84);"><b style="color: #FFFFFF; font-variant-numeric: tabular-nums;">%s</b> %s</span></div>') % (c, e(a), e(b))
+    if n == 7:  # одна полоса 160 ч: ценность + потери
+        mid = ('<div><div style="display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 10px;"><span style="color: rgba(255,255,255,0.84);">Списано за месяц</span><b>160 ч</b></div>'
+               '<div role="img" aria-label="160 часов: 80 часов ценности, 80 часов потерь" style="display: flex; height: 44px; border-radius: 12px; overflow: hidden; font-size: 14px; font-weight: 800; white-space: nowrap;">'
+               '<div style="width: 50%%; background: #63D5FF; color: #0D0C15; display: flex; align-items: center; padding-left: 10px;">80 ч ценности</div>'
+               '<div style="width: 50%%; background: %s; color: #FFFFFF; display: flex; align-items: center; padding-left: 10px;">80 ч потерь</div></div>'
+               '<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px;">%s%s</div></div>') % (RED_STRIPES, legend('#63D5FF', '80 ч', 'задачи, реально решённые в коде'), legend(RED, '80 ч', 'оплачено без результата'))
+    elif n == 8:  # месяц = 20 рабочих дней по 8 ч
+        cells = ''.join('<span aria-hidden="true" style="aspect-ratio: 1; border-radius: 6px; background: %s;"></span>' % ('#63D5FF' if i < 10 else RED_STRIPES) for i in range(20))
+        mid = ('<div><div style="display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 10px;"><span style="color: rgba(255,255,255,0.84);">Месяц — 20 рабочих дней, 160 ч</span><span style="%s font-size: 12px; color: rgba(255,255,255,0.55);">1 клетка = 8 ч</span></div>'
+               '<div role="img" aria-label="20 рабочих дней: 10 дней результата, 10 дней потерь" style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px;">%s</div>'
+               '<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px;">%s%s</div></div>') % (MONO, cells, legend('#63D5FF', '10 дней', 'реальной работы в коде — 80 ч'), legend(RED, '10 дней', 'оплачено впустую — 80 ч'))
+    else:  # кольцо
+        r = 52; c = 2 * 3.14159 * r
+        ring = ('<svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Эффективность 50%%: 80 из 160 часов" style="flex: 0 0 auto;">'
+                '<circle cx="70" cy="70" r="%d" fill="none" stroke="%s" stroke-width="18"></circle>'
+                '<circle cx="70" cy="70" r="%d" fill="none" stroke="#63D5FF" stroke-width="18" stroke-dasharray="%.1f %.1f" transform="rotate(-90 70 70)"></circle>'
+                '<text x="70" y="68" text-anchor="middle" font-family="Onest, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">80 ч</text>'
+                '<text x="70" y="88" text-anchor="middle" font-family="Onest, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">из 160 ч</text></svg>') % (r, RED, r, c / 2, c)
+        mid = ('<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px;">%s<div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 12px;">'
+               '<div style="font-size: 16px; color: rgba(255,255,255,0.84);">Списано за месяц <b style="color: #FFFFFF;">160 ч</b></div>%s%s</div></div>') % (
+               ring, legend('#63D5FF', '80 ч', 'задачи, реально решённые в коде'), legend(RED, '80 ч', 'потери — оплачено без результата'))
+    right = top + mid + bottom
+    card = 'flex: 1 1 440px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 20px;'
+    inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 420px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card, right)
+    return section(inner, 'core')
+
 def core_board(n):
-    names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч'}
-    body = '<div style="padding-top: 48px;">%s</div>' % (core_variant(n) if n <= 3 else core_v2(n))
+    names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч',
+             7: 'Полоса ценность / потери', 8: 'Месяц — 20 рабочих дней', 9: 'Кольцо 80 из 160'}
+    body = '<div style="padding-top: 48px;">%s</div>' % (core_variant(n) if n <= 3 else core_v2(n) if n <= 6 else core_v3(n))
     return page('UpCore — блок «Сердце» %d (%s)' % (n, names[n]), body, 600, name='Core-%d' % n)
 
 SEC_CARDS = [
@@ -711,7 +755,7 @@ def home(variant):
             ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
             ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
         ]),
-        core_v2(4),
+        core_v3(7),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
             'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
@@ -951,7 +995,7 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    for n in (1, 2, 3, 4, 5, 6):
+    for n in range(1, 10):
         files['Core-%d' % n] = core_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
