@@ -142,33 +142,6 @@
       "x": 3040,
       "y": 0
     },
-    "Pains-1.dc.html": {
-      "expand": "fill",
-      "h": 993,
-      "page": "home",
-      "title": "Почему это важно 1 — две колонки: CTO | HRD",
-      "w": 1440,
-      "x": 1520,
-      "y": 1400
-    },
-    "Pains-2.dc.html": {
-      "expand": "fill",
-      "h": 806,
-      "page": "home",
-      "title": "Почему это важно 2 — «Шесть вопросов, на которые у вас нет ответов в цифрах» (выбран, стоит на Главной A)",
-      "w": 1440,
-      "x": 3040,
-      "y": 1400
-    },
-    "Pains-3.dc.html": {
-      "expand": "fill",
-      "h": 686,
-      "page": "home",
-      "title": "Почему это важно 3 — цена непрозрачности в деньгах",
-      "w": 1440,
-      "x": 4560,
-      "y": 1179
-    },
     "Projects-A.dc.html": {
       "expand": "fill",
       "h": 7237,
@@ -212,8 +185,7 @@
     "t_grade",
     "t_ai",
     "t_projects",
-    "t_mentor",
-    "t_pains"
+    "t_mentor"
   ],
   "notes": {
     "t": {
@@ -261,15 +233,6 @@
       "x": 0,
       "y": -300
     },
-    "t_pains": {
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "home",
-      "text": "Блок «Почему это важно» — 3 варианта: главные боли CTO и HRD",
-      "w": 240,
-      "x": 1520,
-      "y": 1100
-    },
     "t_projects": {
       "kind": "title1",
       "maxW": 4480,
@@ -298,10 +261,7 @@
     "Mentor-C.dc.html",
     "Home-A.dc.html",
     "Home-B.dc.html",
-    "Home-C.dc.html",
-    "Pains-1.dc.html",
-    "Pains-2.dc.html",
-    "Pains-3.dc.html"
+    "Home-C.dc.html"
   ],
   "pages": [
     {

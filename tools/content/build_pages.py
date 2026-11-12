@@ -1095,9 +1095,8 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    # раунд 17: отдельный артборд «Сердце 9» снят (блок зафиксирован на Главной A); варианты блока болей:
-    for n in (1, 2, 3):
-        files['Pains-%d' % n] = pains_board(n)
+    # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
+    # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
