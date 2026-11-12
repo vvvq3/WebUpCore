@@ -156,13 +156,38 @@ MAIL = 'mailto:office@dex-it.ru'
 def stats(items, note=None):
     cells = []
     for i, (big, small) in enumerate(items):
-        col = '#63D5FF' if i == 0 else '#FFFFFF'
-        cells.append('<div style="flex: 1 1 130px; padding-right: 16px; min-width: 0;"><div style="font-size: 34px; font-weight: 800; color: %s; letter-spacing: -0.02em; line-height: 1.1;">%s</div>'
-                     '<div style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (col, e(big), e(small)))
-    out = '<div style="display: flex; flex-wrap: wrap; row-gap: 16px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 24px;">%s</div>' % ''.join(cells)
+        col = '#63D5FF' if i == 0 else ('#7FDB7A' if big.startswith('+') else '#FFFFFF')
+        cells.append('<div style="min-width: 0;"><div style="font-size: clamp(24px, 6.4vw, 34px); font-weight: 800; color: %s; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                     '<div style="font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (col, e(big), e(small)))
+    cols = 'repeat(2, minmax(0, 1fr))' if len(items) == 4 else 'repeat(auto-fit, minmax(150px, 1fr))'
+    out = '<div style="display: grid; grid-template-columns: %s; gap: 18px 20px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 24px;">%s</div>' % (cols, ''.join(cells))
     if note:
         out += '<div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-top: -12px;">%s</div>' % (MONO, e(note))
     return out
+
+# Цифры первых экранов (раунд 8): самые сильные — рост, экономия, деньги. Ориентиры рынка подписаны в note.
+HERO_STATS = {
+ ('home', 'A'): ([('96%', 'точность от экспертной оценки'), ('1500+', 'разработчиков уже посчитано'),
+                  ('+14%', 'рост эффективности разработки за 3 месяца'), ('500 тыс. ₽', 'экономии в год на каждого разработчика')], 'данные и расчёт UpCore'),
+ ('home', 'B'): ([('≈9,7 млн ₽', 'в месяц эффекта на 100 разработчиков'), ('+12%', 'производительности сразу'), ('20% → 4%', 'находим, кто съедает ФОТ')], 'данные и расчёт UpCore'),
+ ('home', 'C'): ([('100%', 'кода проверено — а не 5–10%'), ('114 ч', 'ручного ревью в месяц экономии'), ('≈1,1 млн ₽', 'в месяц возвращаем времени тимлидов')], 'данные UpCore; расчёт на 100 разработчиков'),
+ ('grade', 'A'): ([('96%', 'совпадение с экспертной оценкой'), ('+12%', 'производительности команды сразу'),
+                   ('≈5 млн ₽', 'в месяц стоят 20% неэффективных на 100 разработчиков'), ('≈1,1 млн ₽', 'в месяц экономии времени тимлидов')], 'данные и расчёт UpCore'),
+ ('grade', 'B'): ([('99%', 'работодателей сталкиваются с накруткой опыта'), ('до 200%', 'годовой зарплаты стоит ошибка найма'), ('3 мес.', 'и реальный грейд подтверждён кодом')], 'Хабр Карьера 2025; SHRM; UpCore'),
+ ('grade', 'C'): ([('−210 ч', 'в год на performance review у руководителя'), ('+12%', 'производительности от прозрачных правил'), ('≈1,1 млн ₽', 'в месяц экономии времени тимлидов')], 'CEB / Gartner; данные и расчёт UpCore'),
+ ('ai', 'A'): ([('×1,9', 'отдачи на каждый рубль, вложенный в ИИ'), ('−41%', 'расходов на токены'),
+                ('+50–100%', 'выработки у Senior с ИИ'), ('+22 п.п.', 'эффективность задач с ИИ — кейс Dex')], 'данные UpCore; ориентиры: Exceeds AI, CodeScene'),
+ ('ai', 'B'): ([('−19%', 'реальная скорость с ИИ'), ('+20%', 'ощущаемое ускорение'), ('×1,9', 'отдачи на рубль, когда ИИ мерят по коду')], 'METR, 2025; ориентир: Exceeds AI'),
+ ('ai', 'C'): ([('×1,9', 'отдачи на рубль в ИИ'), ('−41%', 'расходов на токены'), ('+19%', 'выработки команды под контролем ИИ')], 'ориентиры: Exceeds AI, CodeScene, Weave'),
+ ('projects', 'A'): ([('−75%', 'к оплате по акту — пример аудита'), ('≈19 млн ₽', 'в год переплаты у подрядчика из 10 человек'),
+                      ('−50%', 'затрат на сопровождение'), ('2 дня', 'на аудит бюджета проекта')], 'расчёт UpCore; ориентир: SIG'),
+ ('projects', 'B'): ([('−120 ч', 'к оплате по одному акту'), ('≈1,6 млн ₽', 'переплаты в месяц на 10 разработчиков'), ('$7 млн', 'возвращено у вендоров')], 'расчёт UpCore; ориентир: BlueOptima'),
+ ('projects', 'C'): ([('+45%', 'к бюджету крупных ИТ-проектов'), ('−56%', 'ценности от плана'), ('−75%', 'к оплате находит аудит по коду')], 'McKinsey и Оксфорд; пример UpCore'),
+ ('mentor', 'A'): ([('≈1,9 млн ₽', 'в месяц экономии на ревью — 50 разработчиков'), ('−38%', 'времени на код-ревью'),
+                    ('×2', 'быстрее онбординг'), ('6,0 → 8,0', 'качество кода после ревью')], 'расчёт и демо UpCore; ориентиры: CodeScene, DX'),
+ ('mentor', 'B'): ([('114 ч', 'ручного ревью в месяц экономии'), ('15 мин', 'на критичные MR у лида'), ('×3', 'меньше возвратов из тестирования')], 'демо UpCore; ориентир: Tech Talent Score'),
+ ('mentor', 'C'): ([('50% / 67%', 'понимание с ИИ и без'), ('×2', 'быстрее онбординг с наставником'), ('94%', 'остаются, если компания вкладывается в рост')], 'Anthropic 2026; DX; LinkedIn'),
+}
 
 def slider_console():
     return """<div style="flex: 1.15 1 520px; min-width: 0; position: relative;">
@@ -562,7 +587,8 @@ def home(variant):
                   st=[('100%', 'кода проверено'), ('1 сек', 'на один Merge Request'), ('5–10%', 'успевает проверить человек')], note=None),
     }[variant]
     visual = slider_console() if MODE == 'dc' else static_slider_preview()
-    body = [header(None), hero('цифровой тимлид · онлайн', hv['h1'], hv['sub'], [btn('Подключить репозиторий', REG), btn('Заказать аудит', MAIL, False)], hv['st'], visual, hv['note'])]
+    st, note = HERO_STATS.get(('home', variant), (hv['st'], hv['note']))
+    body = [header(None), hero('цифровой тимлид · онлайн', hv['h1'], hv['sub'], [btn('Подключить репозиторий', REG), btn('Заказать аудит', MAIL, False)], st, visual, note)]
     if variant != 'A':
         return page('UpCore — главная, первый экран ' + variant, '\n'.join(body), 1000, slider=True, name='Home-' + variant)
     body += [
@@ -674,7 +700,8 @@ def product_top(key, v):
     ctas = [btn('Подключить репозиторий', REG), btn('Заказать аудит' if key == 'projects' else 'Получить демо-отчёт', MAIL, False)]
     if key == 'projects':
         ctas = [btn('Заказать аудит', MAIL), btn('Подключить репозиторий', REG, False)]
-    return [header(key), hero(p['badge'], hv['h1'], hv['sub'], ctas, hv['st'], image_console(img, path, t, c, key), hv['note'], key)]
+    st, note = HERO_STATS.get((key, v), (hv['st'], hv['note']))
+    return [header(key), hero(p['badge'], hv['h1'], hv['sub'], ctas, st, image_console(img, path, t, c, key), note, key)]
 
 def product(key, v):
     names = {'grade': 'Grade', 'ai': 'AI', 'projects': 'Projects', 'mentor': 'Mentor'}
