@@ -581,9 +581,11 @@ def core_v3(n):
                 '<circle cx="70" cy="70" r="%d" fill="none" stroke="#63D5FF" stroke-width="18" stroke-dasharray="%.1f %.1f" transform="rotate(-90 70 70)"></circle>'
                 '<text x="70" y="68" text-anchor="middle" font-family="Onest, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">80 ч</text>'
                 '<text x="70" y="88" text-anchor="middle" font-family="Onest, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">из 160 ч</text></svg>') % (r, RED, r, c / 2, c)
-        mid = ('<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px;">%s<div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 12px;">'
-               '<div style="font-size: 16px; color: rgba(255,255,255,0.84);">Списано за месяц <b style="color: #FFFFFF;">160 ч</b></div>%s%s</div></div>') % (
-               ring, legend('#63D5FF', '80 ч', 'задачи, реально решённые в коде'), legend(RED, '80 ч', 'потери — оплачено без результата'))
+        line = lambda a, b, c: '<div style="font-size: 17px; color: rgba(255,255,255,0.84);">%s <b style="color: %s; font-size: 20px; white-space: nowrap;">%s</b></div>' % (e(a), c, e(b))
+        mid = ('<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px;">%s<div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">'
+               '%s%s%s</div></div>') % (ring, line('Списано за месяц', '160 ч', '#FFFFFF'), line('Реально решённых задач', '80 ч', RED_T), line('Эффективность', '50%', RED_T))
+        bottom = ('<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;"><b style="color: %s;">−150 тыс. ₽ в месяц</b>'
+                  ' <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span></div>') % RED_T
     right = top + mid + bottom
     card = 'flex: 1 1 440px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 20px;'
     inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 420px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card, right)
@@ -803,7 +805,7 @@ def home(variant):
             ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
             ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
         ]),
-        core_v4(10),
+        core_v3(9),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
             'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
@@ -1043,7 +1045,7 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    for n in (9, 10, 11, 12):  # раунд 13: остальные варианты сняты с холста (код оставлен для истории)
+    for n in (9,):  # раунд 14: на холсте только «Сердце 9» (остальные варианты сняты, код оставлен для истории)
         files['Core-%d' % n] = core_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
