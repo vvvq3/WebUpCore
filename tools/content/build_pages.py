@@ -555,7 +555,7 @@ def core_v3(n):
     left = (lab + '<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">UpCore не считает строчки кода, а вычисляет его <span style="color: #63D5FF;">реальную ценность</span></h2>'
             '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 500px;">В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.</p>')
     noise = ''.join('<span style="text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.85); color: rgba(255,255,255,0.55); font-size: 15px; white-space: nowrap;">%s</span>' % e(x)
-                    for x in ['8 400 строк', '43 merge request', '18 закрытых задач'])
+                    for x in ['10 423 строк', '37 мерж-реквестов', '27 закрытых задач'])
     top = ('<div><div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">обычные метрики — «выглядит продуктивно»</div>'
            '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px;">%s</div></div>') % (MONO, noise)
     bottom = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">'
