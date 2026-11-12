@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — блок «4 продукта» 2</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ucIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+.uc-blink{animation:ucBlink 1.4s ease-in-out infinite}
+.uc-in{animation:ucIn .6s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; min-height: 100vh; overflow: hidden;">
+<div style="padding-top: 48px;"><section id="products" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; margin-bottom: 14px; letter-spacing: 0.04em;">ПЛАТФОРМА UPCORE</div><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px;"><h2 style="margin: 0; font-size: clamp(32px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800; max-width: 760px;">Одна платформа. Четыре ответа для бизнеса.</h2><p style="margin: 0; max-width: 420px; color: rgba(255,255,255,0.74); font-size: 17px; line-height: 1.55;">Подключите репозиторий один раз — и получите оценки по каждому направлению: люди, ИИ, проекты и рост команды.</p></div><div class="g2"><article id="grade" style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF;">01 / UPCORE GRADE</div><div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">«Кто в команде реально тянет свой грейд?»</div><h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">Объективная оценка разработчика</h3><p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">Цифровой тимлид оценивает каждого разработчика по реальной работе и выдаёт подтверждённый грейд Junior− … Senior — без анкет и собеседований.</p><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.58); margin: 2px 0 -8px;">ЧТО ВЫ УВИДИТЕ</div><ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;"><li>Звезда компетенций по 10 осям и динамика роста</li><li>Рейтинг по компании, стеку и проекту, красная зона</li><li>Авто-резюме: реальный стек и уровень по коду</li></ul><a href="#grade-page" style="margin-top: auto; font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #63D5FF;">Подробнее о Grade →</a></article><article id="ai" style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #B9AEFF;">02 / UPCORE AI</div><div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">«Окупаются ли ИИ-инструменты?»</div><h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">Реальная эффективность ИИ и вайбкодинга</h3><p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">Авто-детект ИИ-кода и промпт-коллектор показывают, кто и как работает с ИИ, сколько это экономит и сколько стоит.</p><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.58); margin: 2px 0 -8px;">ЧТО ВЫ УВИДИТЕ</div><ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;"><li>Доля ИИ-кода в каждом MR</li><li>Время «вручную» и «с ИИ» по каждой задаче</li><li>Сессии, ходы и токены на задачу</li></ul><a href="#ai-page" style="margin-top: auto; font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #B9AEFF;">Подробнее об AI →</a></article><article id="projects" style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #F2C14E;">03 / UPCORE PROJECTS</div><div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">«Сколько на самом деле стоит проект?»</div><h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">Бюджет проекта и контроль подрядчиков</h3><p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">Трудоёмкость каждого MR складывается в полную картину проекта — от эффективности команды до техдолга.</p><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.58); margin: 2px 0 -8px;">ЧТО ВЫ УВИДИТЕ</div><ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;"><li>Акт подрядчика против объективных часов</li><li>Рейтинг проектов, потери и прогноз сроков</li><li>Техдолг и тех-карта команды</li></ul><a href="#projects-page" style="margin-top: auto; font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #F2C14E;">Подробнее о Projects →</a></article><article id="mentor" style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #7FDB7A;">04 / UPCORE MENTOR</div><div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">«Как команде расти быстрее?»</div><h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">ИИ-наставник для каждого разработчика</h3><p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">ИИ-агенты ревьюят код, постановки задач и промпты, а из системных ошибок собирают персональный план развития.</p><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.58); margin: 2px 0 -8px;">ЧТО ВЫ УВИДИТЕ</div><ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;"><li>ИИ-ревью кода в каждом MR</li><li>Ревью промптов и постановок задач</li><li>План роста и Топ-3 технологии для каждого</li></ul><a href="#mentor-page" style="margin-top: auto; font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: #7FDB7A;">Подробнее о Mentor →</a></article></div>
+</section></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1325}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -65,7 +65,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -694,6 +694,50 @@ def pains_board(n):
     names = {1: 'CTO и HRD', 2: 'Шесть вопросов', 3: 'Цена непрозрачности'}
     return page('UpCore — блок «Почему это важно» %d (%s)' % (n, names[n]), '<div style="padding-top: 48px;">%s</div>' % pains_variant(n), 700, name='Pains-%d' % n)
 
+TRUST_H2 = 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.'
+TRUST_LEAD = 'Это не токсичный контроль, а обычное классическое код-ревью — только его делает цифровой тимлид. По каждому MR, без усталости и любимчиков. И гораздо точнее.'
+PILLARS = [('100+ задач подряд', 'Оценка строится по сотне задач: на дистанции статистика сглаживает любые аномалии.'),
+           ('Математика, а не LLM', 'Детерминированная модель не «галлюцинирует»: один и тот же код — всегда одна и та же оценка.'),
+           ('«Глаз» и апелляции', 'Любой вывод открывается до строчки кода, а сотрудник может оспорить оценку.'),
+           ('1500+ разработчиков', 'Модели откалиброваны на экспертных оценках под каждый стек и проверены на сотнях проектов.')]
+
+def trust_variant(n):
+    """Раунд 20: «Принцип» + «Почему этой оценке можно доверять» в одном блоке, три варианта."""
+    head = ('<div style="%s font-size: 13px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 14px;">ПРИНЦИП</div>'
+            '<h2 style="margin: 0; font-size: clamp(30px, 3.2vw, 48px); letter-spacing: -0.03em; line-height: 1.06; font-weight: 800; max-width: 900px;">%s</h2>'
+            '<p style="margin: 16px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 760px;">%s</p>') % (MONO, e(TRUST_H2), e(TRUST_LEAD))
+    big96 = ('<div style="min-width: 0;"><div style="font-size: clamp(88px, 10vw, 152px); font-weight: 800; color: #63D5FF; line-height: 0.9; letter-spacing: -0.04em;">96%%</div>'
+             '<div style="font-size: 20px; color: rgba(255,255,255,0.88); margin-top: 10px;">совпадение с экспертной оценкой</div>%s</div>')
+    if n == 1:  # принцип сверху, ниже 96% слева и 4 опоры 2×2 справа
+        pil = ''.join('<div style="min-width: 0; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 20px;"><div style="font-size: 19px; font-weight: 800; margin-bottom: 6px;">%s</div>'
+                      '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (e(a), e(b)) for a, b in PILLARS)
+        inner = ('<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 36px;">%s'
+                 '<div style="display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 36px;">'
+                 '<div style="flex: 0 1 320px;">%s</div><div class="g2" style="flex: 1 1 520px; min-width: 0;">%s</div></div></div>') % (head, big96 % '', pil)
+    elif n == 2:  # сравнение: живой тимлид / цифровой тимлид
+        rows = [('Проверяет кода', '5–10%', '100%'), ('Время на один MR', 'часы', '≈ 1 секунда'),
+                ('Точность', '«4 часа или 8?» — зависит от того, кто оценивает', '96% от экспертной оценки'),
+                ('Стабильность', 'устаёт, спешит, есть любимчики', 'одна шкала на 100+ задачах'),
+                ('Проверяемость', '«я так вижу»', 'расчёт до строчки кода и апелляция')]
+        trs = ''.join('<tr><th scope="row" style="text-align: left; padding: 14px 16px 14px 0; font-weight: 600; color: rgba(255,255,255,0.7); font-size: 15px; border-top: 1px solid rgba(255,255,255,0.08); vertical-align: top;">%s</th>'
+                      '<td style="padding: 14px 16px; color: rgba(255,255,255,0.72); font-size: 16px; border-top: 1px solid rgba(255,255,255,0.08); vertical-align: top;">%s</td>'
+                      '<td style="padding: 14px 16px; font-weight: 800; font-size: 17px; color: #FFFFFF; background: rgba(99,213,255,0.07); border-top: 1px solid rgba(99,213,255,0.25); vertical-align: top;">%s</td></tr>' % (e(a), e(b), e(c)) for a, b, c in rows)
+        table = ('<div style="overflow-x: auto;"><table class="uc-cmp" style="width: 100%%; border-collapse: collapse;"><thead><tr><th></th>'
+                 '<th scope="col" style="text-align: left; padding: 0 16px 12px; %s font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 400;">ЖИВОЙ ТИМЛИД</th>'
+                 '<th scope="col" style="text-align: left; padding: 0 16px 12px; %s font-size: 12px; color: #63D5FF; font-weight: 400;">ЦИФРОВОЙ ТИМЛИД UPCORE</th></tr></thead><tbody>%s</tbody></table></div>') % (MONO, MONO, trs)
+        inner = ('<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 32px;">%s%s</div>') % (head, table)
+    else:  # компактно: принцип слева, 96% справа, строка из 4 доказательств
+        proofs = [('100+', 'задач в каждой оценке'), ('50+', 'факторов в каждом MR'), ('1500+', 'разработчиков в калибровке'), ('100%', 'выводов открываются в «Глазе»')]
+        cells = ''.join('<div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">%s</div>'
+                        '<div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px;">%s</div></div>' % (e(a), e(b)) for a, b in proofs)
+        inner = ('<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 32px;">'
+                 '<div style="display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: center;"><div style="flex: 1.4 1 480px; min-width: 0;">%s</div><div style="flex: 0 1 320px;">%s</div></div>'
+                 '<div class="g4m2" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px;">%s</div></div>') % (head, big96 % '<div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px;">даже два сильных лида расходятся: один скажет 4 часа, другой — 8</div>', cells)
+    return section(inner, 'trust')
+
+def block_board(prefix, n, html, title):
+    return page('UpCore — %s %d' % (title, n), '<div style="padding-top: 48px;">%s</div>' % html, 900, name='%s-%d' % (prefix, n))
+
 def core_board(n):
     names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч',
              7: 'Полоса ценность / потери', 8: 'Месяц — 20 рабочих дней', 9: 'Кольцо 80 из 160', 10: 'Кольцо, 50% в центре', 11: 'Два кольца', 12: 'Спидометр'}
@@ -724,7 +768,40 @@ def footer():
     return ('<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7);">'
             '<img src="%s" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (985) 848-35-55 · office@dex-it.ru · @upcore_ai</span></div></footer>') % src('logo')
 
-def products_2x2():
+PRODUCT_TEXTS = {  # раунд 20: три варианта абзаца и 3 пунктов в карточках продуктов
+ 1: ('РЕЗУЛЬТАТ ДЛЯ БИЗНЕСА', {
+   'grade': ('Реальный грейд и эффективность каждого разработчика — в часах и рублях, по коду за 3 месяца. Видно, кто тянет свой уровень, а кто живёт на накрученном резюме.',
+             ['+12% к производительности команды от прозрачных правил', '≈5 млн ₽ в месяц на 100 разработчиков — потери от 20% неэффективных', 'Грейд новичка подтверждён до конца испытательного срока']),
+   'ai': ('Сколько часов на самом деле экономит ИИ — по каждому разработчику, команде и инструменту. И где он вместо ускорения плодит переделки и техдолг.',
+          ['Senior с ИИ: +50–100%, Junior: до −50%', '×1,9 отдачи на рубль, когда лицензии идут туда, где есть эффект', 'Отчёт «до и после ИИ» — сразу, по истории Git']),
+   'projects': ('Объективная стоимость кода в часах и рублях — сверьте с актами подрядчика, бюджетом и сроками. Разовый аудит без внедрения.',
+                ['−75% к оплате в примере аудита акта', 'Бюджет всего проекта по коду — за 2 дня', 'Прогноз сроков и риск сорвать дедлайн']),
+   'mentor': ('Персональный ИИ-наставник для каждого разработчика: разбирает MR, задачи и промпты и показывает, что исправить, чтобы вырасти.',
+              ['114 часов ручного ревью в месяц экономии', 'Качество кода 6,0 → 8,0 после ревью', 'Лиду — 15 минут на критичное вместо часов']),
+ }),
+ 2: ('ЧТО ВЫ УВИДИТЕ', {
+   'grade': ('Цифровой тимлид оценивает каждого разработчика по реальной работе и выдаёт подтверждённый грейд Junior− … Senior — без анкет и собеседований.',
+             ['Звезда компетенций по 10 осям и динамика роста', 'Рейтинг по компании, стеку и проекту, красная зона', 'Авто-резюме: реальный стек и уровень по коду']),
+   'ai': ('Авто-детект ИИ-кода и промпт-коллектор показывают, кто и как работает с ИИ, сколько это экономит и сколько стоит.',
+          ['Доля ИИ-кода в каждом MR', 'Время «вручную» и «с ИИ» по каждой задаче', 'Сессии, ходы и токены на задачу']),
+   'projects': ('Трудоёмкость каждого MR складывается в полную картину проекта — от эффективности команды до техдолга.',
+                ['Акт подрядчика против объективных часов', 'Рейтинг проектов, потери и прогноз сроков', 'Техдолг и тех-карта команды']),
+   'mentor': ('ИИ-агенты ревьюят код, постановки задач и промпты, а из системных ошибок собирают персональный план развития.',
+              ['ИИ-ревью кода в каждом MR', 'Ревью промптов и постановок задач', 'План роста и Топ-3 технологии для каждого']),
+ }),
+ 3: ('КАКИЕ РЕШЕНИЯ ВЫ ПРИМЕТЕ', {
+   'grade': ('Для CTO и HRD: повышения, зарплаты и испытательный срок — на фактах из кода, а не на впечатлениях и самооценке.',
+             ['Кого повысить, а кому пересмотреть зарплату', 'Кто не тянет грейд — и что с этим делать', 'Прошёл ли новичок испытательный срок']),
+   'ai': ('Для CTO и финансов: бюджет на ИИ, который можно защитить перед советом директоров — в часах и рублях.',
+          ['Кому давать лицензии, а кому — обучение', 'Где ИИ ускоряет, а где плодит переделки', 'Продолжать ли тратить на токены — и сколько']),
+   'projects': ('Для заказчиков, PMO и финансов: платите за результат в коде, а не за часы в акте.',
+                ['Сколько проект стоит на самом деле', 'Переплачиваете ли вы подрядчику', 'Успеет ли команда к дедлайну']),
+   'mentor': ('Для тимлидов и L&D: менторство, которое масштабируется на всю команду и не съедает время сеньоров.',
+              ['Как быстрее вывести новичков на эффективность', 'Как разгрузить сеньоров от ревью', 'Что прокачать каждому для следующего грейда']),
+ }),
+}
+
+def products_2x2(variant=None):
     items = [
         ('grade', '01 / UPCORE GRADE', '«Кто в команде реально тянет свой грейд?»', 'Объективная оценка разработчика',
          'Эффективность в часах и рублях, подтверждённый грейд Junior− … Senior и рейтинг — по реальному коду за 3 месяца, а не по собеседованию и впечатлениям.',
@@ -739,18 +816,22 @@ def products_2x2():
          'Разбирает каждый MR, задачи и промпты, находит, где проседает эффективность, и даёт конкретные рекомендации — от ошибок в коде до плана развития.',
          ['ИИ-ревью кода и постановок задач', 'Ревью промптов: как работать с ИИ', 'Персональный план роста и Топ-3 технологии'], 'Подробнее о Mentor →'),
     ]
+    ul_label = ''
+    if variant:
+        ul_label, texts = PRODUCT_TEXTS[variant]
+        items = [(k, lab, q, tt) + texts[k] + (more,) for k, lab, q, tt, p0, l0, more in items]
     cards = []
     for key, lab, q, t, p, lis, more in items:
         line, txt = ACC[key]
-        ul = ''.join('<li>%s</li>' % e(x) for x in lis)
+        lab_html = ('<div style="%s font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.58); margin: 2px 0 -8px;">%s</div>' % (MONO, e(ul_label))) if ul_label else ''
+        ul = '<ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;">%s</ul>' % ''.join('<li>%s</li>' % e(x) for x in lis)
         cards.append('<article id="%s" style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
                      '<div style="%s font-size: 13px; color: %s;">%s</div>'
                      '<div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">%s</div>'
                      '<h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">%s</h3>'
-                     '<p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">%s</p>'
-                     '<ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.8;">%s</ul>'
+                     '<p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">%s</p>%s%s'
                      '<a href="#%s-page" style="margin-top: auto; font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: %s;">%s</a></article>' % (
-                         key, MONO, txt, e(lab), e(q), e(t), e(p), ul, key, txt, e(more)))
+                         key, MONO, txt, e(lab), e(q), e(t), e(p), lab_html, ul, key, txt, e(more)))
     return section(sec_head('ПЛАТФОРМА UPCORE', 'Одна платформа. Четыре ответа для бизнеса.', 'Подключите репозиторий один раз — и получите оценки по каждому направлению: люди, ИИ, проекты и рост команды.') +
                    '<div class="g2">%s</div>' % ''.join(cards), 'products')
 
@@ -856,22 +937,8 @@ def home(variant):
     body += [
         pains_variant(2),
         core_v3(9),
-        products_2x2(),
-        compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
-            'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
-            'Мы считаем', ['объективную трудоёмкость каждого MR в часах', 'вес кода по архитектуре: 50 строк в ядре дороже 1000 строк формочек', 'результирующий код: что осталось в продукте, а что переписано',
-                           'без шума: копипаст, автогенерация и ренеймы отсеиваются'],
-            'Больше кода — не значит больше ценности. UpCore оценивает только результат, который остался в продукте.'),
-        method_block('Почему этой оценке можно доверять', [
-            ('ДИСТАНЦИЯ', '100+ задач подряд', 'Не одна задача, а сотня подряд: на дистанции закон больших чисел сглаживает любые аномалии.'),
-            ('МАТЕМАТИКА', 'Не LLM, а модель', 'В ядре — детерминированная математика: она не «галлюцинирует», не требует GPU и даёт одинаковый результат на одинаковом коде.'),
-            ('ПРОЗРАЧНОСТЬ', '«Глаз» и апелляции', 'Любой вывод открывается до строчки кода. Сотрудник видит ту же оценку, что и руководитель, и может её оспорить.'),
-            ('КАЛИБРОВКА', '1500+ разработчиков', 'Модели откалиброваны на экспертных оценках под каждый стек и проверены на сотнях проектов.')],
-            '96%', 'от экспертной оценки', [
-                'Модель обучена повторять оценку опытных тимлидов. Даже два сильных лида расходятся: один оценит задачу в 4 часа, другой — в 8. UpCore даёт одну шкалу для всех.',
-                'Оценка строится по 100+ задачам подряд — на дистанции статистика сглаживает аномалии. «Глаз» показывает расчёт до строчки кода, а сотрудник может подать апелляцию.',
-                'Модели проверены на 1500+ разработчиках и сотнях проектов.'],
-            'Тот же принцип — модель, обученная на оценках экспертов, — исследователи Стэнфорда применили к 100 000+ разработчиков (корреляция с экспертами 0,82–0,86).'),
+        products_2x2(1),
+        trust_variant(1),
         results('home'),
         security(True),
         cta('Узнайте реальную эффективность команды уже сегодня', 'Подключите репозиторий или закажите аудит — первые результаты по истории вашего кода, без ожидания.'),
@@ -1096,6 +1163,9 @@ def build(out, mode):
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
+    for n in (1, 2, 3):  # раунд 20: варианты блоков «Продукты» и «Принцип + доверие»
+        files['Products-%d' % n] = block_board('Products', n, products_2x2(n), 'блок «4 продукта»')
+        files['Trust-%d' % n] = block_board('Trust', n, trust_variant(n), 'блок «Принцип и точность»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':

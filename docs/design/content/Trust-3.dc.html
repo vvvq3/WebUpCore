@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — блок «Принцип и точность» 3</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ucIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+.uc-blink{animation:ucBlink 1.4s ease-in-out infinite}
+.uc-in{animation:ucIn .6s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; min-height: 100vh; overflow: hidden;">
+<div style="padding-top: 48px;"><section id="trust" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 32px;"><div style="display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: center;"><div style="flex: 1.4 1 480px; min-width: 0;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 14px;">ПРИНЦИП</div><h2 style="margin: 0; font-size: clamp(30px, 3.2vw, 48px); letter-spacing: -0.03em; line-height: 1.06; font-weight: 800; max-width: 900px;">Не тайм-трекер. Не слежка. Не KPI по строкам кода.</h2><p style="margin: 16px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 760px;">Это не токсичный контроль, а обычное классическое код-ревью — только его делает цифровой тимлид. По каждому MR, без усталости и любимчиков. И гораздо точнее.</p></div><div style="flex: 0 1 320px;"><div style="min-width: 0;"><div style="font-size: clamp(88px, 10vw, 152px); font-weight: 800; color: #63D5FF; line-height: 0.9; letter-spacing: -0.04em;">96%</div><div style="font-size: 20px; color: rgba(255,255,255,0.88); margin-top: 10px;">совпадение с экспертной оценкой</div><div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px;">даже два сильных лида расходятся: один скажет 4 часа, другой — 8</div></div></div></div><div class="g4m2" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px;"><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">100+</div><div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px;">задач в каждой оценке</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">50+</div><div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px;">факторов в каждом MR</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">1500+</div><div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px;">разработчиков в калибровке</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">100%</div><div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px;">выводов открываются в «Глазе»</div></div></div></div>
+</section></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":624}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
