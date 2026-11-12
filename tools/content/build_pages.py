@@ -63,8 +63,9 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -472,6 +473,53 @@ def core_block():
              '%s%s<div class="g3">%s</div></div>') % (MONO, pipeline, formula, dcards)
     return section(inner, 'core')
 
+def _bar(label, val, pct, color):
+    return ('<div><div style="display: flex; justify-content: space-between; gap: 12px; font-size: 16px; margin-bottom: 8px;"><span style="color: rgba(255,255,255,0.84);">%s</span><b style="font-variant-numeric: tabular-nums;">%s</b></div>'
+            '<div style="height: 14px; border-radius: 7px; background: rgba(255,255,255,0.07); overflow: hidden;"><div style="width: %d%%; height: 100%%; background: %s; border-radius: 7px;"></div></div></div>') % (e(label), e(val), pct, color)
+
+CORE_LABEL = 'СЕРДЦЕ UPCORE · ЗАПАТЕНТОВАННЫЙ МЕТОД'
+CORE_PANEL = 'border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.45); box-shadow: inset 0 0 140px rgba(99,213,255,0.07); padding: clamp(24px, 3.5vw, 48px);'
+
+def core_variant(n):
+    """Три компактных варианта блока об уникальной механике (раунд 10)."""
+    lab = '<div style="%s font-size: 12px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 12px;">%s</div>' % (MONO, CORE_LABEL)
+    if n == 1:  # «Формула»: заголовок + одна фраза слева, пример со шкалами справа
+        left = ('<div style="flex: 1 1 420px; min-width: 0;">%s<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">'
+                'Код → <span style="color: #63D5FF;">объективные человеко‑часы</span></h2>'
+                '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 480px;">Запатентованная математическая модель по 50+ факторам считает, сколько часов работа в коде стоит на самом деле.</p></div>') % lab
+        right = ('<div style="flex: 1 1 420px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 18px;">'
+                 '%s%s<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;">'
+                 '<span>Эффективность <b style="color: #63D5FF;">50%%</b></span><span style="color: rgba(255,255,255,0.74);">потери — 80 ч × ставка</span></div></div>') % (
+                 _bar('Отработано за месяц', '160 ч', 100, 'rgba(255,255,255,0.35)'), _bar('Реальная ценность кода', '80 ч', 50, '#63D5FF'))
+        inner = '<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;">%s%s</div>' % (CORE_PANEL, left, right)
+    elif n == 2:  # «Конвейер»: одна строка шагов + строка расчёта
+        steps_ = ['Merge Request', '50+ факторов', 'Запатентованная модель', 'Объективные часы']
+        chain = ''.join(('<span aria-hidden="true" style="color: #63D5FF; font-size: 26px; font-weight: 800;">›</span>' if i else '') +
+                        '<span style="padding: 12px 16px; border-radius: 14px; background: %s; border: 1px solid %s; font-size: 16px; font-weight: 700; white-space: nowrap;">%s</span>' % (
+                            'rgba(99,213,255,0.14)' if i == 3 else '#0B0A12', 'rgba(99,213,255,0.5)' if i == 3 else 'rgba(255,255,255,0.1)', e(s)) for i, s in enumerate(steps_))
+        calc = [('160 ч', 'отработал разработчик'), ('80 ч', 'реальная ценность кода'), ('50%', 'эффективность'), ('−80 ч', '× ставка — потери')]
+        cells = ''.join('<div style="min-width: 0;"><div style="font-size: clamp(30px, 3vw, 44px); font-weight: 800; letter-spacing: -0.03em; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                        '<div style="font-size: 14px; color: rgba(255,255,255,0.72); margin-top: 4px;">%s</div></div>' % ('#63D5FF' if i in (1, 2) else '#FFFFFF', e(a), e(b)) for i, (a, b) in enumerate(calc))
+        inner = ('<div style="%s display: flex; flex-direction: column; gap: 28px;"><div>%s<h2 style="margin: 0; font-size: clamp(28px, 2.8vw, 40px); letter-spacing: -0.03em; line-height: 1.1; font-weight: 800;">Как UpCore видит реальную ценность кода</h2></div>'
+                 '<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">%s</div>'
+                 '<div class="g4m2" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px;">%s</div></div>') % (CORE_PANEL, lab, chain, cells)
+    else:  # «Контраст»: две гигантские цифры
+        big = lambda v, l, c: ('<div style="min-width: 0;"><div style="font-size: clamp(64px, 9vw, 128px); font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                               '<div style="font-size: 16px; color: rgba(255,255,255,0.75); margin-top: 10px;">%s</div></div>') % (c, e(v), e(l))
+        nums = ('<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 32px;">%s<div aria-hidden="true" style="font-size: clamp(40px, 5vw, 72px); font-weight: 800; color: rgba(255,255,255,0.3); line-height: 1; padding-bottom: 28px;">→</div>%s</div>') % (
+                big('160 ч', 'отработано за месяц', '#FFFFFF'), big('80 ч', 'реальная ценность кода', '#63D5FF'))
+        tags = ''.join('<span style="padding: 8px 12px; border-radius: 10px; background: rgba(99,213,255,0.1); color: #CFF3FF; font-size: 14px;">%s</span>' % e(x) for x in ['50+ факторов', 'запатентованная модель', '96% совпадения с экспертом'])
+        text = ('<div style="flex: 1 1 360px; min-width: 0;">%s<h2 style="margin: 0; font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.02em; line-height: 1.15; font-weight: 800;">Эффективность — 50%%. Остальное видно до строчки кода.</h2>'
+                '<p style="margin: 14px 0 18px; color: rgba(255,255,255,0.78); font-size: 16px; line-height: 1.55;">Сердце UpCore переводит код в объективные человеко‑часы — и сразу в деньги.</p>'
+                '<div style="display: flex; flex-wrap: wrap; gap: 8px;">%s</div></div>') % (lab, tags)
+        inner = '<div style="%s display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: center;"><div style="flex: 1.3 1 480px; min-width: 0;">%s</div>%s</div>' % (CORE_PANEL, nums, text)
+    return section(inner, 'core')
+
+def core_board(n):
+    names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст'}
+    body = '<div style="padding-top: 48px;">%s</div>' % core_variant(n)
+    return page('UpCore — блок «Сердце» %d (%s)' % (n, names[n]), body, 600, name='Core-%d' % n)
+
 SEC_CARDS = [
     ('Вход через GitHub или GitLab', 'Подключите репозиторий — и получите первые оценки по истории проекта. Код, написанный за год, анализируется за несколько минут.'),
     ('Код не покидает ваш контур', 'Локальный агент анализирует код на вашей стороне. На сервер уходят только метрики — исходники никуда не передаются.'),
@@ -632,7 +680,7 @@ def home(variant):
             ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
             ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
         ]),
-        core_block(),
+        core_variant(1),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
             'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
@@ -872,6 +920,8 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
+    for n in (1, 2, 3):
+        files['Core-%d' % n] = core_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)

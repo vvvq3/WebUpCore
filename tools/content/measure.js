@@ -18,7 +18,9 @@ const fs = require('fs'), path = require('path');
         const bad = [];
         document.querySelectorAll('body *').forEach(el => { const r = el.getBoundingClientRect(); if (r.width && r.right > W + 2 && !el.closest('svg')) bad.push(el.tagName + ':' + (el.innerText||'').slice(0,30).replace(/\s+/g,' ') + '@' + Math.round(r.right)); });
         let small = 0; document.querySelectorAll('body *').forEach(el => { if ([...el.childNodes].some(n => n.nodeType===3 && n.textContent.trim())) { if (parseFloat(getComputedStyle(el).fontSize) < 12) small++; } });
-        return { h: document.documentElement.scrollHeight, bad: bad.slice(0, 4), nbad: bad.length, small };
+        const core = document.querySelector('#core');
+        const hh = (location.pathname.split('/').pop().startsWith('Core-') && core) ? Math.ceil(core.getBoundingClientRect().bottom + scrollY) : document.documentElement.scrollHeight;
+        return { h: hh, bad: bad.slice(0, 4), nbad: bad.length, small };
       }, w);
       await p.close();
     }
