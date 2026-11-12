@@ -589,10 +589,58 @@ def core_v3(n):
     inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 420px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card, right)
     return section(inner, 'core')
 
+def core_v4(n):
+    """Раунд 13: на основе «Сердце 9» (кольцо). Эффективность 50% — красным; подписи: списано 160 ч, решено задач на 80 ч, эффективность 50%."""
+    lab = '<div style="%s font-size: 12px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 12px;">УНИКАЛЬНАЯ МЕХАНИКА UPCORE</div>' % MONO
+    left = (lab + '<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">UpCore не считает строчки кода, а вычисляет его <span style="color: #63D5FF;">реальную ценность</span></h2>'
+            '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 500px;">В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.</p>')
+    noise = ''.join('<span style="text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.85); color: rgba(255,255,255,0.55); font-size: 15px; white-space: nowrap;">%s</span>' % e(x)
+                    for x in ['2 400 строк', '37 коммитов', '18 закрытых задач'])
+    top = ('<div><div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">обычные метрики — «выглядит продуктивно»</div>'
+           '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px;">%s</div></div>') % (MONO, noise)
+    money = ('<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;"><b style="color: %s;">−150 тыс. ₽ в месяц</b>'
+             ' <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span></div>') % RED_T
+    def row(mark, label, val, vcol='#FFFFFF', big=False):
+        fs = '30px' if big else '24px'
+        return ('<div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.06);">'
+                '<span style="display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 15px; color: rgba(255,255,255,0.84);">%s<span>%s</span></span>'
+                '<b style="font-size: %s; letter-spacing: -0.02em; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</b></div>') % (mark, e(label), fs, vcol, e(val))
+    def dot(c, ring=False):
+        st = 'border: 3px solid %s; background: transparent;' % c if ring else 'background: %s;' % c
+        return '<span aria-hidden="true" style="flex: 0 0 auto; width: 14px; height: 14px; border-radius: 50%%; %s"></span>' % st
+    rows = (row(dot('rgba(255,255,255,0.45)', True), 'Списано за месяц', '160 ч') + row(dot('#63D5FF'), 'Реально решённых задач', 'на 80 ч', '#63D5FF')
+            + row(dot(RED), 'Эффективность', '50%', RED_T, True))
+    r = 52; C = 2 * 3.14159 * r
+    stripes = ('<defs><pattern id="ucStr%d" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
+               '<rect width="8" height="8" fill="rgba(232,101,101,0.55)"></rect><rect width="4" height="8" fill="#E86565"></rect></pattern></defs>') % n
+    if n == 10:  # кольцо: голубая половина — решено, красная — потери; в центре 50% красным
+        svg = ('<svg viewBox="0 0 140 140" width="168" height="168" role="img" aria-label="Эффективность 50%%: решено задач на 80 из 160 часов" style="flex: 0 0 auto;">%s'
+               '<circle cx="70" cy="70" r="%d" fill="none" stroke="url(#ucStr%d)" stroke-width="18"></circle>'
+               '<circle cx="70" cy="70" r="%d" fill="none" stroke="#63D5FF" stroke-width="18" stroke-dasharray="%.1f %.1f" transform="rotate(-90 70 70)"></circle>'
+               '<text x="70" y="80" text-anchor="middle" font-family="Onest, sans-serif" font-size="30" font-weight="800" fill="%s">50%%</text></svg>') % (stripes, r, n, r, C / 2, C, RED_T)
+    elif n == 11:  # два кольца: внешнее — списано 160 ч, внутреннее — решено 80 ч
+        r2 = 36; C2 = 2 * 3.14159 * r2
+        svg = ('<svg viewBox="0 0 140 140" width="168" height="168" role="img" aria-label="Списано 160 часов, решено задач на 80 часов, эффективность 50%%" style="flex: 0 0 auto;">' + stripes +
+               '<circle cx="70" cy="70" r="%d" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="12"></circle>'
+               '<circle cx="70" cy="70" r="%d" fill="none" stroke="url(#ucStr11)" stroke-width="12"></circle>'
+               '<circle cx="70" cy="70" r="%d" fill="none" stroke="#63D5FF" stroke-width="12" stroke-dasharray="%.1f %.1f" stroke-linecap="round" transform="rotate(-90 70 70)"></circle>'
+               '<text x="70" y="77" text-anchor="middle" font-family="Onest, sans-serif" font-size="19" font-weight="800" fill="%s">50%%</text></svg>') % (r + 6, r2, r2, C2 / 2, C2, RED_T)
+    else:  # полукольцо-спидометр: 50% красным
+        R = 58; half = 3.14159 * R
+        svg = ('<svg viewBox="0 0 150 108" width="200" height="144" role="img" aria-label="Эффективность 50%%" style="flex: 0 0 auto;">%s'
+               '<path d="M 17 80 A 58 58 0 0 1 133 80" fill="none" stroke="url(#ucStr%d)" stroke-width="16" stroke-linecap="butt"></path>'
+               '<path d="M 17 80 A 58 58 0 0 1 133 80" fill="none" stroke="#63D5FF" stroke-width="16" stroke-dasharray="%.1f %.1f"></path>'
+               '<line x1="75" y1="80" x2="75" y2="34" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"></line><circle cx="75" cy="80" r="5" fill="#FFFFFF"></circle>'
+               '<text x="75" y="104" text-anchor="middle" font-family="Onest, sans-serif" font-size="17" font-weight="800" fill="%s">50%%</text></svg>') % (stripes, n, half / 2, half, RED_T)
+    mid = '<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px;">%s<div style="flex: 1 1 220px; min-width: 0;">%s</div></div>' % (svg, rows)
+    card = 'flex: 1 1 440px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 20px;'
+    inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 420px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card, top + mid + money)
+    return section(inner, 'core')
+
 def core_board(n):
     names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч',
-             7: 'Полоса ценность / потери', 8: 'Месяц — 20 рабочих дней', 9: 'Кольцо 80 из 160'}
-    body = '<div style="padding-top: 48px;">%s</div>' % (core_variant(n) if n <= 3 else core_v2(n) if n <= 6 else core_v3(n))
+             7: 'Полоса ценность / потери', 8: 'Месяц — 20 рабочих дней', 9: 'Кольцо 80 из 160', 10: 'Кольцо, 50% в центре', 11: 'Два кольца', 12: 'Спидометр'}
+    body = '<div style="padding-top: 48px;">%s</div>' % (core_variant(n) if n <= 3 else core_v2(n) if n <= 6 else core_v3(n) if n <= 9 else core_v4(n))
     return page('UpCore — блок «Сердце» %d (%s)' % (n, names[n]), body, 600, name='Core-%d' % n)
 
 SEC_CARDS = [
@@ -755,7 +803,7 @@ def home(variant):
             ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
             ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
         ]),
-        core_v3(7),
+        core_v4(10),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
             'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
@@ -995,7 +1043,7 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    for n in range(1, 10):
+    for n in (9, 10, 11, 12):  # раунд 13: остальные варианты сняты с холста (код оставлен для истории)
         files['Core-%d' % n] = core_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
