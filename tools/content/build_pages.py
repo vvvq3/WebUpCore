@@ -515,9 +515,40 @@ def core_variant(n):
         inner = '<div style="%s display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: center;"><div style="flex: 1.3 1 480px; min-width: 0;">%s</div>%s</div>' % (CORE_PANEL, nums, text)
     return section(inner, 'core')
 
+def core_v2(n):
+    """Раунд 11: три варианта на основе «Сердце 1» — уникальная механика, ценность вместо строк, 160 ч → 80 ч."""
+    def lab(text):
+        return '<div style="%s font-size: 12px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 12px;">%s</div>' % (MONO, e(text))
+    def h2(html_):
+        return '<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">%s</h2>' % html_
+    def para(text):
+        return '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 500px;">%s</p>' % text
+    def foot(a, b):
+        return ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;">'
+                '<span>%s</span><span style="color: rgba(255,255,255,0.78);">%s</span></div>') % (a, b)
+    bars = _bar('Списано за месяц', '160 ч', 100, 'rgba(255,255,255,0.35)') + _bar('Реально решено задач — по коду', '80 ч', 50, '#63D5FF')
+    card_style = 'flex: 1 1 420px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 18px;'
+    if n == 4:
+        left = lab('УНИКАЛЬНАЯ МЕХАНИКА UPCORE') + h2('Мы не считаем строки кода. Мы измеряем его <span style="color: #63D5FF;">реальную ценность</span>') + para(
+            'В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.')
+        right = bars + foot('Эффективность <b style="color: #63D5FF;">50%</b>', '80 ч оплачено впустую')
+    elif n == 5:
+        left = lab('НОВАЯ МЕХАНИКА ОЦЕНКИ') + h2('Написанный код → <span style="color: #63D5FF;">фактические человеко‑часы</span>') + para(
+            'Строки, коммиты и закрытые тикеты легко накрутить — особенно с ИИ. Наша запатентованная матмодель по 50+ факторам считает другое: сколько часов работы на самом деле стоит результат в коде.')
+        noise = ''.join('<span style="text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.8); color: rgba(255,255,255,0.55); font-size: 15px; white-space: nowrap;">%s</span>' % e(x)
+                        for x in ['2 400 строк', '37 коммитов', '18 закрытых задач'])
+        right = ('<div><div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">обычные метрики — «выглядит продуктивно»</div>'
+                 '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px;">%s</div></div>') % (MONO, noise) + bars + foot('Реальная эффективность <b style="color: #63D5FF;">50%</b>', 'видно до строчки кода')
+    else:
+        left = lab('СЕРДЦЕ UPCORE · ЗАПАТЕНТОВАННАЯ МАТМОДЕЛЬ') + h2('Списано 160 часов. Задач решено — на 80. <span style="color: #63D5FF;">UpCore видит разницу.</span>') + para(
+            'Наша уникальная механика оценивает не количество строк, а реальную ценность кода: математическая модель по 50+ факторам переводит каждый MR в фактические человеко‑часы — и показывает, за что вы на самом деле платите.')
+        right = bars + foot('Эффективность <b style="color: #63D5FF;">50%</b>', '≈150 тыс. ₽ в месяц — переплата за одного разработчика')
+    inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 440px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card_style, right)
+    return section(inner, 'core')
+
 def core_board(n):
-    names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст'}
-    body = '<div style="padding-top: 48px;">%s</div>' % core_variant(n)
+    names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч'}
+    body = '<div style="padding-top: 48px;">%s</div>' % (core_variant(n) if n <= 3 else core_v2(n))
     return page('UpCore — блок «Сердце» %d (%s)' % (n, names[n]), body, 600, name='Core-%d' % n)
 
 SEC_CARDS = [
@@ -680,7 +711,7 @@ def home(variant):
             ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
             ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
         ]),
-        core_variant(1),
+        core_v2(4),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
             'время в IDE, клики и скриншоты', 'активность в мессенджерах и на дейликах', 'строки кода, коммиты и закрытые тикеты — их легко накрутить, особенно с ИИ'],
@@ -920,7 +951,7 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    for n in (1, 2, 3):
+    for n in (1, 2, 3, 4, 5, 6):
         files['Core-%d' % n] = core_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
