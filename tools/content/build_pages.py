@@ -555,7 +555,7 @@ def core_v3(n):
     left = (lab + '<h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -0.03em; line-height: 1.08; font-weight: 800;">UpCore не считает строчки кода, а вычисляет его <span style="color: #63D5FF;">реальную ценность</span></h2>'
             '<p style="margin: 16px 0 0; color: rgba(255,255,255,0.8); font-size: 17px; line-height: 1.55; max-width: 500px;">В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.</p>')
     noise = ''.join('<span style="text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.85); color: rgba(255,255,255,0.55); font-size: 15px; white-space: nowrap;">%s</span>' % e(x)
-                    for x in ['2 400 строк', '37 коммитов', '18 закрытых задач'])
+                    for x in ['8 400 строк', '43 merge request', '18 закрытых задач'])
     top = ('<div><div style="%s font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">обычные метрики — «выглядит продуктивно»</div>'
            '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px;">%s</div></div>') % (MONO, noise)
     bottom = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">'
@@ -579,12 +579,12 @@ def core_v3(n):
         ring = ('<svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Эффективность 50%%: 80 из 160 часов" style="flex: 0 0 auto;">'
                 '<circle cx="70" cy="70" r="%d" fill="none" stroke="%s" stroke-width="18"></circle>'
                 '<circle cx="70" cy="70" r="%d" fill="none" stroke="#63D5FF" stroke-width="18" stroke-dasharray="%.1f %.1f" transform="rotate(-90 70 70)"></circle>'
-                '<text x="70" y="68" text-anchor="middle" font-family="Onest, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">80 ч</text>'
+                '<text x="70" y="68" text-anchor="middle" font-family="Onest, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">80</text>'
                 '<text x="70" y="88" text-anchor="middle" font-family="Onest, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">из 160 ч</text></svg>') % (r, RED, r, c / 2, c)
         line = lambda a, b, c: '<div style="font-size: 17px; color: rgba(255,255,255,0.84);">%s <b style="color: %s; font-size: 20px; white-space: nowrap;">%s</b></div>' % (e(a), c, e(b))
         mid = ('<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px;">%s<div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 14px;">'
-               '%s%s%s</div></div>') % (ring, line('Списано за месяц', '160 ч', '#FFFFFF'), line('Реально решённых задач', '80 ч', RED_T), line('Эффективность', '50%', RED_T))
-        bottom = ('<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;"><b style="color: %s;">−150 тыс. ₽ в месяц</b>'
+               '%s%s%s</div></div>') % (ring, line('Списано за месяц', '160 час', '#FFFFFF'), line('Реально решённых задач', '80 час', RED_T), line('Эффективность', '50%', RED_T))
+        bottom = ('<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; font-size: 17px;"><b style="color: %s; font-size: 24px; letter-spacing: -0.01em;">−140 тыс. ₽ в месяц</b>'
                   ' <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span></div>') % RED_T
     right = top + mid + bottom
     card = 'flex: 1 1 440px; min-width: 0; border-radius: 22px; background: #0B0A12; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 20px;'
