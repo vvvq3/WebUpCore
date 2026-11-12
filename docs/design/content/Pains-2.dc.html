@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — блок «Почему это важно» 2 (Шесть вопросов)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ucIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+.uc-blink{animation:ucBlink 1.4s ease-in-out infinite}
+.uc-in{animation:ucIn .6s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; min-height: 100vh; overflow: hidden;">
+<div style="padding-top: 48px;"><section id="pains" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; margin-bottom: 14px; letter-spacing: 0.04em;">ПОЧЕМУ ЭТО ВАЖНО</div><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px;"><h2 style="margin: 0; font-size: clamp(32px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800; max-width: 760px;">Шесть вопросов, на которые у CTO и HRD нет ответа в цифрах</h2><p style="margin: 0; max-width: 420px; color: rgba(255,255,255,0.74); font-size: 17px; line-height: 1.55;">UpCore отвечает на каждый — по коду, без отчётов, анкет и тайм-трекеров.</p></div><div class="g3"><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(99,213,255,0.14); color: #9FE6FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CTO</span><span style="padding: 4px 9px; border-radius: 7px; background: rgba(155,140,255,0.16); color: #C9C0FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">HRD</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">Кто в команде реально тянет свой грейд?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">99% работодателей сталкиваются с накруткой опыта, а на испытательном сроке её ловят лишь в 2% случаев.</p></article><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(99,213,255,0.14); color: #9FE6FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CTO</span><span style="padding: 4px 9px; border-radius: 7px; background: rgba(242,193,78,0.14); color: #F7D88A; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CFO</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">Окупается ли ИИ, за который мы платим?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">Эффект ИИ-инструментов измеряют лишь 18% компаний. Ощущение ускорения и реальное ускорение расходятся на десятки процентов.</p></article><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(99,213,255,0.14); color: #9FE6FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CTO</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">Почему Jira зелёная, а релиз снова сдвинулся?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">Статусы и дейлики показывают активность, а не результат в коде. Тимлид глубоко видит лишь 5–10% изменений.</p></article><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(155,140,255,0.16); color: #C9C0FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">HRD</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">За что повышать — за результат или за харизму?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">Около 60% разброса в оценках объясняется личностью руководителя. Performance review превращается в спор.</p></article><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(99,213,255,0.14); color: #9FE6FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CTO</span><span style="padding: 4px 9px; border-radius: 7px; background: rgba(242,193,78,0.14); color: #F7D88A; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">CFO</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">Сколько на самом деле стоит работа подрядчика?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">Акт на 1500 часов принимают на веру: проверить, сколько работы реально в коде, нечем.</p></article><article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 26px; display: flex; flex-direction: column; gap: 14px;"><div style="display: flex; flex-wrap: wrap; gap: 6px;"><span style="padding: 4px 9px; border-radius: 7px; background: rgba(155,140,255,0.16); color: #C9C0FF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em;">HRD</span></div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">Кого из сильных мы потеряем следующим?</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">Сильные уходят туда, где видят свой рост. А 20% команды, дающие 4% результата, остаются незамеченными.</p></article></div>
+</section></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":806}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

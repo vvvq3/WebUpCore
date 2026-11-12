@@ -639,6 +639,61 @@ def core_v4(n):
     inner = ('<div style="%s display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center;"><div style="flex: 1 1 420px; min-width: 0;">%s</div><div style="%s">%s</div></div>') % (CORE_PANEL, left, card, top + mid + money)
     return section(inner, 'core')
 
+ROLE_COL = {'CTO': ('rgba(99,213,255,0.14)', '#9FE6FF'), 'HRD': ('rgba(155,140,255,0.16)', '#C9C0FF'), 'CFO': ('rgba(242,193,78,0.14)', '#F7D88A'), 'CEO': ('rgba(242,193,78,0.14)', '#F7D88A')}
+
+def role_tags(roles):
+    return ''.join('<span style="padding: 4px 9px; border-radius: 7px; background: %s; color: %s; %s font-size: 12px; letter-spacing: 0.04em;">%s</span>' % (ROLE_COL[r][0], ROLE_COL[r][1], MONO, r) for r in roles)
+
+def pains_variant(n):
+    """Раунд 17: три варианта блока «Почему это важно» — главные боли CTO и HRD."""
+    if n == 1:  # две колонки: CTO | HRD
+        cols = [
+            ('CTO', 'Вы отвечаете за разработку, но не видите её изнутри', [
+                ('5–10%', 'кода успевает глубоко проверить тимлид. Остальное уходит в продакшен на доверии — а ИИ пишет код быстрее, чем его успевают ревьюить.', 'данные UpCore; Faros AI: +91% времени ревью'),
+                ('18%', 'компаний измеряют эффект ИИ-инструментов. Остальные платят за лицензии и токены вслепую — хотя опытные разработчики с ИИ бывают на 19% медленнее.', 'LeadDev 2025; METR 2025'),
+                ('20% → 4%', 'пятая часть команды даёт лишь 4% результата. В Jira всё зелёное, а релиз снова переносится.', 'данные UpCore')]),
+            ('HRD', 'Вы принимаете решения о людях, опираясь на слова', [
+                ('99%', 'работодателей в ИТ сталкиваются с накруткой опыта. На испытательном сроке её выявляют лишь в 2% случаев.', 'Хабр Карьера, 2025'),
+                ('≈60%', 'разброса в оценках сотрудников объясняется личностью руководителя, а не работой. Повышают «за выслугу» и харизму.', 'Scullen et al.; HBR'),
+                ('до 200%', 'годовой зарплаты стоит ошибка найма. А сильные уходят туда, где их рост видят и ценят.', 'SHRM')]),
+        ]
+        panels = []
+        for role, title, items in cols:
+            bg, fg = ROLE_COL[role]
+            rows = ''.join('<div style="display: flex; flex-direction: column; gap: 8px; padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.07);">'
+                           '<div style="font-size: clamp(28px, 2.6vw, 38px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: %s; white-space: nowrap;">%s</div>'
+                           '<div><p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.5;">%s</p>%s</div></div>' % (fg, e(b), e(tx), src_line(s)) for b, tx, s in items)
+            panels.append('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 36px);">'
+                          '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">%s</div>'
+                          '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; line-height: 1.2; margin-bottom: 8px;">%s</div>%s</article>' % (role_tags([role]), e(title), rows))
+        body = sec_head('ПОЧЕМУ ЭТО ВАЖНО', 'Разработка — самая дорогая статья расходов. И самая непрозрачная.') + '<div class="g2">%s</div>' % ''.join(panels)
+    elif n == 2:  # шесть вопросов без ответа
+        qs = [(['CTO', 'HRD'], 'Кто в команде реально тянет свой грейд?', '99% работодателей сталкиваются с накруткой опыта, а на испытательном сроке её ловят лишь в 2% случаев.'),
+              (['CTO', 'CFO'], 'Окупается ли ИИ, за который мы платим?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Ощущение ускорения и реальное ускорение расходятся на десятки процентов.'),
+              (['CTO'], 'Почему Jira зелёная, а релиз снова сдвинулся?', 'Статусы и дейлики показывают активность, а не результат в коде. Тимлид глубоко видит лишь 5–10% изменений.'),
+              (['HRD'], 'За что повышать — за результат или за харизму?', 'Около 60% разброса в оценках объясняется личностью руководителя. Performance review превращается в спор.'),
+              (['CTO', 'CFO'], 'Сколько на самом деле стоит работа подрядчика?', 'Акт на 1500 часов принимают на веру: проверить, сколько работы реально в коде, нечем.'),
+              (['HRD'], 'Кого из сильных мы потеряем следующим?', 'Сильные уходят туда, где видят свой рост. А 20% команды, дающие 4% результата, остаются незамеченными.')]
+        cards = ''.join(card('<div style="display: flex; flex-wrap: wrap; gap: 6px;">%s</div><div style="font-size: clamp(20px, 1.8vw, 24px); font-weight: 800; line-height: 1.25;">%s</div>'
+                             '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">%s</p>' % (role_tags(r), e(q), e(a)), pad='26px') for r, q, a in qs)
+        body = sec_head('ПОЧЕМУ ЭТО ВАЖНО', 'Шесть вопросов, на которые у CTO и HRD нет ответа в цифрах', 'UpCore отвечает на каждый — по коду, без отчётов, анкет и тайм-трекеров.') + '<div class="g3">%s</div>' % cards
+    else:  # цена непрозрачности
+        items = [(['CTO', 'CFO'], '≈5 млн ₽', 'в месяц стоят 20% неэффективных на каждые 100 разработчиков — и это не видно ни в Jira, ни на дейликах', 'расчёт UpCore'),
+                 (['HRD'], 'до 200%', 'годовой зарплаты стоит ошибка найма. 99% работодателей сталкиваются с накруткой опыта в резюме', 'SHRM; Хабр Карьера, 2025'),
+                 (['CTO'], '+91%', 'времени на ревью с приходом ИИ: кода стало больше, а тимлиды тонут в проверке сгенерированного', 'Faros AI, 2025'),
+                 (['HRD', 'CTO'], '210 ч', 'в год тратит каждый руководитель на performance review — и оценка всё равно субъективна', 'CEB / Gartner')]
+        cards = ''.join(card('<div style="display: flex; flex-wrap: wrap; gap: 6px;">%s</div><div style="font-size: clamp(36px, 3.4vw, 52px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: %s; white-space: nowrap;">%s</div>'
+                             '<p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.5;">%s</p>%s' % (role_tags(r), RED_T, e(b), e(tx), src_line(s)), pad='26px') for r, b, tx, s in items)
+        strip = ('<div style="margin-top: 16px; border-radius: 22px; background: rgba(99,213,255,0.08); border: 1px solid rgba(99,213,255,0.4); padding: 20px 26px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between;">'
+                 '<span style="font-size: clamp(18px, 1.6vw, 22px); font-weight: 800;">Каждый месяц без данных — это реальные деньги.</span>'
+                 '<span style="font-size: 16px; color: rgba(255,255,255,0.8);">UpCore показывает их по коду — в часах и рублях.</span></div>')
+        body = sec_head('ЦЕНА НЕПРОЗРАЧНОСТИ', 'Пока у вас нет данных, вы платите за это каждый месяц') + '<div class="g4">%s</div>%s' % (cards, strip)
+    return section(body, 'pains')
+
+def pains_board(n):
+    names = {1: 'CTO и HRD', 2: 'Шесть вопросов', 3: 'Цена непрозрачности'}
+    return page('UpCore — блок «Почему это важно» %d (%s)' % (n, names[n]), '<div style="padding-top: 48px;">%s</div>' % pains_variant(n), 700, name='Pains-%d' % n)
+
 def core_board(n):
     names = {1: 'Формула', 2: 'Конвейер', 3: 'Контраст', 4: 'Ценность, а не строки', 5: 'Обычные метрики против UpCore', 6: '160 ч → 80 ч',
              7: 'Полоса ценность / потери', 8: 'Месяц — 20 рабочих дней', 9: 'Кольцо 80 из 160', 10: 'Кольцо, 50% в центре', 11: 'Два кольца', 12: 'Спидометр'}
@@ -799,12 +854,7 @@ def home(variant):
     if variant != 'A':
         return page('UpCore — главная, первый экран ' + variant, '\n'.join(body), 1000, slider=True, name='Home-' + variant)
     body += [
-        text_pains('ПОЧЕМУ ЭТО ВАЖНО', 'Разработка — самая дорогая статья расходов. И самая непрозрачная.', [
-            ('Jira зелёная, а релиз снова переносится', 'Статусы, дейлики и отчёты показывают активность, а не результат в коде. Почему сорваны сроки, объяснить никто не может.', None),
-            ('20% команды дают 4% результата', 'Неэффективность прячется в «средней температуре по больнице». Без данных её не видно — а зарплату вы платите полностью.', 'данные UpCore'),
-            ('Тимлид видит 5–10% кода', 'Остальное принимается на доверии. С приходом ИИ кода стало в разы больше, а ревьюеров — нет.', None),
-            ('ИИ куплен. Окупился?', 'Эффект ИИ-инструментов измеряют лишь 18% компаний. Остальные платят за лицензии и токены вслепую.', 'LeadDev AI Impact Report, 2025'),
-        ]),
+        pains_variant(1),
         core_v3(9),
         products_2x2(),
         compare('ПРИНЦИП', 'Не тайм-трекер. Не слежка. Не KPI по строкам кода.', 'Мы не считаем', [
@@ -1045,8 +1095,9 @@ def build(out, mode):
     files = {}
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
-    for n in (9,):  # раунд 14: на холсте только «Сердце 9» (остальные варианты сняты, код оставлен для истории)
-        files['Core-%d' % n] = core_board(n)
+    # раунд 17: отдельный артборд «Сердце 9» снят (блок зафиксирован на Главной A); варианты блока болей:
+    for n in (1, 2, 3):
+        files['Pains-%d' % n] = pains_board(n)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
