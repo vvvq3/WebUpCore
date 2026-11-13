@@ -1445,7 +1445,7 @@ def profile_head():
             + kv('Динамика роста', '<span style="color: ' + AMBER + ';">Middle+</span> → <span style="color: #7FDB7A;">Senior</span>', '7,2 → 8,5 с мая по октябрь')
             + kv('Рейтинг за месяц', '2 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 14</span>', 'в компании · 4 из 13 в стеке · 4 из 8 в проекте') + '</div></div>')
 
-def method_example(h2='Грейд — сложная математика по 10+ факторам. Главный — эффективность кода в часах'):
+def method_example(h2='Грейд — сложная математика по 10+ факторам. Главный — эффективность кода в часах', insights_on=True, list_label='10 ФАКТОРОВ ГРЕЙДА'):
     """Методика + пример в одном блоке: звезда как в демо, 10 факторов с описанием и динамикой, сильные стороны / зона роста."""
     rows = ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: baseline; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07);">'
                    '<span style="min-width: 0;"><b style="font-size: 16px; color: ' + ('#63D5FF' if i == 0 else '#FFFFFF') + ';">' + e(n) + (' · главный фактор' if i == 0 else '') + '</b><br><span style="font-size: 14px; color: rgba(255,255,255,0.6);">' + e(d.replace(' — главный фактор', '')) + '</span></span>'
@@ -1459,8 +1459,8 @@ def method_example(h2='Грейд — сложная математика по 1
     body = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.35); padding: clamp(24px, 3.4vw, 44px);">' + profile_head() +
             '<div style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; margin-top: 24px;">'
             '<div style="flex: 1.1 1 420px; min-width: 0; max-width: 600px; margin: 0 auto;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 4px;">УРОВЕНЬ РАБОТЫ · <span style="color: #7FDB7A;">SENIOR 8,5 / 10</span></div>' + star_demo([(n, v) for n, v, _, _ in LEVEL]) + star_legend() + '</div>'
-            '<div style="flex: 1 1 400px; min-width: 0;"><div style="display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);"><span>10 ФАКТОРОВ ГРЕЙДА</span><span>МАЙ → ОКТЯБРЬ</span></div>' + rows + '</div></div>'
-            + insights + '</div>')
+            '<div style="flex: 1 1 400px; min-width: 0;"><div style="display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);"><span>' + list_label + '</span><span>МАЙ → ОКТЯБРЬ</span></div>' + rows + '</div></div>'
+            + (insights if insights_on else '') + '</div>')
     return section(sec_head('МЕТОДИКА НА ПРИМЕРЕ', h2, 'Реальный профиль из демо UpCore: не просто «Senior», а все факторы, из которых он сложился, — с динамикой за полгода и местом в рейтинге.', 'grade') + body, 'method')
 
 def factors_deep():
@@ -1543,7 +1543,7 @@ def drill_visual():
 
 GRADE_STATS = [('96%', 'точность экспертной оценки на 300+ тыс. MR'), ('10+', 'факторов грейда, главный — эффективность в часах'), ('3 мес.', 'до объективного грейда'), ('1 неделя', 'до первых результатов')]
 
-def grade_hero(h1, sub, visual, kicker=None):
+def grade_hero(h1, sub, visual, kicker=None, st=None):
     line, txt = ACC['grade']
     name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
             '<span style="color: #63D5FF;">&gt;</span><span>UpCore<span style="color: #63D5FF;">.Grade</span></span></div>')
@@ -1555,7 +1555,7 @@ def grade_hero(h1, sub, visual, kicker=None):
             + name + kick +
             '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
-            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + ctas + '</div>' + stats(GRADE_STATS) + '</div>' + visual + '</section>')
+            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + ctas + '</div>' + stats(st or GRADE_STATS) + '</div>' + visual + '</section>')
 
 GRADE_FAQ = [
     ('Это слежка за разработчиками?', 'Нет. Мы не считаем время в IDE, клики, скриншоты и активность в мессенджерах. Оценивается только результат — код, который вошёл в продукт. Это обычное код-ревью, только его делает цифровой тимлид.'),
@@ -1583,10 +1583,11 @@ def grade_page(n):
         top = grade_hero('Не просто «Middle+, 7,8 из 10». Все факторы — до строчки кода', 'UpCore.Grade считает грейд по 10+ факторам и показывает каждый: от звезды грейда до MR и строк кода. Оценка, которую можно проверить, — а не мнение.', drill_visual())
         blocks = [method_example('Главный фактор — эффективность кода в часах. Ещё девять уточняют уровень'), factors_deep(), rhythm_block(True)]
     else:
-        top = grade_hero('Объективная оценка разработчика — и рейтинг всей команды каждый месяц', 'Эффективность каждого разработчика в часах, рейтинг по компании, стеку и проекту, а раз в 3 месяца — объективный грейд по 10+ факторам. Полностью автоматически: нужен только код.',
+        # раунд 31: принят за основу; правки владельца — без вопроса-кикера, 50+ факторов, новые цифры, без «Прозрачности» и «Ритма»
+        top = grade_hero('Объективная оценка разработчика — и рейтинг всей команды каждый месяц', 'Эффективность каждого разработчика в часах, рейтинг по компании, стеку и проекту, а также объективный грейд по 50+ факторам. Полностью автоматически: нужен только код.',
                          '<div style="flex: 1 1 460px; min-width: 0;"><div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); box-shadow: 0 40px 120px rgba(99,213,255,0.10); padding: 22px;">' + rating_card() + '</div></div>',
-                         kicker='«Кто в команде реально тянет свой грейд?»')
-        blocks = [method_example(), factors_deep(), transparency_block(), rhythm_block(False)]
+                         st=[('96%', 'точность от экспертной оценки на 300+ тыс. MR'), ('50+', 'факторов грейда'), ('1500+', 'разработчиков уже посчитано'), ('1 день', 'до первых результатов')])
+        blocks = [method_example('Грейд — сложная математика по 50+ факторам', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ'), factors_deep()]
     body = [header('grade'), top] + blocks + [
         roles('ДЛЯ КОГО', 'Одна цифра для CTO, HR, тимлида и разработчика', GRADE_ROLES, 'grade'),
         faq(GRADE_FAQ, acc_key='grade'),
@@ -1898,7 +1899,7 @@ def build(out, mode):
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
     # раунд 28: «Результаты для бизнеса» (расчёт 2) зафиксирован на Главной A, артборды Results-1..4 сняты
-    for n in (1, 2, 3):  # раунд 30: три полных макета страницы Grade (Grade-B/C и Method-1..4 сняты с холста)
+    for n in (1, 2, 3):  # раунд 30: три полных макета страницы Grade; раунд 31 — на холсте остаётся только Grade-3
         files['Grade-%d' % n] = grade_page(n)
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
