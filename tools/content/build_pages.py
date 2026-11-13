@@ -61,13 +61,14 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-scan{animation:ucScanY 4.5s linear infinite}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .uc-ml{display:none}
+.uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.uc-sc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.uc-sc>span:first-child{grid-column:1/-1}.uc-sc>span:first-child:empty{display:none}.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (max-width:720px){.uc-rl{display:none}.uc-sc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.uc-sc>span:first-child{grid-column:1/-1}.uc-sc>span:first-child:empty{display:none}.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -1392,6 +1393,208 @@ def method_variant(n):
                 '<p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5;">Каждый месяц — детальный отчёт и динамика эффективности, грейда и рейтинга на графиках.</p></article>')
     return section(method_head('Каждый месяц — отчёт и рейтинг. Каждые 3 месяца — грейд', 'Полностью автоматически: никаких анкет, самооценок и калибровочных сессий. Нужен только код.') + '<div class="g2">' + timeline + rank + '</div>' + method_foot(), 'method')
 
+# ---------------------------------------------------------------- раунд 30: Grade — 3 полные страницы
+def star_demo(vals, size=560, rings=(4.5, 7.5)):
+    """Звезда грейда как в демо: сетка 2–10 с подписями шкалы, пунктиры Middle/Senior, цветные точки, подписи осей со значениями."""
+    import math
+    n = len(vals); c = size / 2; R = size * 0.31; pad = 72
+    ang = lambda i: 2 * math.pi * i / n
+    pt = lambda i, v: (c + R * v / 10 * math.sin(ang(i)), c - R * v / 10 * math.cos(ang(i)))
+    poly = lambda vl: ' '.join('%.1f,%.1f' % pt(i, v) for i, v in enumerate(vl))
+    o = ['<svg viewBox="%d 0 %d %d" role="img" aria-label="Звезда грейда по 10 факторам" style="width: 100%%; height: auto; display: block;">' % (-pad, size + 2 * pad, size)]
+    for k in (2, 4, 6, 8, 10):
+        o.append('<polygon points="%s" fill="%s" stroke="rgba(255,255,255,0.10)" stroke-width="1"></polygon>' % (poly([k] * n), 'rgba(255,255,255,0.015)' if k == 10 else 'none'))
+        if k < 10:
+            x, y = pt(0, k)
+            o.append('<text class="uc-rl" x="%.1f" y="%.1f" fill="rgba(255,255,255,0.35)" font-size="12" font-family="Onest, sans-serif" text-anchor="start">%d</text>' % (x + 6, y + 4, k))
+    for i in range(n):
+        x, y = pt(i, 10)
+        o.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="rgba(255,255,255,0.08)"></line>' % (c, c, x, y))
+    o.append('<polygon points="%s" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-dasharray="2 4"></polygon>' % poly([rings[0]] * n))
+    o.append('<polygon points="%s" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-dasharray="8 5"></polygon>' % poly([rings[1]] * n))
+    o.append('<polygon points="%s" fill="rgba(99,213,255,0.20)" stroke="#63D5FF" stroke-width="3" stroke-linejoin="round"></polygon>' % poly([v for _, v in vals]))
+    for i, (nm, v) in enumerate(vals):
+        x, y = pt(i, v)
+        o.append('<circle cx="%.1f" cy="%.1f" r="7" fill="%s" stroke="#12111C" stroke-width="2.5"></circle>' % (x, y, lvl_col(v)))
+        lx, ly = c + (R + 24) * math.sin(ang(i)), c - (R + 24) * math.cos(ang(i))
+        sx = math.sin(ang(i))
+        anchor = 'middle' if abs(sx) < 0.2 else ('start' if sx > 0 else 'end')
+        words = nm.split(' ')
+        lines = [nm] if len(nm) <= 14 else [' '.join(words[:len(words) // 2 + (len(words) % 2)]), ' '.join(words[len(words) // 2 + (len(words) % 2):])]
+        dy0 = -14 - 10 * (len(lines) - 1) if math.cos(ang(i)) > 0.3 else (-4 if abs(math.cos(ang(i))) <= 0.3 else 8)
+        for j, ln in enumerate(lines):
+            o.append('<text class="uc-rl" x="%.1f" y="%.1f" fill="rgba(255,255,255,0.76)" font-size="16" font-family="Onest, sans-serif" text-anchor="%s">%s</text>' % (lx, ly + dy0 + 19 * j, anchor, e(ln)))
+        o.append('<text class="uc-rl" x="%.1f" y="%.1f" fill="%s" font-size="22" font-weight="800" font-family="Bricolage Grotesque, Onest, sans-serif" text-anchor="%s">%s</text>' % (lx, ly + dy0 + 19 * len(lines) + 5, lvl_col(v), anchor, fmt1(v)))
+    o.append('</svg>')
+    return ''.join(o)
+
+def star_legend():
+    return ('<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; font-size: 13px; color: rgba(255,255,255,0.66); margin-top: 4px;">'
+            '<span><span style="display: inline-block; width: 14px; height: 10px; border: 2px solid #63D5FF; background: rgba(99,213,255,0.2); border-radius: 3px; vertical-align: -1px;"></span> оценки за период</span>'
+            '<span style="white-space: nowrap;"><span style="letter-spacing: 1px;">····</span> уровень Middle</span><span style="white-space: nowrap;"><span>– – –</span> уровень Senior</span></div>')
+
+def profile_head():
+    def kv(k, v, sub=''):
+        return ('<div style="min-width: 0;"><div style="font-size: 13px; color: rgba(255,255,255,0.6);">' + e(k) + '</div><div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; white-space: nowrap;">' + v + '</div>'
+                + ('<div style="font-size: 13px; color: rgba(255,255,255,0.55);">' + e(sub) + '</div>' if sub else '') + '</div>')
+    return ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; align-items: flex-end; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08);">'
+            '<div style="min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);">ДЕМО UPCORE · МЕНЮ «УРОВЕНЬ» · ОКТЯБРЬ 2026</div>'
+            '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; margin-top: 8px;">Лукьянов Александр</div><div style="font-size: 15px; color: rgba(255,255,255,0.66);">Backend, C# · проект UpCore Backend</div></div>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 20px 36px;">'
+            + kv('Грейд за 3 месяца', '<span style="color: #7FDB7A;">Senior</span> 8,5<span style="font-size: 16px; color: rgba(255,255,255,0.5);"> / 10</span>')
+            + kv('Динамика роста', '<span style="color: ' + AMBER + ';">Middle+</span> → <span style="color: #7FDB7A;">Senior</span>', '7,2 → 8,5 с мая по октябрь')
+            + kv('Рейтинг за месяц', '2 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 14</span>', 'в компании · 4 из 13 в стеке · 4 из 8 в проекте') + '</div></div>')
+
+def method_example(h2='Грейд — сложная математика по 10+ факторам. Главный — эффективность кода в часах'):
+    """Методика + пример в одном блоке: звезда как в демо, 10 факторов с описанием и динамикой, сильные стороны / зона роста."""
+    rows = ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: baseline; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07);">'
+                   '<span style="min-width: 0;"><b style="font-size: 16px; color: ' + ('#63D5FF' if i == 0 else '#FFFFFF') + ';">' + e(n) + (' · главный фактор' if i == 0 else '') + '</b><br><span style="font-size: 14px; color: rgba(255,255,255,0.6);">' + e(d.replace(' — главный фактор', '')) + '</span></span>'
+                   '<span style="white-space: nowrap; font-variant-numeric: tabular-nums;"><span style="font-size: 13px; color: rgba(255,255,255,0.5);">' + fmt1(w) + ' → </span><b style="font-size: 19px; color: ' + lvl_col(v) + ';">' + fmt1(v) + '</b> ' + arrow(v, w) + '</span></div>'
+                   for i, (n, v, w, d) in enumerate(LEVEL))
+    insights = ('<div class="g3" style="margin-top: 24px;">'
+                + card('<div style="' + MONO + ' font-size: 12px; color: #7FDB7A;">СИЛЬНЫЕ СТОРОНЫ</div><p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.84);">Эффективность 10 из 10: 889 часов результата при 436 рабочих, 123 MR за период. 91% кода дошло до релиза, тех-метч с проектом — 95%.</p>', pad='22px', bg='rgba(83,192,77,0.06)', border='rgba(83,192,77,0.3)', gap=8)
+                + card('<div style="' + MONO + ' font-size: 12px; color: ' + AMBER + ';">ЗОНА РОСТА</div><p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.84);">Архитектурная сложность 3,1: 80% времени — периферия, в ядре системы только 7%. Следующий шаг к росту — задачи в ядре.</p>', pad='22px', bg='rgba(242,193,78,0.06)', border='rgba(242,193,78,0.3)', gap=8)
+                + card('<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПРОВЕРИТЬ САМОМУ</div><p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.84);">Каждый фактор раскрывается в меню «Отчёты», а оттуда — до MR и строчек кода в «Глазе». Ни одной цифры «на веру».</p>', pad='22px', bg='rgba(99,213,255,0.06)', border='rgba(99,213,255,0.3)', gap=8)
+                + '</div>')
+    body = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.35); padding: clamp(24px, 3.4vw, 44px);">' + profile_head() +
+            '<div style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; margin-top: 24px;">'
+            '<div style="flex: 1.1 1 420px; min-width: 0; max-width: 600px; margin: 0 auto;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 4px;">УРОВЕНЬ РАБОТЫ · <span style="color: #7FDB7A;">SENIOR 8,5 / 10</span></div>' + star_demo([(n, v) for n, v, _, _ in LEVEL]) + star_legend() + '</div>'
+            '<div style="flex: 1 1 400px; min-width: 0;"><div style="display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);"><span>10 ФАКТОРОВ ГРЕЙДА</span><span>МАЙ → ОКТЯБРЬ</span></div>' + rows + '</div></div>'
+            + insights + '</div>')
+    return section(sec_head('МЕТОДИКА НА ПРИМЕРЕ', h2, 'Реальный профиль из демо UpCore: не просто «Senior», а все факторы, из которых он сложился, — с динамикой за полгода и местом в рейтинге.', 'grade') + body, 'method')
+
+def factors_deep():
+    """Подробный разбор 3 важных факторов (из 50+) — тексты, которые одобрил владелец."""
+    arch = ('<div style="display: flex; flex-direction: column; gap: 8px;">'
+            + ''.join('<div><div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 4px;"><span>' + a + '</span><b style="white-space: nowrap;">' + b + '</b></div>'
+                      '<div style="height: 8px; border-radius: 4px; background: rgba(255,255,255,0.06); overflow: hidden;"><div style="width: ' + str(w) + '%; height: 100%; background: ' + c + ';"></div></div></div>'
+                      for a, b, w, c in [('Ядро', '59 ч · 7%', 7, '#63D5FF'), ('Middle', '116 ч · 13%', 13, 'rgba(99,213,255,0.6)'), ('Периферия', '713 ч · 80%', 80, 'rgba(255,255,255,0.35)')])
+            + '<div style="font-size: 12px; color: rgba(255,255,255,0.5);">пример из демо: архитектурная сложность 3,1 / 10</div></div>')
+    tech = ('<div style="display: flex; flex-direction: column; gap: 8px;">'
+            + ''.join('<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 8px 12px; border-radius: 12px; background: rgba(255,255,255,0.04);"><span>' + e(a) + '</span><b style="color: ' + c + '; white-space: nowrap;">' + e(b) + '</b></div>'
+                      for a, b, c in [('Senior-технологии', '2 · 1,8 ч', GREEN), ('Middle-технологии', '16 · 191,4 ч', '#FFFFFF'), ('Ввёл в проект новых', '1', '#63D5FF'), ('Легаси / новое для себя', 'учитывается', 'rgba(255,255,255,0.7)')]) + '</div>')
+    churn = ('<div><div style="display: flex; height: 18px; border-radius: 9px; overflow: hidden; gap: 3px;"><div style="flex: 150 1 0; background: #63D5FF;"></div><div style="flex: 150 1 0; background: rgba(232,101,101,0.5);"></div></div>'
+             '<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.66); margin-top: 8px;"><span><b style="color: #63D5FF;">150 строк</b> дошли до релиза</span><span><b style="color: ' + RED_T + ';">150</b> удалены и переписаны</span></div></div>')
+    def deep(num, title, viz, text):
+        return ('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 16px;">'
+                '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">' + num + '</div><div style="font-size: 22px; font-weight: 800; line-height: 1.2;">' + e(title) + '</div>' + viz +
+                '<p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 15px; line-height: 1.55;">' + e(text) + '</p></article>')
+    cards = (deep('ФАКТОР · АРХИТЕКТУРА', 'Где написан код: в ядре или на периферии', arch, 'Строим AST-дерево всего проекта и видим, где работает разработчик. 20 строк в ядре системы бывают сложнее и ценнее 200 строк на периферии, которые меняют цвет кнопок.')
+             + deep('ФАКТОР · ТЕХНОЛОГИИ', 'Какие технологии и в каком объёме', tech, 'Разбираем каждую строчку и считаем часы по каждой технологии. Карта компетенций стека задаёт её сложность и грейд. Учитываем легаси, новое для человека и новые технологии, которые он ввёл в проект.')
+             + deep('ФАКТОР · РЕЗУЛЬТИРУЮЩИЙ КОД', 'Сколько кода дошло до релиза', churn, 'Написал 300 строк, а назавтра половину удалили и переписали — значит, до релиза дошло 50% работы. Фактор особенно важен с ИИ и отсекает любые накрутки.'))
+    return section(sec_head('ПОДРОБНО О ФАКТОРАХ', 'Разбираем подробно несколько важных факторов — из 50+', 'Мы анализируем каждую строчку кода. Вот три фактора, которые не покажут ни резюме, ни самооценка, ни выборочное ревью.', 'grade') + '<div class="g3">' + cards + '</div>', 'factors')
+
+def rating_card():
+    names = [('Ярослав Землинский', '100%', 'top', 1), ('Александр Лукьянов', '100%', 'top', 2), ('Анна Павловская', '90%', 'top', 3), ('…', '', 'mid', 0),
+             ('Ольга Аристова', '35%', 'low', 12), ('Владислав Редкозубов', '19%', 'low', 13), ('Александр Марко', '12%', 'low', 14)]
+    rows = ''
+    for nm, ef, z, pos in names:
+        if z == 'mid':
+            rows += '<div style="padding: 4px 12px; font-size: 14px; color: rgba(255,255,255,0.4);">…</div>'
+            continue
+        rows += ('<div style="display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 12px; margin-bottom: 4px; background: ' + ('rgba(83,192,77,0.08)' if z == 'top' else 'rgba(232,101,101,0.08)') + ';">'
+                 '<b style="font-variant-numeric: tabular-nums;">' + str(pos) + '</b><span style="font-size: 15px; min-width: 0;">' + e(nm) + '</span><b style="color: ' + (GREEN if z == 'top' else RED_T) + '; font-variant-numeric: tabular-nums;">' + ef + '</b></div>')
+    tags = ''.join('<span style="font-size: 13px; padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.8);">' + e(x) + '</span>' for x in ['по компании', 'по стеку', 'по проекту', 'vs среднее по команде', 'vs среднее по стеку', 'vs среднее по компании'])
+    return ('<div style="display: flex; justify-content: space-between; gap: 12px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;"><span>ДЕМО · РЕЙТИНГ ПО КОМПАНИИ</span><span>ОКТЯБРЬ 2026</span></div>'
+            '<div style="display: flex; justify-content: space-between; ' + MONO + ' font-size: 12px; margin-bottom: 6px;"><span style="color: ' + GREEN + ';">ТОП-20%</span><span style="color: rgba(255,255,255,0.45);">эффективность</span></div>' + rows +
+            '<div style="' + MONO + ' font-size: 12px; color: ' + RED_T + '; margin: 2px 0 12px;">20% ОТСТАЮЩИХ — С НИМИ РАБОТАТЬ В ПЕРВУЮ ОЧЕРЕДЬ</div><div style="display: flex; flex-wrap: wrap; gap: 8px;">' + tags + '</div>')
+
+def rhythm_block(with_rating=True):
+    """Один блок: каждый месяц (отчёт, рейтинг, сравнения, динамика) + каждые 3 месяца (грейд)."""
+    li = lambda xs: ''.join('<li style="margin: 0 0 8px;">' + e(x) + '</li>' for x in xs)
+    month = ['Эффективность и детальный отчёт за месяц', 'Рейтинг по компании, стеку и проекту: топ-20% и 20% отстающих', 'Сравнение со средним по команде, стеку и компании', 'Динамика эффективности, грейда и рейтинга на графиках']
+    steps = ''.join('<div style="flex: 1 1 0; min-width: 0; text-align: center; padding: 10px 6px; border-radius: 12px; background: rgba(99,213,255,0.08); border: 1px solid rgba(99,213,255,0.25); font-size: 14px;"><b>Месяц ' + str(i) + '</b><div style="font-size: 12px; color: rgba(255,255,255,0.6);">отчёт · рейтинг</div></div>' for i in (1, 2, 3))
+    timeline = ('<div style="display: flex; gap: 8px; align-items: stretch;">' + steps +
+                '<div style="flex: 1.1 1 0; min-width: 0; text-align: center; padding: 10px 6px; border-radius: 12px; background: #63D5FF; color: #0D0C15; font-size: 14px;"><b>Грейд</b><div style="font-size: 12px;">за 3 месяца</div></div></div>')
+    inner = ('<div style="display: flex; flex-direction: column; gap: 22px;">' + timeline +
+             '<div style="display: flex; flex-wrap: wrap; gap: 24px 40px;">'
+             '<div style="flex: 1.3 1 300px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: #63D5FF; margin-bottom: 10px;">КАЖДЫЙ МЕСЯЦ</div><ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.5;">' + li(month) + '</ul></div>'
+             '<div style="flex: 1 1 240px; min-width: 0; border-left: 1px solid rgba(255,255,255,0.08); padding-left: 24px;"><div style="' + MONO + ' font-size: 12px; color: #63D5FF; margin-bottom: 10px;">КАЖДЫЕ 3 МЕСЯЦА</div><div style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Грейд</div>'
+             '<p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 15px; line-height: 1.55;">Грейд считаем по трём месяцам работы: так данных хватает для объективной оценки, а случайный месяц не перекашивает результат.</p></div></div>'
+             '<div style="display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; font-size: 15px; color: rgba(255,255,255,0.8);"><span>Всё — автоматически. <b style="color: #FFFFFF;">Нужен только код.</b></span><span style="color: rgba(255,255,255,0.66);">Гибкая интеграция с вашими системами и по протоколу MCP.</span></div></div>')
+    box = 'border-radius: 32px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3.4vw, 40px);'
+    if with_rating:
+        body = ('<div style="display: flex; flex-wrap: wrap; gap: 16px;"><div style="flex: 1.2 1 480px; min-width: 0; ' + box + '">' + inner + '</div>'
+                '<div style="flex: 1 1 380px; min-width: 0; ' + box + '">' + rating_card() + '</div></div>')
+    else:
+        body = '<div style="' + box + '">' + inner + '</div>'
+    return section(sec_head('РИТМ ОЦЕНКИ', 'Каждый месяц — отчёт и рейтинг. Каждые 3 месяца — грейд', 'Полностью автоматически: никаких анкет, самооценок и калибровочных сессий.', 'grade') + body, 'rhythm')
+
+def transparency_block():
+    steps = [('01', 'Грейд', '<span style="color: ' + AMBER + ';">Middle+</span> 7,8', 'одна цифра за 3 месяца'),
+             ('02', 'Меню «Уровень»', '10 факторов', 'звезда грейда, динамика и дашборд'),
+             ('03', 'Меню «Отчёты»', 'Архитектура 3,1', 'ядро 59 ч · middle 116 ч · периферия 713 ч'),
+             ('04', '«Глаз»', 'MR и строки', 'каждый фактор — до строчки кода')]
+    cells = ''.join('<div style="min-width: 0; border-radius: 24px; background: ' + ('rgba(99,213,255,0.08)' if i == 3 else '#1A1925') + '; border: 1px solid ' + ('rgba(99,213,255,0.4)' if i == 3 else 'rgba(255,255,255,0.08)') + '; padding: 24px; display: flex; flex-direction: column; gap: 8px;">'
+                    '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">' + a + ' · ' + e(b).upper() + '</div><div style="font-size: clamp(24px, 2.2vw, 30px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;">' + c + '</div>'
+                    '<div style="font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.45;">' + e(d) + '</div></div>' for i, (a, b, c, d) in enumerate(steps))
+    quote = ('<div style="margin-top: 16px; border-radius: 28px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 2.6vw, 32px); font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: rgba(255,255,255,0.88);">'
+             'Мы не просто говорим «этот разработчик — Middle+, 7,8 из 10». Мы показываем <b style="color: #FFFFFF;">все факторы, из которых сложился грейд</b>, и каждый открывается в отчётах до строчек кода. '
+             'Любую цифру можно проверить самому — так разработка становится прозрачной.</div>')
+    return section(sec_head('ПРОЗРАЧНОСТЬ', 'Любую цифру можно проверить до строчки кода', 'Грейд — это верхушка. Под ней 10 факторов, под каждым фактором — отчёт, под отчётом — MR и код.', 'grade') + '<div class="g4">' + cells + '</div>' + quote, 'transparency')
+
+def drill_visual():
+    rows = [('ГРЕЙД', '<span style="color: ' + AMBER + ';">Middle+</span> 7,8 / 10', '100%'), ('ФАКТОР', 'Архитектурная сложность 3,1', '88%'),
+            ('ОТЧЁТ', 'Ядро 59 ч · Middle 116 ч · Периферия 713 ч', '76%'), ('КОД', 'MR → файлы → строки в «Глазе»', '64%')]
+    out = ''.join('<div style="margin-left: ' + str(i * 18) + 'px; border-radius: 18px; background: ' + ('rgba(99,213,255,0.1)' if i == 3 else '#1A1925') + '; border: 1px solid ' + ('rgba(99,213,255,0.45)' if i == 3 else 'rgba(255,255,255,0.1)') + '; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px;">'
+                  '<span style="' + MONO + ' font-size: 12px; color: #63D5FF;">' + '%02d' % (i + 1) + ' · ' + a + '</span><span style="font-size: clamp(17px, 1.5vw, 21px); font-weight: 800; line-height: 1.25;">' + b + '</span></div>' for i, (a, b, _) in enumerate(rows))
+    return ('<div style="flex: 1.15 1 480px; min-width: 0; position: relative;"><div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); box-shadow: 0 40px 120px rgba(99,213,255,0.10); padding: 22px; display: flex; flex-direction: column; gap: 10px;">'
+            '<div style="display: flex; justify-content: space-between; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.72); padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08);"><span>upcore://grade / от цифры к коду</span><span style="color: #63D5FF;">● прозрачно</span></div>' + out + '</div></div>')
+
+GRADE_STATS = [('96%', 'точность экспертной оценки на 300+ тыс. MR'), ('10+', 'факторов грейда, главный — эффективность в часах'), ('3 мес.', 'до объективного грейда'), ('1 неделя', 'до первых результатов')]
+
+def grade_hero(h1, sub, visual, kicker=None):
+    line, txt = ACC['grade']
+    name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
+            '<span style="color: #63D5FF;">&gt;</span><span>UpCore<span style="color: #63D5FF;">.Grade</span></span></div>')
+    kick = ('<div style="font-size: 19px; color: rgba(255,255,255,0.72); font-style: italic;">' + e(kicker) + '</div>') if kicker else ''
+    ctas = btn('Подключить UpCore', REG) + btn('Получить демо-отчёт', MAIL, False)
+    return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">' + CHEVRON +
+            '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 24px;">'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.62);"><span style="color: #63D5FF;">01 · ОБЪЕКТИВНАЯ ОЦЕНКА РАЗРАБОТЧИКА</span><span>CTO · HRD · ТИМЛИДЫ</span></div>'
+            + name + kick +
+            '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
+            '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + ctas + '</div>' + stats(GRADE_STATS) + '</div>' + visual + '</section>')
+
+GRADE_FAQ = [
+    ('Это слежка за разработчиками?', 'Нет. Мы не считаем время в IDE, клики, скриншоты и активность в мессенджерах. Оценивается только результат — код, который вошёл в продукт. Это обычное код-ревью, только его делает цифровой тимлид.'),
+    ('Разве код нельзя «накрутить»?', 'Строки и коммиты — можно. Поэтому UpCore очищает код от шума — автогенерации, копипаста, бойлерплейта, ренеймов, — взвешивает его по архитектуре и учитывает только результирующий код, который дошёл до релиза.'),
+    ('А если оценка ошибётся?', 'Грейд считается по трём месяцам работы, а не по одной задаче. Любой фактор открывается в «Отчётах» и в «Глазе» до строчки кода, а сотрудник может подать апелляцию.'),
+    ('Как к этому отнесутся разработчики?', 'Сильные — с облегчением: отчёты не нужны, правила честные, вклад виден. Прозрачность сразу даёт команде в среднем +12% к производительности.')]
+GRADE_ROLES = [('CTO', 'Видит реальную силу команд и проектов, топ-20% для сложных задач и 20% отстающих, с которыми нужно работать в первую очередь.'),
+               ('HRD', 'Повышения, пересмотр зарплат, калибровка грейдов и испытательный срок — на данных, а не на впечатлениях.'),
+               ('Тимлид', 'Не тратит часы на оценку каждого разработчика и не спорит на ревью: у всех один расчёт, который можно проверить.'),
+               ('Разработчик', 'Никаких отчётов и тайм-трекеров. Вклад наконец виден, а путь к следующему грейду — понятен по каждому фактору.')]
+
+def grade_page(n):
+    if n == 1:
+        top = grade_hero('Грейд, который подтверждает код', 'Объективная оценка разработчика по реальному коду: эффективность в часах, грейд по 10+ факторам и рейтинг по компании, стеку и проекту. Каждую цифру можно проверить до строчки кода.',
+                         image_console('star', 'grade / уровень', 'Звезда грейда', '10 факторов и динамика роста', 'grade'))
+        blocks = [method_example(), factors_deep(), rhythm_block(True), transparency_block(),
+                  modules('ЧТО ВНУТРИ', 'Всё для решений о людях — на данных, а не на впечатлениях', [
+                      ('Эффективность в часах и рублях', 'Время UpCore против рабочего времени: создано ценности, упущенная выгода и реальная ставка за час результата. Каждый месяц.'),
+                      ('Грейд по 10+ факторам', 'Звезда грейда, динамика роста и дашборд по каждому фактору. Главный фактор — эффективность кода в часах.'),
+                      ('Рейтинг каждый месяц', 'По компании, стеку и проекту. Топ-20% и 20% отстающих видны сразу, плюс сравнение со средним.'),
+                      ('Авто-резюме по коду', 'Какие технологии и на каком уровне человек реально использует — по карте компетенций стека.'),
+                      ('Онбординг и испытательный срок', 'За сколько недель новичок вышел на среднюю эффективность команды — решение по испытательному сроку на фактах.'),
+                      ('Отчёты, «Глаз» и апелляции', 'Каждый фактор раскрывается до строчки кода. Сотрудник видит тот же расчёт и может его оспорить.')], 'grade')]
+    elif n == 2:
+        top = grade_hero('Не просто «Middle+, 7,8 из 10». Все факторы — до строчки кода', 'UpCore.Grade считает грейд по 10+ факторам и показывает каждый: от звезды грейда до MR и строк кода. Оценка, которую можно проверить, — а не мнение.', drill_visual())
+        blocks = [method_example('Главный фактор — эффективность кода в часах. Ещё девять уточняют уровень'), factors_deep(), rhythm_block(True)]
+    else:
+        top = grade_hero('Объективная оценка разработчика — и рейтинг всей команды каждый месяц', 'Эффективность каждого разработчика в часах, рейтинг по компании, стеку и проекту, а раз в 3 месяца — объективный грейд по 10+ факторам. Полностью автоматически: нужен только код.',
+                         '<div style="flex: 1 1 460px; min-width: 0;"><div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); box-shadow: 0 40px 120px rgba(99,213,255,0.10); padding: 22px;">' + rating_card() + '</div></div>',
+                         kicker='«Кто в команде реально тянет свой грейд?»')
+        blocks = [method_example(), factors_deep(), transparency_block(), rhythm_block(False)]
+    body = [header('grade'), top] + blocks + [
+        roles('ДЛЯ КОГО', 'Одна цифра для CTO, HR, тимлида и разработчика', GRADE_ROLES, 'grade'),
+        faq(GRADE_FAQ, acc_key='grade'),
+        security(True, home=True),
+        cta('Узнайте реальный грейд своей команды', 'Подключите репозиторий — оценка по истории за 3 месяца, без ожидания и анкет.', ('Подключить UpCore', REG)),
+        footer()]
+    return page('UpCore Grade — макет %d' % n, '\n'.join(body), 6000, name='Grade-%d' % n)
+
 def ai_insight():
     bars = [('Senior + ИИ', '+50–100%', 100, '#53C04D', '#7FDB7A'), ('Middle + ИИ', '0…+20%', 30, '#F2C14E', '#F2C14E'), ('Junior + ИИ', 'до −50%', 55, '#E86565', '#F08A8A')]
     rows = ''.join('<div><div style="display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 10px;"><span>%s</span><b style="color: %s;">%s</b></div>'
@@ -1695,8 +1898,8 @@ def build(out, mode):
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
     # раунд 28: «Результаты для бизнеса» (расчёт 2) зафиксирован на Главной A, артборды Results-1..4 сняты
-    for n in (1, 2, 3, 4):  # раунд 29: варианты блока «Методика» страницы Grade
-        files['Method-%d' % n] = block_board('Method', n, method_variant(n), 'Grade: блок «Методика»')
+    for n in (1, 2, 3):  # раунд 30: три полных макета страницы Grade (Grade-B/C и Method-1..4 сняты с холста)
+        files['Grade-%d' % n] = grade_page(n)
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':

@@ -57,24 +57,6 @@
       "x": 0,
       "y": 0
     },
-    "Grade-B.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "grade",
-      "title": "Grade B — первый экран · «Резюме можно накрутить. Код — нет» (HRD)",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Grade-C.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "grade",
-      "title": "Grade C — первый экран · performance review без споров",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
     "Home-A.dc.html": {
       "expand": "fill",
       "h": 6724,
@@ -149,41 +131,32 @@
       "x": 3040,
       "y": 0
     },
-    "Method-1.dc.html": {
+    "Grade-1.dc.html": {
       "expand": "fill",
-      "h": 1199,
+      "h": 7342,
       "page": "grade",
-      "title": "Методика · 1 — звезда грейда и 10 факторов, главный — эффективность в часах",
+      "title": "Grade 1 — «Грейд, который подтверждает код»: звезда в первом экране, методика на примере, факторы, ритм + рейтинг, прозрачность, что внутри",
       "w": 1440,
       "x": 1520,
-      "y": 1400
+      "y": 0
     },
-    "Method-2.dc.html": {
+    "Grade-2.dc.html": {
       "expand": "fill",
-      "h": 1377,
+      "h": 6037,
       "page": "grade",
-      "title": "Методика · 2 — три глубоких фактора: архитектура (AST), технологии, результирующий код",
+      "title": "Grade 2 — «Не просто “Middle+, 7,8 из 10”»: от цифры к коду в первом экране, методика, факторы, ритм + рейтинг",
       "w": 1440,
       "x": 3040,
-      "y": 1400
+      "y": 0
     },
-    "Method-3.dc.html": {
+    "Grade-3.dc.html": {
       "expand": "fill",
-      "h": 992,
+      "h": 6631,
       "page": "grade",
-      "title": "Методика · 3 — прозрачность: грейд → «Уровень» → «Отчёты» → строки кода",
+      "title": "Grade 3 — «Объективная оценка разработчика»: рейтинг в первом экране, методика, факторы, прозрачность, ритм",
       "w": 1440,
       "x": 4560,
-      "y": 1400
-    },
-    "Method-4.dc.html": {
-      "expand": "fill",
-      "h": 991,
-      "page": "grade",
-      "title": "Методика · 4 — ритм: каждый месяц отчёт и рейтинг (топ/лоу 20%), грейд за 3 месяца",
-      "w": 1440,
-      "x": 6080,
-      "y": 1400
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -201,8 +174,7 @@
     "t_grade",
     "t_ai",
     "t_projects",
-    "t_mentor",
-    "t_method"
+    "t_mentor"
   ],
   "notes": {
     "t": {
@@ -227,7 +199,7 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "grade",
-      "text": "UpCore Grade: страница A и ещё 2 варианта первого экрана",
+      "text": "UpCore Grade: основной макет A и 3 новых макета всей страницы",
       "w": 240,
       "x": 0,
       "y": -300
@@ -258,24 +230,12 @@
       "w": 240,
       "x": 0,
       "y": -300
-    },
-    "t_method": {
-      "kind": "title1",
-      "maxW": 4480,
-      "page": "grade",
-      "text": "Grade: блок «Методика» — 4 варианта (1 стоит на странице A)",
-      "w": 240,
-      "x": 1520,
-      "y": 1100
     }
   },
   "order": [
     "Main.dc.html",
     "CommandCenter-R1.dc.html",
     "CommandCenter-V3.dc.html",
-    "Grade-A.dc.html",
-    "Grade-B.dc.html",
-    "Grade-C.dc.html",
     "AI-A.dc.html",
     "AI-B.dc.html",
     "AI-C.dc.html",
@@ -286,10 +246,10 @@
     "Mentor-B.dc.html",
     "Mentor-C.dc.html",
     "Home-A.dc.html",
-    "Method-1.dc.html",
-    "Method-2.dc.html",
-    "Method-3.dc.html",
-    "Method-4.dc.html"
+    "Grade-A.dc.html",
+    "Grade-1.dc.html",
+    "Grade-2.dc.html",
+    "Grade-3.dc.html"
   ],
   "pages": [
     {
