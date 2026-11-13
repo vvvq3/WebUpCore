@@ -587,6 +587,53 @@ def results_v5(n):
            '<div style="margin-top: 14px; %s font-size: 12px; color: rgba(255,255,255,0.5);">Цифры — ориентиры: данные UpCore и рынка; перед публикацией заменить на подтверждённые показатели UpCore.</div>' % MONO)
     return section(out, 'results')
 
+# ---------------------------------------------------------------- раунд 27: «Результаты для бизнеса» — 4 расчёта, без сносок-ориентиров
+RES6 = {
+ 1: dict(big='≈1,2 млн ₽', month='≈9,7 млн ₽', title='Эффект на команду из 100 разработчиков',
+         rows=[('Закрываем «дыру» 20% неэффективных', '≈5,0 млн ₽'), ('+12% к выработке остальных — от прозрачности', '≈3,6 млн ₽'), ('2,5 ставки тимлидов (400 ч) освобождаются от ручной оценки', '≈1,1 млн ₽')],
+         total=('Итого в месяц', '≈9,7 млн ₽'), tail=[('В год на команду', '≈116 млн ₽'), ('На одного разработчика в год', '≈1,2 млн ₽')],
+         foot='Допущения: 100 разработчиков, полные затраты 300 тыс. ₽ в месяц на человека (ФОТ разработки 30 млн ₽), ставка тимлида 450 тыс. ₽. Даже при 30% реализации — ≈2,9 млн ₽ в месяц, или ≈350 тыс. ₽ на разработчика в год.'),
+ 2: dict(big='≈780 тыс. ₽', month='≈6,5 млн ₽', title='Эффект на команду из 100 разработчиков',
+         rows=[('Берём половину «дыры» 20% неэффективных: −10% потерь ФОТ', '≈2,5 млн ₽'), ('+12% к выработке остальных — от прозрачности', '≈3,0 млн ₽'), ('2,5 ставки тимлидов освобождаются от ручной оценки', '≈1,0 млн ₽')],
+         total=('Итого в месяц', '≈6,5 млн ₽'), tail=[('В год на команду', '≈78 млн ₽'), ('На одного разработчика в год', '≈780 тыс. ₽')],
+         foot='Допущения: 100 разработчиков, полные затраты 250 тыс. ₽ в месяц на человека (ФОТ разработки 25 млн ₽), ставка тимлида 400 тыс. ₽. Из «дыры» 20% неэффективных учитываем только половину эффекта — 10% ФОТ.'),
+ 3: dict(big='≈450 тыс. ₽', month='≈3,75 млн ₽', title='Эффект на команду из 100 разработчиков',
+         rows=[('Закрываем четверть «дыры» неэффективных: −5% потерь ФОТ', '≈1,25 млн ₽'), ('+6% к выработке — половина эффекта прозрачности', '≈1,5 млн ₽'), ('2,5 ставки тимлидов освобождаются от ручной оценки', '≈1,0 млн ₽')],
+         total=('Итого в месяц', '≈3,75 млн ₽'), tail=[('В год на команду', '≈45 млн ₽'), ('На одного разработчика в год', '≈450 тыс. ₽')],
+         foot='Допущения: 100 разработчиков, полные затраты 250 тыс. ₽ в месяц на человека (ФОТ разработки 25 млн ₽), ставка тимлида 400 тыс. ₽. Берём осторожно: четверть «дыры» неэффективных и половину эффекта прозрачности.'),
+ 4: dict(big='≈450 тыс. ₽', month='≈3,75 млн ₽', title='Эффект на одного разработчика',
+         rows=[('Затраты компании на разработчика в месяц', '250 тыс. ₽'), ('+10% к выработке — прозрачность и саморегуляция', '≈25 тыс. ₽'), ('−5% потерь на работу без результата и переделки', '≈12,5 тыс. ₽')],
+         total=('Эффект в месяц на разработчика', '≈37,5 тыс. ₽'), tail=[('На одного разработчика в год', '≈450 тыс. ₽'), ('На команду из 100 разработчиков в год', '≈45 млн ₽')],
+         foot='Считаем от одного человека: эффект 15% от затрат на разработчика. Время тимлидов не учитываем — это бонус сверху, ещё ≈10 тыс. ₽ в месяц на каждого разработчика (2,5 ставки по 400 тыс. ₽ на 100 человек).'),
+}
+RES6_TILES = [('до +30%', 'рост эффективности разработки за счёт контроля продуктивности'),
+              ('−20%', 'time-to-market: потери в процессах становятся видны'),
+              ('2,5 ставки', 'тимлидов на каждые 100 разработчиков освобождается от ручной оценки')]
+
+def results_v6(n):
+    d = RES6[n]
+    line, txt = ACC[None]
+    subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 неделя', 'до первых решений — по истории вашего Git'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
+    sub_html = ''.join('<div style="min-width: 0;"><div style="font-size: clamp(24px, 2.2vw, 34px); font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                       '<div style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (e(a), e(b)) for a, b in subs)
+    banner = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid %s73; box-shadow: inset 0 0 120px rgba(99,213,255,0.06); padding: clamp(28px, 4vw, 48px); display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; margin-bottom: 16px;">'
+              '<div style="flex: 1.2 1 420px; min-width: 0;"><div style="font-size: clamp(44px, 7vw, 104px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+              '<p style="margin: 16px 0 0; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.45; color: rgba(255,255,255,0.88); max-width: 560px;">экономического эффекта в год на каждого разработчика</p></div>'
+              '<div class="g3" style="flex: 1 1 420px; min-width: 0; gap: 20px;">%s</div></div>') % (line, txt, e(d['big']), sub_html)
+    tiles = ''.join(card('<div style="font-size: clamp(30px, 2.7vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                         '<p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 15px; line-height: 1.5;">%s</p>' % ('#7FDB7A' if b.startswith(('+', 'до +')) else txt, e(b), e(l)), pad='24px', gap=10) for b, l in RES6_TILES)
+    rowst = 'display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 17px; line-height: 1.4;'
+    lines = ''.join('<div style="%s"><span style="color: rgba(255,255,255,%s);">%s</span><b style="white-space: nowrap; font-variant-numeric: tabular-nums;%s">%s</b></div>' % (
+        rowst, '0.62' if (n == 4 and i == 0) else '0.84', e(a), ' font-weight: 400; color: rgba(255,255,255,0.7);' if (n == 4 and i == 0) else '', e(b)) for i, (a, b) in enumerate(d['rows']))
+    tot = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 18px 0 12px; border-top: 2px solid %s; font-size: 22px; font-weight: 800;"><span>%s</span><span style="color: %s; font-variant-numeric: tabular-nums;">%s</span></div>' % (txt, e(d['total'][0]), txt, e(d['total'][1])))
+    tot += ''.join('<div style="%s"><span style="color: rgba(255,255,255,0.84);">%s</span><b style="white-space: nowrap;%s">%s</b></div>' % (rowst, e(a), (' color: %s;' % txt) if 'одного' in a else '', e(b)) for a, b in d['tail'])
+    calc = ('<div style="margin-top: 16px; border-radius: 28px; background: #12111C; border: 1px solid rgba(255,255,255,0.1); padding: clamp(24px, 3vw, 40px); display: flex; flex-wrap: wrap; gap: 32px;">'
+            '<div style="flex: 1 1 280px; min-width: 0;"><div style="%s font-size: 13px; color: %s; margin-bottom: 10px;">РАСЧЁТ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">%s</div>'
+            '<p style="margin: 14px 0 0; color: rgba(255,255,255,0.62); font-size: 14px; line-height: 1.5;">%s</p></div>'
+            '<div style="flex: 1.4 1 420px; min-width: 0;">%s%s</div></div>') % (MONO, txt, e(d['title']), e(d['foot']), lines, tot)
+    out = sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], RESULTS['home'].get('lead')) + banner + '<div class="g3">%s</div>' % tiles + calc
+    return section(out, 'results')
+
 def core_block():
     """Сердце UpCore: запатентованная модель 50+ факторов → человеко-часы. Уникальная механика, отличие от конкурентов."""
     factors = ['Язык, технологии и их грейд', 'Объём, тип и сложность задачи', 'Цикломатическая, когнитивная, логическая сложность',
@@ -1477,8 +1524,8 @@ def build(out, mode):
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
-    for n in (1, 2, 3):  # раунд 26: варианты блока «Результаты для бизнеса» на основе варианта 1 (раунд 25 снят)
-        files['Results-%d' % n] = block_board('Results', n, results_v5(n), 'блок «Результаты для бизнеса»')
+    for n in (1, 2, 3, 4):  # раунд 27: 4 расчёта блока «Результаты для бизнеса» (варианты раунда 26 сняты)
+        files['Results-%d' % n] = block_board('Results', n, results_v6(n), 'блок «Результаты для бизнеса»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
