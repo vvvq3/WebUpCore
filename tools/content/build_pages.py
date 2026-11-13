@@ -67,7 +67,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (max-width:720px){.uc-sc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.uc-sc>span:first-child{grid-column:1/-1}.uc-sc>span:first-child:empty{display:none}.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -523,6 +523,69 @@ def results_variant(n):
              '<p style="margin: 8px 0 0; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.78);">производительности команды сразу после запуска — ещё до любых решений, только за счёт прозрачности.</p></div></div>'
              '<div class="g2">%s</div>%s</div>') % (box, res_label(), h2st, cards, res_foot('Цифры — ориентиры из расчётов UpCore и данных рынка (подписаны), перед публикацией заменить на подтверждённые. Затраты 300 тыс. ₽ в месяц на разработчика.'))
     return section(inner, 'results')
+
+# ---------------------------------------------------------------- раунд 26: «Результаты для бизнеса» на основе варианта 1, большая цифра согласована с расчётом
+RES_SCEN = {
+  'full': dict(big='≈1,2 млн ₽', text='экономического эффекта в год на каждого разработчика — столько возвращает UpCore при полной реализации',
+               rows=[('Закрываем «дыру» 20% неэффективных', '≈5,0 млн ₽'), ('+12% к выработке остальных — от прозрачности', '≈3,6 млн ₽'), ('2,5 ставки тимлидов (400 ч) освобождаются от ручной оценки', '≈1,1 млн ₽')],
+               month='≈9,7 млн ₽', year='≈116 млн ₽', per='≈1,2 млн ₽'),
+  'cons': dict(big='≈500 тыс. ₽', text='экономического эффекта в год на каждого разработчика — даже в осторожном сценарии',
+               rows=[('Закрываем только четверть «дыры» неэффективных', '≈1,3 млн ₽'), ('+6% к выработке — половина эффекта прозрачности', '≈1,8 млн ₽'), ('2,5 ставки тимлидов (400 ч) освобождаются от ручной оценки', '≈1,1 млн ₽')],
+               month='≈4,2 млн ₽', year='≈50 млн ₽', per='≈500 тыс. ₽'),
+}
+RES_TILES = [('до +30%', 'рост эффективности разработки за счёт контроля продуктивности', 'ориентир: Tech Talent Score'),
+             ('−20%', 'time-to-market: потери в процессах становятся видны', 'ориентир: Tech Talent Score'),
+             ('2,5 ставки', 'тимлидов на каждые 100 разработчиков освобождается от ручной оценки', U)]
+RES_ASSUME = 'Допущения: 100 разработчиков, полные затраты 300 тыс. ₽ в месяц на человека (ФОТ разработки 30 млн ₽), ставка тимлида 450 тыс. ₽.'
+
+def results_v5(n):
+    """1 — полный эффект (≈1,2 млн ₽ на разработчика), 2 — осторожный сценарий (≈500 тыс. ₽), 3 — вилка с двумя колонками расчёта."""
+    line, txt = ACC[None]
+    if n == 3:
+        big, text = '0,5–1,2 млн ₽', 'экономического эффекта в год на каждого разработчика: от осторожного сценария до полной реализации'
+        month_sub = '4,2–9,7 млн ₽'
+    else:
+        d = RES_SCEN['full' if n == 1 else 'cons']
+        big, text, month_sub = d['big'], d['text'], d['month']
+    subs = [(month_sub, 'в месяц на команду из 100 разработчиков'), ('1 месяц', 'до первых решений — по истории вашего Git'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
+    sub_html = ''.join('<div style="min-width: 0;"><div style="font-size: %s; font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                       '<div style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; margin-top: 4px;">%s</div></div>' % ('clamp(20px, 1.6vw, 24px)' if n == 3 and i == 0 else 'clamp(24px, 2.2vw, 34px)', e(a), e(b)) for i, (a, b) in enumerate(subs))
+    banner = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid %s73; box-shadow: inset 0 0 120px rgba(99,213,255,0.06); padding: clamp(28px, 4vw, 48px); display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; margin-bottom: 16px;">'
+              '<div style="flex: 1.2 1 420px; min-width: 0;"><div style="font-size: %s; font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; color: %s; font-variant-numeric: tabular-nums;">%s</div>'
+              '<p style="margin: 16px 0 0; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.45; color: rgba(255,255,255,0.88); max-width: 560px;">%s</p></div>'
+              '<div class="g3" style="flex: 1 1 420px; min-width: 0; gap: 20px;">%s</div></div>') % (
+                  line, 'clamp(56px, 6.4vw, 96px)' if n == 3 else 'clamp(56px, 7vw, 104px)', txt, e(big), e(text), sub_html)
+    tiles = ''.join(card('<div style="font-size: clamp(30px, 2.7vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+                         '<p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 15px; line-height: 1.5;">%s</p>%s' % ('#7FDB7A' if b.startswith(('+', 'до +')) else txt, e(b), e(l), src_line(s_)), pad='24px', gap=10) for b, l, s_ in RES_TILES)
+    rowst = 'display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 17px; line-height: 1.4;'
+    if n in (1, 2):
+        d = RES_SCEN['full' if n == 1 else 'cons']
+        lines = ''.join('<div style="%s"><span style="color: rgba(255,255,255,0.84);">%s</span><b style="white-space: nowrap; font-variant-numeric: tabular-nums;">%s</b></div>' % (rowst, e(a), e(b)) for a, b in d['rows'])
+        tot = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 18px 0 12px; border-top: 2px solid %s; font-size: 22px; font-weight: 800;"><span>Итого в месяц</span><span style="color: %s; font-variant-numeric: tabular-nums;">%s</span></div>'
+               '<div style="%s"><span style="color: rgba(255,255,255,0.84);">В год на команду</span><b style="white-space: nowrap;">%s</b></div>'
+               '<div style="%s"><span style="color: rgba(255,255,255,0.84);">На одного разработчика в год</span><b style="white-space: nowrap; color: %s;">%s</b></div>') % (txt, txt, d['month'], rowst, d['year'], rowst, txt, d['per'])
+        title = 'Эффект на команду из 100 разработчиков' if n == 1 else 'Осторожный сценарий: команда из 100 разработчиков'
+        foot = RES_ASSUME + (' Даже при 30% реализации — ≈2,9 млн ₽ в месяц, или ≈350 тыс. ₽ на разработчика в год.' if n == 1 else ' При полной реализации эффект больше в 2,3 раза — ≈1,2 млн ₽ на разработчика в год.')
+        right = lines + tot
+    else:
+        f, c = RES_SCEN['full'], RES_SCEN['cons']
+        grid = 'display: grid; grid-template-columns: minmax(0, 1fr) minmax(76px, auto) minmax(76px, auto); gap: 6px 20px; align-items: baseline; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 16px; line-height: 1.4;'
+        head = '<div class="uc-sc" style="%s border-top: 0; padding-top: 0;"><span></span><span style="%s font-size: 12px; color: rgba(255,255,255,0.6); text-align: right;">ОСТОРОЖНО</span><span style="%s font-size: 12px; color: %s; text-align: right;">ПОЛНЫЙ ЭФФЕКТ</span></div>' % (grid, MONO, MONO, txt)
+        labels = ['Неэффективность: «дыра» 20% разработчиков', 'Прозрачность: рост выработки остальных', 'Тимлиды: 2,5 ставки без ручной оценки']
+        body = ''.join('<div class="uc-sc" style="%s"><span style="color: rgba(255,255,255,0.84);">%s</span><b style="text-align: right; white-space: nowrap; color: rgba(255,255,255,0.8);">%s</b><b style="text-align: right; white-space: nowrap;">%s</b></div>' % (grid, e(l), c['rows'][i][1], f['rows'][i][1]) for i, l in enumerate(labels))
+        tot = ''.join('<div class="uc-sc" style="%s%s"><span style="font-weight: %s;">%s</span><b style="text-align: right; white-space: nowrap; color: rgba(255,255,255,0.86); font-size: %s;">%s</b><b style="text-align: right; white-space: nowrap; color: %s; font-size: %s;">%s</b></div>' % (
+            grid, ' border-top: 2px solid %s;' % txt if i == 0 else '', 800 if i == 0 else 400, a, '20px' if i == 2 else '17px', cv, txt, '20px' if i == 2 else '17px', fv)
+            for i, (a, cv, fv) in enumerate([('Итого в месяц', c['month'], f['month']), ('В год на команду', c['year'], f['year']), ('На одного разработчика в год', c['per'], f['per'])]))
+        title = 'Эффект на команду из 100 разработчиков: два сценария'
+        foot = RES_ASSUME + ' Осторожно: закрываем четверть «дыры» неэффективных и берём половину эффекта прозрачности (+6%). Полный эффект: −20% потерь и +12% выработки.'
+        right = head + body + tot
+    calc = ('<div style="margin-top: 16px; border-radius: 28px; background: #12111C; border: 1px solid rgba(255,255,255,0.1); padding: clamp(24px, 3vw, 40px); display: flex; flex-wrap: wrap; gap: 32px;">'
+            '<div style="flex: 1 1 280px; min-width: 0;"><div style="%s font-size: 13px; color: %s; margin-bottom: 10px;">РАСЧЁТ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">%s</div>'
+            '<p style="margin: 14px 0 0; color: rgba(255,255,255,0.62); font-size: 14px; line-height: 1.5;">%s</p></div>'
+            '<div style="flex: 1.4 1 420px; min-width: 0;">%s</div></div>') % (MONO, txt, e(title), e(foot), right)
+    out = (sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], RESULTS['home'].get('lead')) + banner + '<div class="g3">%s</div>' % tiles + calc +
+           '<div style="margin-top: 14px; %s font-size: 12px; color: rgba(255,255,255,0.5);">Цифры — ориентиры: данные UpCore и рынка; перед публикацией заменить на подтверждённые показатели UpCore.</div>' % MONO)
+    return section(out, 'results')
 
 def core_block():
     """Сердце UpCore: запатентованная модель 50+ факторов → человеко-часы. Уникальная механика, отличие от конкурентов."""
@@ -1414,8 +1477,8 @@ def build(out, mode):
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
-    for n in (1, 2, 3, 4):  # раунд 25: варианты блока «Результаты для бизнеса» (1 — текущий)
-        files['Results-%d' % n] = block_board('Results', n, results_variant(n), 'блок «Результаты для бизнеса»')
+    for n in (1, 2, 3):  # раунд 26: варианты блока «Результаты для бизнеса» на основе варианта 1 (раунд 25 снят)
+        files['Results-%d' % n] = block_board('Results', n, results_v5(n), 'блок «Результаты для бизнеса»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
