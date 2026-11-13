@@ -1019,7 +1019,7 @@ def home(variant):
     body += [
         pains_variant(2),
         core_v3(9),
-        products_2x2(1),
+        platform_variant(3),  # раунд 22: принят вариант 3 «Шеврон»
         trust_variant(1),
         results('home'),
         security(True),
@@ -1245,8 +1245,7 @@ def build(out, mode):
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
-    for n in (1, 2, 3, 4):  # раунд 21: варианты блока «Платформа» (Products-1..3 раунда 20 сняты)
-        files['Platform-%d' % n] = block_board('Platform', n, platform_variant(n), 'блок «Платформа»')
+    # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     for n in (1, 2, 3):  # раунд 20: варианты блока «Принцип + доверие»
         files['Trust-%d' % n] = block_board('Trust', n, trust_variant(n), 'блок «Принцип и точность»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
