@@ -2,33 +2,6 @@
   "v": 3,
   "attachments": {},
   "boards": {
-    "AI-A.dc.html": {
-      "expand": "fill",
-      "h": 6602,
-      "page": "ai",
-      "title": "AI A — полная страница · «Реальная эффективность внедрения ИИ в вашу разработку»",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "AI-B.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "ai",
-      "title": "AI B — первый экран · METR: −19% против ощущения +20%",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "AI-C.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "ai",
-      "title": "AI C — первый экран · Senior +50–100%, Junior до −50%; ×1,9 отдачи на рубль",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
     "CommandCenter-R1.dc.html": {
       "expand": "fill",
       "h": 3490,
@@ -68,60 +41,6 @@
       "x": 0,
       "y": 0
     },
-    "Mentor-A.dc.html": {
-      "expand": "fill",
-      "h": 6605,
-      "page": "mentor",
-      "title": "Mentor A — полная страница · «ИИ-наставник для каждого разработчика»",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Mentor-B.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "mentor",
-      "title": "Mentor B — первый экран · «Тимлид менторит троих, Mentor — всю команду»",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Mentor-C.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "mentor",
-      "title": "Mentor C — первый экран · ИИ может тормозить рост (Anthropic)",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "Projects-A.dc.html": {
-      "expand": "fill",
-      "h": 7558,
-      "page": "projects",
-      "title": "Projects A — полная страница · «Сколько стоит проект? Посчитаем по коду»",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Projects-B.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "projects",
-      "title": "Projects B — первый экран · «В акте 160 часов. В коде — 40»",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Projects-C.dc.html": {
-      "expand": "fill",
-      "h": 1015,
-      "page": "projects",
-      "title": "Projects C — первый экран · McKinsey: +45% к бюджету",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
     "Grade-3.dc.html": {
       "expand": "fill",
       "h": 5243,
@@ -129,6 +48,114 @@
       "title": "Grade — основной макет (на базе Grade 3) · «Объективная оценка разработчика — и рейтинг всей команды каждый месяц»",
       "w": 1440,
       "x": 0,
+      "y": 0
+    },
+    "AI-1.dc.html": {
+      "expand": "fill",
+      "h": 5622,
+      "page": "ai",
+      "title": "AI 1 — «Реальная эффективность внедрения ИИ»: скриншот демо, ИИ-эффективность на примере, факторы, «кому ИИ даёт результат»",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "AI-2.dc.html": {
+      "expand": "fill",
+      "h": 5592,
+      "page": "ai",
+      "title": "AI 2 — «Сколько часов экономит ИИ — по каждому MR»: таблица MR с ИИ, «кому ИИ даёт результат», факторы, пример",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "AI-3.dc.html": {
+      "expand": "fill",
+      "h": 4957,
+      "page": "ai",
+      "title": "AI 3 — «Senior +50–100%, Junior до −50%»: полосы по уровням, пример, факторы (самый короткий)",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Projects-1.dc.html": {
+      "expand": "fill",
+      "h": 5756,
+      "page": "projects",
+      "title": "Projects 1 — «Сколько стоит проект? Посчитаем по коду»: сводка проекта, проект на примере, факторы, сценарии",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Projects-2.dc.html": {
+      "expand": "fill",
+      "h": 5729,
+      "page": "projects",
+      "title": "Projects 2 — «В акте 160 часов. В коде — 40»: аудит акта, контроль подрядчиков, проект на примере, факторы",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Projects-3.dc.html": {
+      "expand": "fill",
+      "h": 5781,
+      "page": "projects",
+      "title": "Projects 3 — «Бюджет проекта и контроль подрядчиков»: техдолг в первом экране, пример, факторы, контроль подрядчиков",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Mentor-1.dc.html": {
+      "expand": "fill",
+      "h": 5353,
+      "page": "mentor",
+      "title": "Mentor 1 — «ИИ-наставник для каждого разработчика»: качество и дефекты, наставник на примере, факторы",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Mentor-2.dc.html": {
+      "expand": "fill",
+      "h": 5426,
+      "page": "mentor",
+      "title": "Mentor 2 — «Тимлид менторит троих, Mentor — всю команду»: приоритизация ревью, факторы, пример",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Mentor-3.dc.html": {
+      "expand": "fill",
+      "h": 5374,
+      "page": "mentor",
+      "title": "Mentor 3 — «Из оценки — в план роста»: ИПР и Топ-3 технологии, пример, факторы",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Blog-1.dc.html": {
+      "expand": "fill",
+      "h": 2342,
+      "page": "blog",
+      "title": "Блог 1 — баннер Telegram, главный пост крупно, сетка 6 постов",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Blog-2.dc.html": {
+      "expand": "fill",
+      "h": 2260,
+      "page": "blog",
+      "title": "Блог 2 — журнал: рейтинг 7 постов по просмотрам, справа карточка канала и темы",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Blog-3.dc.html": {
+      "expand": "fill",
+      "h": 2263,
+      "page": "blog",
+      "title": "Блог 3 — фильтры тем, карточки в 2 колонки, большой баннер канала внизу",
+      "w": 1440,
+      "x": 3040,
       "y": 0
     }
   },
@@ -147,7 +174,8 @@
     "t_grade",
     "t_ai",
     "t_projects",
-    "t_mentor"
+    "t_mentor",
+    "t_blog"
   ],
   "notes": {
     "t": {
@@ -163,7 +191,7 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "ai",
-      "text": "UpCore AI: страница A и ещё 2 варианта первого экрана",
+      "text": "UpCore AI: 3 макета страницы на основе главной и Grade",
       "w": 240,
       "x": 0,
       "y": -300
@@ -190,7 +218,7 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "mentor",
-      "text": "UpCore Mentor: страница A и ещё 2 варианта первого экрана",
+      "text": "UpCore Mentor: 3 макета страницы на основе главной и Grade",
       "w": 240,
       "x": 0,
       "y": -300
@@ -199,7 +227,16 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "projects",
-      "text": "UpCore Projects: страница A и ещё 2 варианта первого экрана",
+      "text": "UpCore Projects: 3 макета страницы на основе главной и Grade",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_blog": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "blog",
+      "text": "Блог: 3 макета — Telegram-канал «ИИ-тимлид UpCore» и 7 самых популярных постов",
       "w": 240,
       "x": 0,
       "y": -300
@@ -209,17 +246,20 @@
     "Main.dc.html",
     "CommandCenter-R1.dc.html",
     "CommandCenter-V3.dc.html",
-    "AI-A.dc.html",
-    "AI-B.dc.html",
-    "AI-C.dc.html",
-    "Projects-A.dc.html",
-    "Projects-B.dc.html",
-    "Projects-C.dc.html",
-    "Mentor-A.dc.html",
-    "Mentor-B.dc.html",
-    "Mentor-C.dc.html",
     "Home-A.dc.html",
-    "Grade-3.dc.html"
+    "Grade-3.dc.html",
+    "AI-1.dc.html",
+    "AI-2.dc.html",
+    "AI-3.dc.html",
+    "Projects-1.dc.html",
+    "Projects-2.dc.html",
+    "Projects-3.dc.html",
+    "Mentor-1.dc.html",
+    "Mentor-2.dc.html",
+    "Mentor-3.dc.html",
+    "Blog-1.dc.html",
+    "Blog-2.dc.html",
+    "Blog-3.dc.html"
   ],
   "pages": [
     {
@@ -245,6 +285,10 @@
     {
       "id": "mentor",
       "name": "UpCore Mentor"
+    },
+    {
+      "id": "blog",
+      "name": "Блог"
     }
   ],
   "title": "UpCore — дизайн и тексты сайта"

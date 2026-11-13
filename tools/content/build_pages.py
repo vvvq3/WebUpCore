@@ -1934,6 +1934,358 @@ def product(key, v):
             footer()]
     return page('UpCore %s — страница A' % names[key], '\n'.join(body), 5400, name='%s-A' % names[key])
 
+# ---------------------------------------------------------------- раунд 36: страницы AI, Projects, Mentor (по образцу Grade) и Блог — по 3 макета
+MODC = {'ai': ('AI', '02', 'ЭФФЕКТИВНОСТЬ ИИ И ВАЙБКОДИНГА', 'CTO · CFO · ТИМЛИДЫ'),
+        'projects': ('Projects', '03', 'БЮДЖЕТ ПРОЕКТА И КОНТРОЛЬ ПОДРЯДЧИКОВ', 'CEO · PMO · CFO'),
+        'mentor': ('Mentor', '04', 'ИИ-НАСТАВНИК ДЛЯ КАЖДОГО РАЗРАБОТЧИКА', 'ТИМЛИДЫ · L&D · РАЗРАБОТЧИКИ')}
+
+def mod_hero(key, h1, sub, visual, st):
+    line, txt = ACC[key]; mod, num, lab, rl = MODC[key]
+    name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
+            '<span style="color: ' + line + ';">&gt;</span><span>UpCore<span style="color: ' + txt + ';">.' + mod + '</span></span></div>')
+    sec = btn('Заказать аудит', MAIL, False) if key == 'projects' else btn('Получить демо-отчёт', MAIL, False)
+    return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">' + CHEVRON +
+            '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 24px;">'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.62);"><span style="color: ' + txt + ';">' + num + ' · ' + e(lab) + '</span><span>' + e(rl) + '</span></div>'
+            + name +
+            '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
+            '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + btn('Подключить UpCore', REG) + sec + '</div>' + stats(st) + '</div>' + visual + '</section>')
+
+def panel(key, path, right, body, flex='1.15 1 480px'):
+    line, txt = ACC[key]
+    return ('<div style="flex: ' + flex + '; min-width: 0; position: relative;"><div style="border-radius: 24px; background: #12111C; border: 1px solid ' + line + '66; box-shadow: 0 40px 120px rgba(99,213,255,0.10); overflow: hidden;">'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.72);"><span>upcore://' + e(path) + '</span><span style="color: ' + txt + ';">' + e(right) + '</span></div>'
+            '<div style="padding: 20px;">' + body + '</div></div></div>')
+
+def tile(big, small, col='#FFFFFF'):
+    return ('<div style="min-width: 0; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 14px 16px;">'
+            '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: ' + col + '; font-variant-numeric: tabular-nums;">' + big + '</div>'
+            '<div style="font-size: 13px; color: rgba(255,255,255,0.66); line-height: 1.4; margin-top: 2px;">' + e(small) + '</div></div>')
+
+def hbar(label, val_txt, pct, col, sub=''):
+    return ('<div><div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 5px;"><span style="min-width: 0;">' + e(label) + '</span><b style="white-space: nowrap; color: ' + col + ';">' + val_txt + '</b></div>'
+            '<div style="height: 8px; border-radius: 4px; background: rgba(255,255,255,0.06); overflow: hidden;"><div style="width: ' + str(pct) + '%; height: 100%; background: ' + col + ';"></div></div>'
+            + ('<div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 3px;">' + e(sub) + '</div>' if sub else '') + '</div>')
+
+def deep_block(key, h2, lead, items, cols='g2'):
+    line, txt = ACC[key]
+    cards = ''.join('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 16px;">'
+                    '<div style="' + MONO + ' font-size: 12px; color: ' + txt + ';">' + e(a) + '</div><div style="font-size: 22px; font-weight: 800; line-height: 1.2;">' + e(b) + '</div>' + viz +
+                    '<p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 15px; line-height: 1.55;">' + e(t) + '</p></article>' for a, b, viz, t in items)
+    return section(sec_head('ПОДРОБНО О ФАКТОРАХ', h2, lead, key) + '<div class="' + cols + '">' + cards + '</div>', 'factors')
+
+def example_shell(key, label, h2, lead, head_html, body_html):
+    line, txt = ACC[key]
+    return section(sec_head(label, h2, lead, key) + '<div style="border-radius: 32px; background: #12111C; border: 1px solid ' + line + '59; padding: clamp(24px, 3.4vw, 44px); display: flex; flex-direction: column; gap: 24px;">' + head_html + body_html + '</div>', 'example')
+
+def demo_head(key, title, sub, kvs):
+    line, txt = ACC[key]
+    kv = ''.join('<div style="min-width: 0;"><div style="font-size: 13px; color: rgba(255,255,255,0.6);">' + e(k) + '</div><div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; white-space: nowrap;">' + v + '</div>'
+                 + ('<div style="font-size: 13px; color: rgba(255,255,255,0.55);">' + e(s_) + '</div>' if s_ else '') + '</div>' for k, v, s_ in kvs)
+    return ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 32px; align-items: flex-end; padding-bottom: 22px; border-bottom: 1px solid rgba(255,255,255,0.08);">'
+            '<div style="min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);">' + e(sub) + '</div><div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; margin-top: 8px;">' + e(title) + '</div></div>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 20px 36px;">' + kv + '</div></div>')
+
+# ------------------------------- AI
+AI_MR = [('№ 2494', 'Обновление выводов', 100, '2,5 ч', '1 ч', '7 · 70'), ('№ 2376', 'Поиск по виджетам', 100, '9,7 ч', '1 ч', '1 · 10'),
+         ('№ 2356', 'Учёт работы в выходные', 90, '5,3 ч', '5,9 ч', '1 · 7'), ('№ 2374', 'Грейды и рост: зона внимания', 67, '1,2 ч', '1,8 ч', '1 · 8'),
+         ('№ 2271', 'Повторная оценка строк в MR', 39, '5,4 ч', '13,7 ч', '1 · 2'), ('№ 2370', 'Пороги динамики эффективности', 22, '2,5 ч', '11,3 ч', '1 · 8')]
+
+def ai_mr_rows(short=False):
+    head = ('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 120px; gap: 10px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5); padding: 0 0 8px;">'
+            '<span>MR, СДЕЛАННЫЕ С ИИ</span><span style="text-align: right;">ЭФФ.</span><span style="text-align: right;">UPCORE / СПИСАНО</span></div>')
+    rows = ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 120px; gap: 10px; align-items: baseline; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;">'
+                   '<span style="min-width: 0;"><span style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);">' + a + '</span> ' + e(b) + '</span>'
+                   '<b style="text-align: right; color: ' + (GREEN if c >= 85 else (AMBER if c >= 60 else RED_T)) + '; font-variant-numeric: tabular-nums;">' + str(c) + '%</b>'
+                   '<span style="text-align: right; white-space: nowrap; color: rgba(255,255,255,0.8); font-variant-numeric: tabular-nums;">' + d + ' / ' + f + '</span></div>' for a, b, c, d, f, g in (AI_MR[:4] if short else AI_MR))
+    return head + rows
+
+def ai_smj(compact=False):
+    rows = [('Senior + ИИ', '+50…100%', 100, GREEN, 'знает, что спросить, и быстро ревьюит ответ'), ('Middle + ИИ', '0…+20%', 30, AMBER, 'эффект есть, но нестабильный'), ('Junior + ИИ', 'до −50%', 50, RED_T, 'копирует галлюцинации и часами отлаживает')]
+    out = ''
+    for nm, v, w, c, d in rows:
+        neg = v.startswith('до −')
+        bar = ('<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: 12px;"><div style="display: flex; justify-content: flex-end; background: rgba(255,255,255,0.04); border-radius: 6px 0 0 6px;">' + ('<div style="width: ' + str(w) + '%; background: ' + c + '; border-radius: 6px 0 0 6px;"></div>' if neg else '') + '</div>'
+               '<div style="background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.4); border-radius: 0 6px 6px 0;">' + ('' if neg else '<div style="width: ' + str(w) + '%; height: 100%; background: ' + c + '; border-radius: 0 6px 6px 0;"></div>') + '</div></div>')
+        out += ('<div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.07);"><div style="display: flex; justify-content: space-between; gap: 12px;"><b style="font-size: 16px;">' + e(nm) + '</b><b style="color: ' + c + '; font-size: 18px; white-space: nowrap;">' + e(v) + '</b></div>' + bar
+                + ('' if compact else '<div style="font-size: 13px; color: rgba(255,255,255,0.6);">' + e(d) + '</div>') + '</div>')
+    return out
+
+def ai_example():
+    head = demo_head('ai', 'Лукьянов Александр · Backend, C#', 'ДЕМО UPCORE · ВКЛАДКА «ИИ-ЭФФЕКТИВНОСТЬ»', [
+        ('MR через ИИ', '6 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 47</span>', ''), ('Эффективность ИИ-MR', '<span style="color: ' + AMBER + ';">77%</span>', ''), ('UpCore / списано', '26,6 / 34,7 ч', '−8,1 ч')])
+    left = '<div style="flex: 1.3 1 460px; min-width: 0;">' + ai_mr_rows() + '</div>'
+    right = ('<div style="flex: 1 1 300px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start;">'
+             + tile('12', 'сессий с ИИ-агентом · 8,1 ч') + tile('121 тыс.', 'токенов на 1 MR при норме 250 тыс.') + tile('23 тыс.', 'токенов на час результата при норме 30 тыс.') + tile('<span style="color: ' + GREEN + ';">3</span> / <span style="color: ' + RED_T + ';">2</span>', 'MR, где ИИ ускорил / где замедлил') + '</div>')
+    note = ('<div style="border-radius: 18px; background: rgba(155,140,255,0.08); border: 1px solid rgba(155,140,255,0.3); padding: 16px 20px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.86);">'
+            'На трёх задачах ИИ дал результат быстрее, чем вручную. На двух — человек потратил с ИИ больше времени, чем заняла бы ручная работа. Без UpCore это выглядело бы одинаково: «задача закрыта».</div>')
+    return example_shell('ai', 'ИИ-ЭФФЕКТИВНОСТЬ НА ПРИМЕРЕ', 'Сколько ИИ реально дал одному разработчику — по каждому MR', 'Профиль из демо UpCore: какие задачи сделаны с ИИ, сколько часов результата они дали и сколько токенов на это ушло.', head,
+                         '<div style="display: flex; flex-wrap: wrap; gap: 24px 40px;">' + left + right + '</div>' + note)
+
+def ai_deep():
+    churn = ('<div><div style="display: flex; height: 18px; border-radius: 9px; overflow: hidden; gap: 3px;"><div style="flex: 50 1 0; background: #9B8CFF;"></div><div style="flex: 50 1 0; background: rgba(232,101,101,0.5);"></div></div>'
+             '<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.66); margin-top: 8px;"><span><b style="color: #B9AEFF;">дошло до релиза</b></span><span><b style="color: ' + RED_T + ';">переписано</b></span></div></div>')
+    items = [('ФАКТОР · АВТО-ДЕТЕКТ', 'Где в коде ИИ', hbar('MR с вайбкодингом по всей компании', '37 из 488', 8, '#B9AEFF', 'демо: сводный отчёт по компании'),
+              'Определяем ИИ-код в каждом MR — по разработчику, команде и проекту. Не зависит от инструмента: смотрим на сам код.'),
+             ('ФАКТОР · ПРОМПТ-КОЛЛЕКТОР', 'Как именно работали с ИИ', '<div class="g3" style="gap: 8px;">' + tile('7', 'сессий') + tile('70', 'ходов') + tile('604 тыс.', 'токенов') + '</div>',
+              'Агент на машине разработчика собирает сессии, ходы и токены по каждому MR. Видно, где не хватило контекста и где ИИ увёл в сторону.'),
+             ('ФАКТОР · РЕЗУЛЬТИРУЮЩИЙ КОД', 'Сколько ИИ-кода дошло до релиза', churn,
+              'ИИ пишет быстрее, но если половину кода назавтра переписывают — эффекта нет. Считаем только результат, который остался в продукте.'),
+             ('ФАКТОР · СТОИМОСТЬ', 'Сколько стоит час результата', '<div style="display: flex; flex-direction: column; gap: 10px;">' + hbar('Токенов на 1 MR', '121 / 250 тыс.', 48, GREEN) + hbar('Токенов на час результата', '23 / 30 тыс.', 77, AMBER) + '</div>',
+              'Сравниваем расход токенов с нормой: где ИИ окупается, а где сжигает бюджет без пользы.')]
+    return deep_block('ai', 'Разбираем подробно, как ИИ меняет вашу разработку', 'Та же мерка, что и для человека: часы результата, результирующий код и качество — плюс данные о самой работе с ИИ.', items)
+
+def ai_smj_block():
+    left = ('<div style="flex: 1 1 380px; min-width: 0; border-radius: 28px; background: #12111C; border: 1px solid rgba(155,140,255,0.35); padding: clamp(22px, 3vw, 36px);">'
+            '<div style="' + MONO + ' font-size: 12px; color: #B9AEFF; margin-bottom: 8px;">ПРИРОСТ ЭФФЕКТИВНОСТИ С ИИ</div>' + ai_smj() + '</div>')
+    right = ('<div style="flex: 1 1 380px; min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;">'
+             '<div style="' + MONO + ' font-size: 12px; color: #B9AEFF;">КЕЙС · ПРОЕКТНЫЙ ОФИС DEX, ВНЕДРЕНИЕ CLAUDE</div>'
+             '<div style="display: flex; flex-wrap: wrap; gap: 16px 32px;"><div><div style="font-size: clamp(40px, 4vw, 56px); font-weight: 800; color: #B9AEFF; line-height: 1;">23%</div><div style="font-size: 14px; color: rgba(255,255,255,0.7);">MR уже пишутся с ИИ</div></div>'
+             '<div><div style="font-size: clamp(40px, 4vw, 56px); font-weight: 800; color: ' + GREEN + '; line-height: 1;">+22 п.п.</div><div style="font-size: 14px; color: rgba(255,255,255,0.7);">эффективность MR с ИИ</div></div></div>'
+             + hbar('MR с ИИ', '86%', 86, GREEN) + hbar('Средняя ручная эффективность команды', '64%', 64, 'rgba(255,255,255,0.45)') +
+             '<p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.78);">86% — это эффективность хорошего сеньора. Теперь видно, в чьих руках ИИ приносит прибыль, а в чьих — это дорогая игрушка.</p></div>')
+    return section(sec_head('КОМУ ИИ ДАЁТ РЕЗУЛЬТАТ', 'Один инструмент — три разных результата', 'Один и тот же ИИ ускоряет сильных и тормозит новичков. UpCore показывает это по каждому человеку, чтобы бюджет на ИИ не делили «на всех поровну».', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + left + right + '</div>', 'smj')
+
+AI_FAQ = [('С какими ИИ-инструментами работает?', 'Авто-детект смотрит на сам код — он не зависит от инструмента. Промпт-коллектор собирает сессии ИИ-агента на машине разработчика.'),
+          ('Это не слежка за промптами?', 'Промпты разбираются для ревью и обучения: где теряется контекст и как получать результат быстрее. Доступ — по ролям, в on-premise всё остаётся у вас.'),
+          ('Нужно ждать, пока накопится статистика?', 'Нет. История за полгода уже лежит в вашем Git — UpCore проанализирует её за час и сразу покажет картину «до» и «после» внедрения ИИ.'),
+          ('Чем это отличается от отчёта вендора ИИ?', 'Вендор показывает использование своего продукта. UpCore показывает результат в коде — одинаково для любых инструментов и людей.')]
+AI_ROLES = [('CTO', 'Видит, где ИИ ускоряет разработку, а где плодит переделки и техдолг, — по командам и проектам.'),
+            ('CFO', 'Бюджет на лицензии и токены, который можно защитить: отдача в часах и рублях на каждый вложенный рубль.'),
+            ('Тимлид', 'Понимает, кому из команды нужно обучение работе с ИИ, а кому — больше сложных задач.'),
+            ('Разработчик', 'Видит, как работает с ИИ, и где теряет время на отладку сгенерированного кода.')]
+AI_STATS = [('23%', 'MR уже пишутся с ИИ — проектный офис Dex'), ('+22 п.п.', 'эффективность MR с ИИ против ручных'), ('+50–100%', 'к эффективности у Senior с ИИ'), ('1 день', 'до первых результатов')]
+
+# ------------------------------- Projects
+TECHDEBT = [('Функциональная пригодность', 273, 13), ('Сопровождаемость', 227, 11), ('Гибкость', 157, 7), ('Надёжность', 39, 2), ('Совместимость', 29, 1), ('Защищённость', 11, 1), ('Производительность', 4, 0)]
+TECHMAP = [('EF Metadata', 8, '87,3 ч', 81), ('Multithreading Advanced', 9, '21 ч', 90), ('java.nio', 8, '16,8 ч', 14), ('TypeScript Compiler API', 8, '11,9 ч', 0), ('Spring Security', 9, '23 мин', 0)]
+
+def proj_summary():
+    return ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">'
+            + tile('<span style="color: ' + GREEN + ';">90%</span>', 'эффективность за месяц · 1,3 из 1,4 тыс. ч') + tile('88%', 'за 3 месяца · 2,9 из 3,3 тыс. ч')
+            + tile('<span style="color: ' + AMBER + ';">35%</span>', 'найденной тяжести дефектов ушло в main') + tile('78%', 'мэтч команды с тех-картой проекта') + '</div>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.66);"><span>сложность 8 / 10</span><span>1 год 7 мес</span><span>размер сильно больше среднего</span><span>легаси 0%</span></div>')
+
+def techdebt_bars(n=7):
+    return '<div style="display: flex; flex-direction: column; gap: 10px;">' + ''.join(hbar(a, str(b) + ' · ' + str(c) + '%', max(3, int(b / 273 * 100)), AMBER if i < 3 else 'rgba(242,193,78,0.5)') for i, (a, b, c) in enumerate(TECHDEBT[:n])) + '</div>'
+
+def techmap_rows():
+    head = '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span>ТЕХНОЛОГИЯ</span><span>СЛОЖН.</span><span>В КОДЕ</span><span style="text-align: right;">МЭТЧ</span></div>'
+    return head + ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; align-items: baseline; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;">'
+                          '<span style="min-width: 0;">' + e(a) + '</span><span>' + str(b) + '</span><span style="white-space: nowrap;">' + e(c) + '</span><b style="text-align: right; color: ' + (GREEN if d >= 75 else (AMBER if d >= 30 else RED_T)) + ';">' + str(d) + '%</b></div>' for a, b, c, d in TECHMAP)
+
+def act_vs_code():
+    return ('<div style="display: flex; flex-direction: column; gap: 14px;">'
+            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Часов в акте подрядчика</span><b>160 ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.25);"></div></div>'
+            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Объективно по коду</span><b style="color: #F2C14E;">40 ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.06);"><div style="width: 25%; height: 100%; border-radius: 8px; background: #F2C14E;"></div></div></div>'
+            '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;"><span style="font-size: 15px; color: rgba(255,255,255,0.8);">К оплате по факту кода</span><b style="font-size: 26px; color: ' + RED_T + ';">−120 ч · −75%</b></div></div>')
+
+def proj_example():
+    head = demo_head('projects', 'Проект «UpCore Backend»', 'ДЕМО UPCORE · МЕНЮ «ОТЧЁТЫ ПРОЕКТА» · ОКТЯБРЬ 2026', [
+        ('Эффективность', '<span style="color: ' + GREEN + ';">90%</span>', 'за месяц · 88% за 3 месяца'), ('Сложность', '8 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">/ 10</span>', 'размер сильно больше среднего'), ('Мэтч команды', '78%', 'с тех-картой проекта')])
+    a = ('<div style="flex: 1 1 360px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: #F2C14E; margin-bottom: 4px;">ТЕХДОЛГ ЗА МЕСЯЦ · ISO/IEC 25010</div>'
+         '<div style="font-size: 15px; color: rgba(255,255,255,0.75); margin-bottom: 12px;"><b style="color: #FFFFFF;">35%</b> найденной ревью тяжести ушло в main — 750 из 2 147 баллов</div>' + techdebt_bars() + '</div>')
+    b = ('<div style="flex: 1 1 360px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: #F2C14E; margin-bottom: 12px;">ТЕХ-КАРТА ПРОЕКТА · SENIOR-ТЕХНОЛОГИИ</div>' + techmap_rows() +
+         '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div></div>')
+    return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Всё о проекте — в часах, рисках и технологиях', 'Отчёт проекта из демо UpCore: эффективность команды, техдолг по категориям качества и тех-карта с мэтчем команды.', head,
+                         '<div style="display: flex; flex-wrap: wrap; gap: 32px 48px;">' + a + b + '</div>')
+
+def proj_deep():
+    items = [('ФАКТОР · ОБЪЕКТИВНАЯ СТОИМОСТЬ', 'Сколько стоит код на самом деле', act_vs_code(),
+              'Трудоёмкость каждого MR складывается в объективную стоимость проекта в часах и рублях. Сверяйте её с актами, бюджетом и сроками.'),
+             ('ФАКТОР · ТЕХДОЛГ', 'Сколько дефектов ушло в main', techdebt_bars(4),
+              'ИИ-ревью находит дефекты, а UpCore считает, какая доля их тяжести ушла в main, — по категориям качества ISO/IEC 25010 и с динамикой.'),
+             ('ФАКТОР · ТЕХ-КАРТА И МЭТЧ', 'Подходит ли команда проекту', '<div style="display: flex; flex-direction: column; gap: 10px;">' + hbar('Мэтч команды с тех-картой', '78%', 78, GREEN) + hbar('Senior-технологий в проекте', '1%', 3, AMBER) + hbar('Middle-технологий в проекте', '9%', 9, AMBER) + '</div>',
+              'Какие технологии есть в коде и в каком объёме, насколько им соответствует команда. Пробелы закрываются вакансией или подбором специалиста.'),
+             ('ФАКТОР · СЛОЖНОСТЬ И РИСКИ', 'Честное сравнение проектов', '<div class="g2" style="gap: 8px;">' + tile('8 / 10', 'сложность') + tile('0%', 'легаси') + tile('1 г. 7 мес', 'длительность') + tile('≫ среднего', 'размер') + '</div>',
+              'Размер, сложность, доля легаси и прирост проекта учитываются в оценке — проекты и подрядчиков можно сравнивать между собой.')]
+    return deep_block('projects', 'Разбираем подробно, из чего складывается картина проекта', 'Каждая цифра отчёта считается по коду и раскрывается до MR и строчек в «Глазе».', items)
+
+def proj_audit():
+    pts = ['Реальная эффективность каждого разработчика подрядчика в часах', 'Подтверждённый грейд и сложность задач', 'Чистая ценность результирующего кода — без шума и часов, потерянных при отладке', 'Техдолг и риски по категориям качества']
+    left = ('<div style="flex: 1 1 380px; min-width: 0; border-radius: 28px; background: #12111C; border: 1px solid rgba(242,193,78,0.35); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;">'
+            '<div style="' + MONO + ' font-size: 12px; color: #F2C14E;">ПРИМЕР АУДИТА АКТА</div>' + act_vs_code() + '</div>')
+    right = ('<div style="flex: 1.2 1 420px; min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 14px;">'
+             '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; line-height: 1.2;">Вместе с актом — отчёт, который можно проверить</div>'
+             '<ul style="margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.84);">' + ''.join('<li style="margin-bottom: 8px;">' + e(x) + '</li>' for x in pts) + '</ul>'
+             '<p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.7);">Так Dex сам работает со своими клиентами на аутстаффе. Прогоним репозиторий вашего подрядчика через UpCore — и покажем объективную ценность его кода.</p></div>')
+    return section(sec_head('КОНТРОЛЬ ПОДРЯДЧИКОВ', 'Акт на 1 500 часов? Проверьте его по коду', 'При оплате за часы у подрядчика нет стимула ускоряться. UpCore показывает, сколько трудоёмкости в коде на самом деле.', 'projects')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + left + right + '</div>', 'audit')
+
+PROJ_FAQ = [('А если подрядчик не даст доступ к коду?', 'Как правило, код по договору принадлежит заказчику. Анализ можно провести on-premise — полностью в вашем контуре, без доступа к интернету.'),
+            ('Подходит для 1С и легаси?', 'Да: C#, Java, Go, Python, Kotlin, PHP, JS/TS, C++ и 1С. Доля легаси и сложность учитываются в оценке.'),
+            ('Это заменит приёмку работ?', 'Нет — даст приёмке объективную основу: сколько трудоёмкости в коде на самом деле, а сколько в акте.'),
+            ('Можно оценить проект при покупке компании?', 'Да. Разовый аудит покажет, сколько стоил код, сколько в нём техдолга и насколько команда соответствует технологиям.')]
+PROJ_ROLES = [('CEO', 'Понимает, сколько на самом деле стоит продукт и за что компания платит подрядчикам.'),
+              ('PMO', 'Рейтинг проектов, прогноз сроков и риски дедлайна — в одном окне, по коду, а не по статусам в Jira.'),
+              ('CFO', 'Сверяет акты с объективной трудоёмкостью и находит переплаты до оплаты счёта.'),
+              ('CTO', 'Видит техдолг, сложность и мэтч команды с технологиями каждого проекта.')]
+PROJ_STATS = [('−75%', 'к оплате по акту — пример аудита'), ('50+', 'факторов в оценке каждого MR'), ('1 час', 'на анализ полугода истории проекта'), ('1 день', 'до первых результатов')]
+
+# ------------------------------- Mentor
+DEFECTS = [('Критические', 1, 1, RED_T), ('Высокие', 11, 13, '#F2A65E'), ('Средние', 35, 41, AMBER), ('Мелкие', 30, 35, 'rgba(255,255,255,0.5)'), ('Без уровня', 9, 10, 'rgba(255,255,255,0.3)')]
+
+def defects_bars():
+    return '<div style="display: flex; flex-direction: column; gap: 10px;">' + ''.join(hbar(a, str(b) + ' · ' + str(c) + '%', max(3, c * 2), col) for a, b, c, col in DEFECTS) + '</div>'
+
+def quality_summary():
+    return ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px;">'
+            + tile('6,0 → <span style="color: ' + GREEN + ';">8,0</span>', 'качество кода до и после ревью') + tile('41 из 47', 'MR разобрано ИИ-ревью')
+            + tile('86', 'дефектов найдено') + tile('30,9 ч', 'на исправления · 7% времени') + '</div>')
+
+def review_queue():
+    items = [('затронуто архитектурное ядро', RED_T), ('найдена логическая ошибка или уязвимость', RED_T), ('время сильно больше объективной сложности', AMBER), ('нетипичная технология или паттерн', AMBER)]
+    rows = ''.join('<div style="display: flex; gap: 12px; align-items: center; padding: 11px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + ';"></span><span style="min-width: 0;">' + e(t) + '</span></div>' for t, c in items)
+    return ('<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>' + rows +
+            '<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px;">' + tile('<span style="color: ' + GREEN + ';">94%</span>', 'MR проверено авто-ревью · 457 из 488') + tile('15 мин', 'у лида на критичное вместо часов') + '</div>')
+
+def ipr_card():
+    top3 = [('Multithreading Advanced', 'сложность 9'), ('EF Advanced', 'сложность 8'), ('Spring Security', 'сложность 9')]
+    return (hbar('Тех-метч с проектом', '60%', 60, GREEN, 'пример из поста канала: соответствие технологиям проекта') +
+            '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin: 16px 0 10px;">ТОП-3 ТЕХНОЛОГИИ ДЛЯ РОСТА</div>'
+            + ''.join('<div style="display: flex; justify-content: space-between; gap: 12px; padding: 11px 14px; border-radius: 12px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.25); margin-bottom: 6px; font-size: 15px;"><span><b style="color: #7FDB7A;">' + str(i + 1) + '.</b> ' + e(a) + '</span><span style="color: rgba(255,255,255,0.6); white-space: nowrap;">' + e(b) + '</span></div>' for i, (a, b) in enumerate(top3))
+            + '<div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 8px;">технологии, которых больше всего в проекте, но которые человек ещё не знает</div>')
+
+def mentor_example():
+    head = demo_head('mentor', 'Лукьянов Александр · Backend, C#', 'ДЕМО UPCORE · ВКЛАДКА «КАЧЕСТВО» · АНАЛИЗ КОД-РЕВЬЮ', [
+        ('Качество кода', '6,0 → <span style="color: ' + GREEN + ';">8,0</span>', 'до и после ревью'), ('MR разобрано', '41 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 47</span>', '38 с дефектами'), ('На исправления', '30,9 ч', '7% времени UpCore')])
+    iso = [('Функциональная пригодность', '0/9/16/6'), ('Сопровождаемость', '0/0/5/19'), ('Гибкость', '1/1/7/2'), ('Совместимость', '0/0/3/1'), ('Надёжность', '0/0/3/1')]
+    isoh = ('<div style="' + MONO + ' font-size: 12px; color: #7FDB7A; margin-bottom: 10px;">ДЕФЕКТЫ ПО БЛОКАМ ISO 25010 · К / В / С / М</div>'
+            + ''.join('<div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;"><span>' + e(a) + '</span><b style="white-space: nowrap; font-variant-numeric: tabular-nums;">' + b + '</b></div>' for a, b in iso))
+    body = ('<div style="display: flex; flex-wrap: wrap; gap: 32px 48px;"><div style="flex: 1 1 340px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: #7FDB7A; margin-bottom: 12px;">86 ДЕФЕКТОВ ПО ТЯЖЕСТИ</div>' + defects_bars() + '</div>'
+            '<div style="flex: 1 1 340px; min-width: 0;">' + isoh + '</div></div>'
+            '<div style="border-radius: 18px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.3); padding: 16px 20px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.86);">'
+            'Из системных ошибок Mentor собирает персональный план: что исправить в коде, как ставить задачи и писать промпты, какие технологии прокачать для следующего грейда.</div>')
+    return example_shell('mentor', 'НАСТАВНИК НА ПРИМЕРЕ', 'Каждый MR разобран — и превращён в план роста', 'Профиль из демо UpCore: ИИ-ревью нашло дефекты по тяжести и категориям качества, после исправлений качество кода выросло с 6,0 до 8,0.', head, body)
+
+def mentor_deep():
+    items = [('ФАКТОР · ИИ-РЕВЬЮ КОДА', 'Ревью каждого MR, а не 5–10%', quality_summary().replace('margin-bottom: 16px;', ''),
+              'ИИ-агент разбирает каждый MR: дефекты по тяжести и категориям ISO 25010, что ушло в main и сколько времени заняли исправления.'),
+             ('ФАКТОР · ЗАДАЧИ И ПРОМПТЫ', 'Ревью постановок и работы с ИИ', '<div class="g3" style="gap: 8px;">' + tile('задачи', 'полнота постановки') + tile('промпты', 'контекст и ход сессии') + tile('ИИ-код', 'что дошло до релиза') + '</div>',
+              'Разбираем постановки задач и промпты: где не хватило контекста и где ИИ увёл в сторону. Цель — расти вместе с ИИ, а не отдавать ему работу вместо себя.'),
+             ('ФАКТОР · ПЛАН РОСТА', 'ИПР по тех-метчу — точечно', ipr_card(),
+              'Накладываем цифровое резюме разработчика на тех-карту проекта и вычисляем Топ-3 технологии, которые дадут максимальный рост эффективности прямо сейчас.'),
+             ('ФАКТОР · ПРИОРИТИЗАЦИЯ РЕВЬЮ', 'Лиду — только критичное', review_queue(),
+              'Система подсвечивает MR, которым нужен человек. Остальное ревьюит цифровой тимлид — лид тратит 15 минут вместо часов.')]
+    return deep_block('mentor', 'Разбираем подробно, как работает цифровое менторство', 'Mentor видит всю историю разработчика — задачи, промпты, код и оценки — и превращает её в конкретные шаги роста.', items)
+
+MENTOR_FAQ = [('Чем Mentor отличается от ИИ-ревьюера кода?', 'Ревьюер смотрит один MR. Mentor видит всю историю разработчика — задачи, промпты, код и оценки — и превращает системные ошибки в план роста.'),
+              ('Mentor заменит тимлида?', 'Нет. Он снимает рутину — ревью всего подряд и разбор типовых ошибок, — чтобы тимлид тратил время на архитектуру и людей.'),
+              ('Это не очередной контроль?', 'Рекомендации видит сам разработчик, и они про рост, а не про наказание. Цифровой тимлид из контролёра становится наставником.'),
+              ('Как Mentor учит работать с ИИ?', 'Разбирает промпты и решения: где не хватило контекста, где ИИ увёл в сторону. Цель — чтобы разработчик рос вместе с ИИ, а не вместо себя отдавал ему работу.')]
+MENTOR_ROLES = [('Тимлид', 'Не ревьюит всё подряд: тратит 15 минут на критичные MR, остальное разбирает цифровой тимлид.'),
+                ('L&D', 'Персональные планы развития по фактам из кода, а не по анкетам — и видно, как они работают.'),
+                ('Разработчик', 'Получает разбор каждого MR и понятный путь к следующему грейду — без страха и оценок «на глаз».'),
+                ('CTO', 'Качество кода растёт, новички быстрее выходят на эффективность, сеньоры возвращаются к архитектуре.')]
+MENTOR_STATS = [('94%', 'MR проверено авто-ревью'), ('114 ч', 'ручного ревью в месяц экономии'), ('6,0 → 8,0', 'качество кода после ревью'), ('1 день', 'до первых результатов')]
+
+def module_page(key, n):
+    mod = MODC[key][0]
+    if key == 'ai':
+        heroes = {1: ('Реальная эффективность внедрения ИИ в вашу разработку', 'Авто-детект ИИ-кода и промпт-коллектор показывают, сколько часов ИИ на самом деле экономит каждому разработчику, где он плодит переделки и окупается ли каждый рубль на лицензии и токены.',
+                      image_console('efficiency', 'ai / эффективность', 'Эффективность специалиста', 'создано через ИИ — в часах и рублях', 'ai')),
+                  2: ('Сколько часов на самом деле экономит ИИ — по каждому MR', 'UpCore сравнивает время, за которое задача решается вручную, с реальными часами работы с ИИ. По каждому разработчику, команде и инструменту.',
+                      panel('ai', 'ai / mr с ии', 'демо', ai_mr_rows(short=True))),
+                  3: ('Senior с ИИ: +50–100%. Junior: до −50%. Узнайте, где ИИ окупается', 'Один и тот же ИИ ускоряет одних и тормозит других. UpCore показывает, кому ИИ даёт результат, кому — переделки и техдолг, и сколько стоит каждый токен.',
+                      panel('ai', 'ai / кому ии даёт результат', 'кейс Dex', ai_smj()))}
+        blocks = {1: [ai_example(), ai_deep(), ai_smj_block()], 2: [ai_smj_block(), ai_deep(), ai_example()], 3: [ai_example(), ai_deep()]}[n]
+        st, roles_, faq_, cta_ = AI_STATS, AI_ROLES, AI_FAQ, ('Посчитайте реальный эффект ИИ в своей команде', 'Подключите репозиторий — сравним время «с ИИ» и «вручную» по истории вашего кода.')
+    elif key == 'projects':
+        heroes = {1: ('Сколько на самом деле стоит проект? Посчитаем по коду', 'Объективная стоимость разработки в часах и рублях, эффективность команды и подрядчиков, техдолг и тех-карта — по каждому MR. Разовый аудит — без внедрения.',
+                      panel('projects', 'projects / upcore backend', 'демо', proj_summary())),
+                  2: ('В акте 160 часов. В коде — 40. Проверьте подрядчика по коду', 'UpCore считает объективную трудоёмкость каждого MR и сверяет её с актами. Переплата видна до оплаты счёта — по каждому разработчику подрядчика.',
+                      panel('projects', 'projects / аудит акта', 'пример', act_vs_code())),
+                  3: ('Бюджет проекта и контроль подрядчиков — в часах и рублях', 'Эффективность команды, техдолг по категориям качества, тех-карта и мэтч команды, прогноз сроков — всё по коду, а не по статусам в Jira.',
+                      panel('projects', 'projects / техдолг', 'демо', '<div style="font-size: 15px; color: rgba(255,255,255,0.75); margin-bottom: 12px;"><b style="color: #FFFFFF;">35%</b> найденной тяжести ушло в main</div>' + techdebt_bars()))}
+        blocks = {1: [proj_example(), proj_deep(), scenarios()], 2: [proj_audit(), proj_example(), proj_deep()], 3: [proj_example(), proj_deep(), proj_audit()]}[n]
+        st, roles_, faq_, cta_ = PROJ_STATS, PROJ_ROLES, PROJ_FAQ, ('Проверьте, сколько на самом деле стоит ваш проект', 'Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.')
+    else:
+        heroes = {1: ('ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Сеньоры возвращаются к архитектуре.',
+                      panel('mentor', 'mentor / качество', 'демо', quality_summary() + defects_bars())),
+                  2: ('Тимлид успевает менторить троих. UpCore.Mentor — всю команду', 'Ревью каждого MR, разбор системных ошибок и план роста — автоматически, каждый день. Лид тратит 15 минут на критичное, а не часы на всё подряд.',
+                      panel('mentor', 'mentor / приоритизация ревью', 'онлайн', review_queue())),
+                  3: ('Из оценки — в план роста: у каждого разработчика свой ИИ-наставник', 'UpCore превращает слабые факторы грейда и тех-метч в конкретные шаги: что исправить в коде, как работать с ИИ и какие технологии прокачать.',
+                      panel('mentor', 'mentor / план роста', 'ИПР', ipr_card()))}
+        blocks = {1: [mentor_example(), mentor_deep()], 2: [mentor_deep(), mentor_example()], 3: [mentor_example(), mentor_deep()]}[n]
+        st, roles_, faq_, cta_ = MENTOR_STATS, MENTOR_ROLES, MENTOR_FAQ, ('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.')
+    h1, sub, vis = heroes[n]
+    primary = ('Заказать аудит', MAIL) if (key == 'projects' and n == 2) else ('Подключить UpCore', REG)
+    body = [header(key), mod_hero(key, h1, sub, vis, st)] + blocks + [
+        roles('ДЛЯ КОГО', {'ai': 'Одни данные об ИИ для CTO, финансов, тимлида и разработчика', 'projects': 'Прозрачность, выгодная заказчику и команде', 'mentor': 'Наставник, который нужен каждому в команде'}[key], roles_, key),
+        faq(faq_, acc_key=key), saas_variant(2), cta(cta_[0], cta_[1], primary), footer()]
+    return page('UpCore %s — макет %d' % (mod, n), '\n'.join(body), 6000, name='%s-%d' % (mod, n))
+
+# ------------------------------- Блог
+TG_URL = 'https://t.me/upcore_ai'
+BLOG = [  # 7 самых популярных постов канала по просмотрам (без оффтопа: №15, №26, №42)
+    (25, '25 августа 2026', 294, 'Интервью', 'Большое интервью про UpCore для Александра Поломодова, CTO Т-Банка', 'Почти 2 часа неудобных и правильных вопросов: как измерить вайбкодинг, как защититься от «хакинга» метрик, не приведёт ли машинная оценка к увольнению полезных людей и почему мы отказались от LLM в ядре оценки.'),
+    (22, '24 августа 2026', 236, 'Деньги', 'Сколько на самом деле стоит код?', 'UpCore переводит код в реально затраченное на задачу время. Из 160 часов в месяц результата на 80 — эффективность 50%, а потери — 80 часов, умноженные на ставку.'),
+    (27, '26 августа 2026', 236, 'ИИ', 'Как измерить эффективность ИИ в разработке?', 'Кейс проектного офиса Dex с Claude: 23% MR пишутся с ИИ, их эффективность 86% против 64% вручную. Senior + ИИ — до +100%, Junior + ИИ — до −50%.'),
+    (20, '23 августа 2026', 212, 'Методика', 'Про математику и точность', 'Как UpCore работает «под капотом»: 50+ факторов в каждой задаче, статистика на сотне задач подряд и детерминированная математика вместо LLM.'),
+    (41, '22 сентября 2026', 204, 'Менторство', 'Как UpCore превращает код в индивидуальный план обучения', 'Тех-карта проекта, автоматическое резюме по коммитам и тех-метч — и Топ-3 технологии, которые дадут максимальный рост прямо сейчас.'),
+    (28, '27 августа 2026', 192, 'Методика', 'Code Churn: кто съедает ваш ФОТ и как с этим бороться?', 'Один инженер пишет чуть медленнее, но сохраняет 90% кода. Второй печатает как пулемёт, но 50% его работы уходит в корзину вместе с деньгами бизнеса.'),
+    (35, '4 сентября 2026', 177, 'Деньги', 'Правило 20%: кто на самом деле сжигает ваш ФОТ?', '20% неэффективных сотрудников дают всего 4% результата. В командах от 50 человек найти их интуитивно невозможно — в Jira у всех закрываются задачи.'),
+]
+TAGC = {'Интервью': '#63D5FF', 'Деньги': '#F2C14E', 'ИИ': '#B9AEFF', 'Методика': '#63D5FF', 'Менторство': '#7FDB7A'}
+
+def tg_icon(size=28, col='#FFFFFF'):
+    return '<svg aria-hidden="true" viewBox="0 0 24 24" width="%d" height="%d" fill="%s" style="flex: 0 0 auto; display: block;"><path d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13 1.4 11.5c-1-.3-1.1-1 .2-1.5L20.6 2.9c.9-.3 1.6.2 1.3 1.4z"/></svg>' % (size, size, col)
+
+def tg_banner(compact=False):
+    return ('<div style="border-radius: 32px; background: linear-gradient(135deg, rgba(99,213,255,0.16), #12111C 60%); border: 1px solid rgba(99,213,255,0.4); padding: clamp(24px, 3.4vw, 44px); display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; justify-content: space-between;">'
+            '<div style="display: flex; gap: 20px; align-items: center; flex: 1 1 420px; min-width: 0;"><div style="flex: 0 0 auto; width: 72px; height: 72px; border-radius: 22px; background: #63D5FF; display: flex; align-items: center; justify-content: center;">' + tg_icon(36, '#0D0C15') + '</div>'
+            '<div style="min-width: 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">TELEGRAM · @UPCORE_AI</div><div style="font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; line-height: 1.15; margin-top: 4px;">ИИ-тимлид UpCore</div>'
+            + ('' if compact else '<p style="margin: 8px 0 0; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.78); max-width: 620px;">Канал об эффективности разработки от основателя Dex Ивана Геля: как работает цифровой тимлид, как измерять ИИ в разработке и переводить код в деньги. Дневник продукта и разборы реальных кейсов.</p>') + '</div></div>'
+            + btn('Подписаться на канал', TG_URL) + '</div>')
+
+def post_card(p, big=False):
+    pid, date, views, tag, title, ex = p
+    col = TAGC.get(tag, '#63D5FF')
+    return ('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: ' + ('clamp(26px, 3.4vw, 44px)' if big else 'clamp(22px, 2.6vw, 30px)') + '; display: flex; flex-direction: column; gap: 14px;">'
+            '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);"><span style="color: ' + col + ';">' + e(tag).upper() + '</span><span>' + e(date) + ' · ' + str(views) + ' просмотров</span></div>'
+            '<div style="font-size: ' + ('clamp(26px, 2.8vw, 40px)' if big else '22px') + '; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em;">' + e(title) + '</div>'
+            '<p style="margin: 0; color: rgba(255,255,255,0.76); font-size: ' + ('17px' if big else '15px') + '; line-height: 1.6;">' + e(ex) + '</p>'
+            '<a href="' + TG_URL + '/' + str(pid) + '" style="margin-top: auto; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; text-decoration: none; color: ' + col + ';">Читать в Telegram →</a></article>')
+
+def post_row(p, i):
+    pid, date, views, tag, title, ex = p
+    col = TAGC.get(tag, '#63D5FF')
+    return ('<a href="' + TG_URL + '/' + str(pid) + '" style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 20px; padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.08); text-decoration: none; color: #FFFFFF;">'
+            '<div style="font-size: 40px; font-weight: 800; color: rgba(255,255,255,0.2); line-height: 1;">' + '%02d' % i + '</div>'
+            '<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px;"><div style="display: flex; flex-wrap: wrap; gap: 8px 16px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);"><span style="color: ' + col + ';">' + e(tag).upper() + '</span><span>' + e(date) + '</span><span>' + str(views) + ' просмотров</span></div>'
+            '<div style="font-size: clamp(20px, 1.9vw, 26px); font-weight: 800; line-height: 1.25;">' + e(title) + '</div><p style="margin: 0; color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.55;">' + e(ex) + '</p></div></a>')
+
+def blog_hero(h1, sub, right=''):
+    return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end; justify-content: space-between;">' + CHEVRON +
+            '<div style="flex: 1 1 560px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 18px;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">БЛОГ UPCORE</div>'
+            '<h1 style="margin: 0; font-size: clamp(36px, 4.2vw, 60px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
+            '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 640px;">' + e(sub) + '</p></div>' + right + '</section>')
+
+def blog_page(n):
+    chips = '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + ''.join('<span style="font-size: 14px; padding: 8px 14px; border-radius: 12px; border: 1px solid ' + ('#63D5FF' if i == 0 else 'rgba(255,255,255,0.14)') + '; background: ' + ('rgba(99,213,255,0.12)' if i == 0 else 'transparent') + '; color: #FFFFFF;">' + e(x) + '</span>' for i, x in enumerate(['Все', 'Методика', 'ИИ', 'Деньги', 'Менторство', 'Интервью'])) + '</div>'
+    if n == 1:  # баннер канала → главный пост крупно → сетка 6
+        top = blog_hero('Код — лучший отчёт. Разбираем, как это работает', 'Самые читаемые посты Telegram-канала UpCore: методика оценки, эффективность ИИ, деньги и цифровое менторство.')
+        body = [section(tg_banner(), pb=48), section('<div style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 14px;">САМОЕ ПОПУЛЯРНОЕ</div>' + post_card(BLOG[0], big=True) + '<div class="g3" style="margin-top: 16px;">' + ''.join(post_card(p) for p in BLOG[1:]) + '</div>', 'posts')]
+    elif n == 2:  # журнал: список-рейтинг слева, канал справа
+        side = ('<aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">'
+                '<div style="border-radius: 28px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); padding: 28px; display: flex; flex-direction: column; gap: 14px;">'
+                '<div style="width: 56px; height: 56px; border-radius: 18px; background: #63D5FF; display: flex; align-items: center; justify-content: center;">' + tg_icon(28, '#0D0C15') + '</div>'
+                '<div style="font-size: 24px; font-weight: 800;">ИИ-тимлид UpCore</div><p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.75);">Канал основателя Dex Ивана Геля: дневник продукта, разборы кейсов и цифры об ИИ в разработке.</p>'
+                + btn('Подписаться', TG_URL) + '</div>'
+                '<div style="border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 12px;">ТЕМЫ</div>' + chips + '</div></aside>')
+        lst = '<div style="flex: 2 1 560px; min-width: 0;"><div style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 4px;">ТОП-7 ПОСТОВ ПО ПРОСМОТРАМ</div>' + ''.join(post_row(p, i + 1) for i, p in enumerate(BLOG)) + '</div>'
+        top = blog_hero('Блог UpCore: самое читаемое из канала', 'Методика, ИИ в разработке и деньги — короткие разборы от команды, которая сама считает эффективность 1500+ разработчиков.')
+        body = [section('<div style="display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: flex-start;">' + lst + side + '</div>', 'posts')]
+    else:  # фильтры тем → карточки 2 колонки → большой CTA канала внизу
+        right = '<div style="flex: 0 1 auto; position: relative;">' + btn('Подписаться в Telegram', TG_URL) + '</div>'
+        top = blog_hero('Об эффективности разработки — без воды', 'Самые популярные посты канала «ИИ-тимлид UpCore»: как работает цифровой тимлид и что он находит в коде.', right)
+        body = [section('<div style="margin-bottom: 20px;">' + chips + '</div><div class="g2">' + ''.join(post_card(p) for p in BLOG[:6]) + '</div>', 'posts'), section(tg_banner(), pb=72)]
+    page_body = [header('blog'), top] + body + [cta('Посмотрите на свою команду глазами цифрового тимлида', 'Подключите репозиторий — первые результаты за 1 день.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore — блог, макет %d' % n, '\n'.join(page_body), 3000, name='Blog-%d' % n)
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -1952,6 +2304,11 @@ def build(out, mode):
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
+    for k, nm in (('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
+        for n in (1, 2, 3):
+            files['%s-%d' % (nm, n)] = module_page(k, n)
+    for n in (1, 2, 3):
+        files['Blog-%d' % n] = blog_page(n)
     ext = '.dc.html' if mode == 'dc' else '.html'
     for name, txt in files.items():
         with open(os.path.join(out, name + ext), 'w', encoding='utf-8') as f:
