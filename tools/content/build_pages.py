@@ -1041,6 +1041,53 @@ def security(full=True, h2='Подключение за минуты. Код о�
     cards = ''.join(card('<div style="font-size: 21px; font-weight: 700;">%s</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">%s</p>' % (e(t), e(p))) for t, p in items)
     return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', h2) + '<div class="g3">%s</div>' % cards)
 
+# ---------------------------------------------------------------- раунд 33: нижний блок главной «SaaS и безопасность» — 2 варианта
+def ico(kind, col='#63D5FF', size=30):
+    paths = {
+        'plug': '<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0V7zM12 16v5"/>',
+        'code': '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>',
+        'link': '<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>',
+        'lock': '<rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M9 15.5h.01M12 15.5h.01M15 15.5h.01"/>',
+        'eye': '<path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+        'shield': '<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6L12 3z"/><path d="M9 12l2 2 4-4"/>',
+        'target': '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+        'wallet': '<rect x="3.5" y="6.5" width="17" height="12" rx="2.5"/><path d="M3.5 10h17M16 14.5h1.5"/>',
+    }
+    return ('<svg aria-hidden="true" viewBox="0 0 24 24" width="%d" height="%d" fill="none" stroke="%s" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto; display: block;">%s</svg>' % (size, size, col, paths[kind]))
+
+SAAS6 = [
+    ('plug', 'Подключение за минуты', 'Вход через GitHub или GitLab, подключили репозиторий — первые результаты через 1 день. Код за год анализируется за несколько минут.'),
+    ('code', 'Нужен только код', 'Без отчётов, анкет и тайм-трекеров. Любой язык: C#, Java, Go, Python, Kotlin, PHP, JS/TS, C++ и 1С.'),
+    ('link', 'Встраивается в ваши процессы', 'GitLab, GitHub и Jira, корпоративные трекеры, дашборды и отчёты. Подключение по протоколу MCP.'),
+    ('lock', 'On-premise без интернета', 'Полностью в вашем контуре безопасности, без доступа к интернету. Нужен только read-only доступ к Git, GPU не нужны.'),
+    ('eye', 'Любой вывод можно проверить', '«Глаз» раскрывает расчёт до строчки кода и подсвечивает значимые изменения — это ускоряет и ручное код-ревью.'),
+    ('wallet', 'Платите за подтверждённый результат', 'Бесплатный пилот на 2–3 ваших проектах. Оплата — только после того, как вы подтвердите точность на своих данных.'),
+]
+
+def saas_variant(n):
+    if n == 1:  # 6 карточек 3×2 с иконками
+        cards = ''.join(card('<div style="display: flex; align-items: center; gap: 14px;">' + ico(k) + '<div style="font-size: 20px; font-weight: 700; line-height: 1.25; color: #FFFFFF;">' + e(t) + '</div></div>'
+                             '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">' + e(p) + '</p>') for k, t, p in SAAS6)
+        return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div class="g3">' + cards + '</div>', 'saas')
+    # n == 2: слева — путь подключения за 3 шага, справа — 4 гарантии
+    steps = [('01', 'Вход через GitHub или GitLab', 'или установка on-premise в вашем контуре'), ('02', 'Подключаете репозиторий', 'read-only доступ, нужен только код'), ('03', 'Через 1 день — первые результаты', 'по истории проекта: код за год — за минуты')]
+    st = ''.join('<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
+                 '<div style="width: 44px; height: 44px; border-radius: 14px; background: ' + ('#63D5FF' if i == 2 else 'rgba(99,213,255,0.12)') + '; color: ' + ('#0D0C15' if i == 2 else '#63D5FF') + '; display: flex; align-items: center; justify-content: center; ' + MONO + ' font-size: 14px; font-weight: 600;">' + a + '</div>'
+                 '<div style="min-width: 0;"><div style="font-size: 19px; font-weight: 700; line-height: 1.3;">' + e(b) + '</div><div style="font-size: 15px; color: rgba(255,255,255,0.66); margin-top: 2px;">' + e(c) + '</div></div></div>' for i, (a, b, c) in enumerate(steps))
+    stacks = ''.join('<span style="font-size: 13px; padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.82);">' + x + '</span>' for x in ['C#', 'Java', 'Go', 'Python', 'Kotlin', 'PHP', 'JS/TS', 'C++', '1С'])
+    integ = ''.join('<span style="font-size: 13px; padding: 6px 10px; border-radius: 10px; background: rgba(99,213,255,0.1); border: 1px solid rgba(99,213,255,0.3); color: #FFFFFF;">' + x + '</span>' for x in ['GitLab', 'GitHub', 'Jira', 'трекеры и дашборды', 'MCP'])
+    left = ('<div style="flex: 1.1 1 440px; min-width: 0; border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.35); padding: clamp(24px, 3.4vw, 40px); display: flex; flex-direction: column; gap: 18px;">'
+            '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПОДКЛЮЧЕНИЕ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">Нужен только код — без отчётов, анкет и тайм-трекеров</div>'
+            '<div>' + st + '</div>'
+            '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ЛЮБОЙ СТЕК</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + stacks + '</div></div>'
+            '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ИНТЕГРАЦИИ</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + integ + '</div></div></div>')
+    g = [('lock', 'On-premise без интернета', 'Полностью в вашем контуре безопасности. Read-only доступ к Git, GPU не нужны.'),
+         ('eye', 'Прозрачно до строчки', '«Глаз» раскрывает любой вывод и подсвечивает значимые изменения в MR.'),
+         ('shield', 'Без «токсичного контроля»', 'Это обычное код-ревью, только автоматическое: около секунды на MR. Накрутки и шум отсекаются.'),
+         ('wallet', 'Оплата после пилота', 'Бесплатный пилот на 2–3 проектах. Платите, когда подтвердите точность на своих данных.')]
+    right = ('<div class="g2" style="flex: 1 1 460px; min-width: 0;">' + ''.join(card('<div>' + ico(k, size=28) + '</div><div style="font-size: 19px; font-weight: 700; line-height: 1.25;">' + e(t) + '</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">' + e(p) + '</p>', pad='24px', gap=10) for k, t, p in g) + '</div>')
+    return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + left + right + '</div>', 'saas')
+
 def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex-it.ru', MAIL)):
     inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: #63D5FF; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
@@ -1899,6 +1946,8 @@ def build(out, mode):
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
     # раунд 28: «Результаты для бизнеса» (расчёт 2) зафиксирован на Главной A, артборды Results-1..4 сняты
+    for n in (1, 2):  # раунд 33: 2 варианта нижнего блока главной «SaaS и безопасность»
+        files['Sec-%d' % n] = block_board('Sec', n, saas_variant(n), 'блок «SaaS и безопасность»')
     for n in (1, 2, 3):  # раунд 30: три полных макета страницы Grade; раунд 31 — на холсте остаётся только Grade-3
         files['Grade-%d' % n] = grade_page(n)
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
