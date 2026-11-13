@@ -1070,7 +1070,7 @@ def saas_variant(n):
                              '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">' + e(p) + '</p>') for k, t, p in SAAS6)
         return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div class="g3">' + cards + '</div>', 'saas')
     # n == 2: слева — путь подключения за 3 шага, справа — 4 гарантии
-    steps = [('01', 'Вход через GitHub или GitLab', 'или установка on-premise в вашем контуре'), ('02', 'Подключаете репозиторий', 'read-only доступ, нужен только код'), ('03', 'Через 1 день — первые результаты', 'по истории проекта: код за год — за минуты')]
+    steps = [('01', 'Вход через GitHub или GitLab', 'или установка on-premise в вашем контуре'), ('02', 'Подключаете репозиторий', 'read-only доступ, нужен только код'), ('03', 'Сразу смотрите результат', 'проанализируем последние полгода работы за 1 час')]
     st = ''.join('<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
                  '<div style="width: 44px; height: 44px; border-radius: 14px; background: ' + ('#63D5FF' if i == 2 else 'rgba(99,213,255,0.12)') + '; color: ' + ('#0D0C15' if i == 2 else '#63D5FF') + '; display: flex; align-items: center; justify-content: center; ' + MONO + ' font-size: 14px; font-weight: 600;">' + a + '</div>'
                  '<div style="min-width: 0;"><div style="font-size: 19px; font-weight: 700; line-height: 1.3;">' + e(b) + '</div><div style="font-size: 15px; color: rgba(255,255,255,0.66); margin-top: 2px;">' + e(c) + '</div></div></div>' for i, (a, b, c) in enumerate(steps))
@@ -1079,10 +1079,9 @@ def saas_variant(n):
     left = ('<div style="flex: 1.1 1 440px; min-width: 0; border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.35); padding: clamp(24px, 3.4vw, 40px); display: flex; flex-direction: column; gap: 18px;">'
             '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПОДКЛЮЧЕНИЕ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">Нужен только код — без отчётов, анкет и тайм-трекеров</div>'
             '<div>' + st + '</div>'
-            '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ЛЮБОЙ СТЕК</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + stacks + '</div></div>'
-            '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ИНТЕГРАЦИИ</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + integ + '</div></div></div>')
+            '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ЛЮБОЙ СТЕК</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + stacks + '</div></div></div>')
     g = [('lock', 'On-premise без интернета', 'Полностью в вашем контуре безопасности. Read-only доступ к Git, GPU не нужны.'),
-         ('eye', 'Прозрачно до строчки', '«Глаз» раскрывает любой вывод и подсвечивает значимые изменения в MR.'),
+         ('link', 'Простая интеграция', 'Система легко интегрируется с уже существующими корпоративными трекерами, дашбордами, отчётами и MCP.'),
          ('shield', 'Без «токсичного контроля»', 'Это обычное код-ревью, только автоматическое: около секунды на MR. Накрутки и шум отсекаются.'),
          ('wallet', 'Оплата после пилота', 'Бесплатный пилот на 2–3 проектах. Платите, когда подтвердите точность на своих данных.')]
     right = ('<div class="g2" style="flex: 1 1 460px; min-width: 0;">' + ''.join(card('<div>' + ico(k, size=28) + '</div><div style="font-size: 19px; font-weight: 700; line-height: 1.25;">' + e(t) + '</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">' + e(p) + '</p>', pad='24px', gap=10) for k, t, p in g) + '</div>')
@@ -1721,7 +1720,7 @@ def home(variant):
         platform_variant(3),  # раунд 22: принят вариант 3 «Шеврон»
         trust_v4(1),  # раунд 24: принят вариант 1 (без «100+ задач» и «Глаза»)
         results_v6(2),  # раунд 28: принят расчёт 2 (≈780 тыс. ₽ на разработчика)
-        security(True, home=True),
+        saas_variant(2),  # раунд 34: принят вариант 2 блока «SaaS и безопасность»
         cta('Узнайте реальную эффективность команды уже сегодня', 'Подключите репозиторий или закажите аудит — первые результаты по истории вашего кода, без ожидания.', ('Подключить UpCore', REG)),
         footer()]
     return page('UpCore — главная A', '\n'.join(body), 5600, slider=True, name='Home-A')
@@ -1946,8 +1945,7 @@ def build(out, mode):
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
     # раунд 28: «Результаты для бизнеса» (расчёт 2) зафиксирован на Главной A, артборды Results-1..4 сняты
-    for n in (1, 2):  # раунд 33: 2 варианта нижнего блока главной «SaaS и безопасность»
-        files['Sec-%d' % n] = block_board('Sec', n, saas_variant(n), 'блок «SaaS и безопасность»')
+    # раунд 34: блок «SaaS и безопасность» (вариант 2) зафиксирован на Главной A, Sec-1/2 сняты
     for n in (1, 2, 3):  # раунд 30: три полных макета страницы Grade; раунд 31 — на холсте остаётся только Grade-3
         files['Grade-%d' % n] = grade_page(n)
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
