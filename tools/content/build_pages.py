@@ -61,11 +61,12 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-scan{animation:ucScanY 4.5s linear infinite}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (max-width:720px){.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -801,8 +802,8 @@ PRODUCT_TEXTS = {  # раунд 20: три варианта абзаца и 3 п
  }),
 }
 
-def products_2x2(variant=None):
-    items = [
+def _products_items():
+    return [
         ('grade', '01 / UPCORE GRADE', '«Кто в команде реально тянет свой грейд?»', 'Объективная оценка разработчика',
          'Эффективность в часах и рублях, подтверждённый грейд Junior− … Senior и рейтинг — по реальному коду за 3 месяца, а не по собеседованию и впечатлениям.',
          ['Грейд и звезда компетенций по 10 осям', 'Рейтинг по компании, стеку и проекту', 'Авто-резюме: реальный стек по коммитам'], 'Подробнее о Grade →'),
@@ -816,6 +817,9 @@ def products_2x2(variant=None):
          'Разбирает каждый MR, задачи и промпты, находит, где проседает эффективность, и даёт конкретные рекомендации — от ошибок в коде до плана развития.',
          ['ИИ-ревью кода и постановок задач', 'Ревью промптов: как работать с ИИ', 'Персональный план роста и Топ-3 технологии'], 'Подробнее о Mentor →'),
     ]
+
+def products_2x2(variant=None):
+    items = _products_items()
     ul_label = ''
     if variant:
         ul_label, texts = PRODUCT_TEXTS[variant]
@@ -834,6 +838,84 @@ def products_2x2(variant=None):
                          key, MONO, txt, e(lab), e(q), e(t), e(p), lab_html, ul, key, txt, e(more)))
     return section(sec_head('ПЛАТФОРМА UPCORE', 'Одна платформа. Четыре ответа для бизнеса.', 'Подключите репозиторий один раз — и получите оценки по каждому направлению: люди, ИИ, проекты и рост команды.') +
                    '<div class="g2">%s</div>' % ''.join(cards), 'products')
+
+PLATFORM = [  # раунд 21: модули с крупными названиями через точку, без тезисов, описание длиннее
+    ('grade', 'Grade', '01', '«Кто в команде реально тянет свой грейд?»', 'Объективная оценка разработчика', 'CTO · HRD · тимлиды',
+     'Цифровой тимлид разбирает каждый MR и переводит код в реально затраченные часы. Из них складываются эффективность, рейтинг и подтверждённый грейд Junior− … Senior для каждого разработчика. Повышения, зарплаты и испытательный срок решаются по фактам из кода, а не по резюме и впечатлениям.',
+     'Подробнее о Grade →'),
+    ('ai', 'AI', '02', '«Окупаются ли ИИ-инструменты?»', 'Реальная эффективность ИИ и вайбкодинга', 'CTO · CFO',
+     'Авто-детект находит ИИ-код в каждом MR, а промпт-коллектор показывает, как разработчики работают с ассистентами. Вы видите, сколько часов ИИ на самом деле экономит каждому, где он плодит переделки и техдолг и окупается ли каждый рубль, потраченный на лицензии и токены.',
+     'Подробнее об AI →'),
+    ('projects', 'Projects', '03', '«Сколько на самом деле стоит проект?»', 'Бюджет проекта и контроль подрядчиков', 'CEO · PMO · CFO',
+     'Трудоёмкость каждого MR складывается в объективную стоимость проекта в часах и рублях. Сверьте её с актами подрядчика, бюджетом и сроками — и найдите переплаты и риск сорвать дедлайн. Нужен разовый ответ — проведём аудит готового проекта без внедрения.',
+     'Подробнее о Projects →'),
+    ('mentor', 'Mentor', '04', '«Как команде расти быстрее?»', 'ИИ-наставник для каждого разработчика', 'тимлиды · L&D',
+     'ИИ-наставник ревьюит код, постановки задач и промпты каждого разработчика и находит, где проседает эффективность. Из системных ошибок он собирает персональный план роста и разгружает сеньоров от рутинного ревью — менторство начинает работать на всю команду.',
+     'Подробнее о Mentor →'),
+]
+PLATFORM_HEAD = ('ПЛАТФОРМА UPCORE', 'Одна платформа. Четыре ответа для бизнеса.', 'Подключите репозиторий один раз — и получите оценки по каждому направлению: люди, ИИ, проекты и рост команды.')
+
+def mod_name(key, mod, size='clamp(34px, 8.6vw, 60px)', whole=False):
+    """Название модуля через точку: UpCore.Grade — крупно, модуль акцентным цветом."""
+    line, txt = ACC[key]
+    head_col = txt if whole else '#FFFFFF'
+    return ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: %s; line-height: 0.95; letter-spacing: -0.035em;">'
+            '<span style="color: %s;">UpCore</span><span style="color: %s;">.<wbr>%s</span></div>') % (size, head_col, txt, mod)
+
+def more_link(key, more):
+    return ('<a href="#%s-page" style="font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: %s;">%s</a>' % (key, ACC[key][1], e(more)))
+
+P_DESC = 'margin: 0; color: rgba(255,255,255,0.8); line-height: 1.6; font-size: 17px;'
+
+def platform_variant(n):
+    if n == 4:  # вариант 2 раунда 20 («Что вы увидите») без тезисов
+        items = [(k, lab, q, tt, PRODUCT_TEXTS[2][1][k][0], [], more) for k, lab, q, tt, p0, l0, more in _products_items()]
+        cards = []
+        for key, lab, q, t, p, lis, more in items:
+            cards.append('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
+                         '<div style="%s font-size: 13px; color: %s;">%s</div>'
+                         '<div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">%s</div>'
+                         '<h3 style="margin: 0; font-size: clamp(26px, 2.3vw, 34px); letter-spacing: -0.02em; line-height: 1.1;">%s</h3>'
+                         '<p style="margin: 0; color: rgba(255,255,255,0.78); line-height: 1.55; font-size: 17px;">%s</p>'
+                         '<div style="margin-top: auto;">%s</div></article>' % (MONO, ACC[key][1], e(lab), e(q), e(t), e(p), more_link(key, more)))
+        body = '<div class="g2">%s</div>' % ''.join(cards)
+    elif n == 1:  # «Имя вместо заголовка»: карточки 2×2, крупное UpCore.Модуль, вопрос, описание
+        cards = []
+        for key, mod, num, q, t, roles, p, more in PLATFORM:
+            line = ACC[key][0]
+            cards.append('<article style="min-width: 0; position: relative; overflow: hidden; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid %s; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 18px;">'
+                         '<div style="position: absolute; right: 0; top: 0; width: 240px; height: 240px; background: radial-gradient(circle at 100%% 0%%, %s33 0%%, transparent 65%%); pointer-events: none;"></div>'
+                         '<div style="%s font-size: 13px; color: rgba(255,255,255,0.58);">%s</div>%s'
+                         '<div style="font-size: 19px; color: rgba(255,255,255,0.92); font-style: italic; font-weight: 500;">%s</div>'
+                         '<p style="%s">%s</p><div style="margin-top: auto;">%s</div></article>' % (
+                             line, line, MONO, num, mod_name(key, mod), e(q), P_DESC, e(p), more_link(key, more)))
+        body = '<div class="g2">%s</div>' % ''.join(cards)
+    elif n == 2:  # «Оглавление»: четыре строки, слева огромное название и роли, справа заголовок и описание
+        rows = []
+        for key, mod, num, q, t, roles, p, more in PLATFORM:
+            rows.append('<article class="uc-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding: clamp(28px, 3.4vw, 44px) 0;">'
+                        '<div style="min-width: 0; display: flex; flex-direction: column; gap: 14px;">'
+                        '<div style="%s font-size: 13px; color: rgba(255,255,255,0.58);">%s / для: %s</div>%s</div>'
+                        '<div style="min-width: 0; display: flex; flex-direction: column; gap: 12px;">'
+                        '<h3 style="margin: 0; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.02em; line-height: 1.15;">%s</h3>'
+                        '<div style="font-size: 17px; color: rgba(255,255,255,0.62); font-style: italic;">%s</div>'
+                        '<p style="%s">%s</p><div>%s</div></div></article>' % (
+                            MONO, num, e(roles), mod_name(key, mod, 'clamp(36px, 9vw, 72px)', whole=True), e(t), e(q), P_DESC, e(p), more_link(key, more)))
+        body = '<div style="border-bottom: 1px solid rgba(255,255,255,0.1);">%s</div>' % ''.join(rows)
+    else:  # n == 3 — «Шеврон»: карточка с цветной плашкой-названием, заголовком-обещанием и вопросом внизу
+        cards = []
+        for key, mod, num, q, t, roles, p, more in PLATFORM:
+            line, txt = ACC[key]
+            cards.append('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1F 0%%, #1A1925 45%%); border: 1px solid %s55; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
+                         '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; %s font-size: 13px; color: rgba(255,255,255,0.62);"><span>%s</span><span>%s</span></div>'
+                         '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
+                         '<h3 style="margin: 0; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -0.01em; line-height: 1.2; color: #FFFFFF;">%s</h3>'
+                         '<p style="%s">%s</p>'
+                         '<div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">'
+                         '<span style="font-size: 16px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span>%s</div></article>' % (
+                             line, line, MONO, num, e(roles), line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), P_DESC, e(p), e(q), more_link(key, more)))
+        body = '<div class="g2">%s</div>' % ''.join(cards)
+    return section(sec_head(*PLATFORM_HEAD) + body, 'products')
 
 # ---------------------------------------------------------------- специальные блоки продуктов
 def grade_example():
@@ -1163,8 +1245,9 @@ def build(out, mode):
     for v in 'ABC':
         files['Home-%s' % v] = home(v)
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
-    for n in (1, 2, 3):  # раунд 20: варианты блоков «Продукты» и «Принцип + доверие»
-        files['Products-%d' % n] = block_board('Products', n, products_2x2(n), 'блок «4 продукта»')
+    for n in (1, 2, 3, 4):  # раунд 21: варианты блока «Платформа» (Products-1..3 раунда 20 сняты)
+        files['Platform-%d' % n] = block_board('Platform', n, platform_variant(n), 'блок «Платформа»')
+    for n in (1, 2, 3):  # раунд 20: варианты блока «Принцип + доверие»
         files['Trust-%d' % n] = block_board('Trust', n, trust_variant(n), 'блок «Принцип и точность»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):

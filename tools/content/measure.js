@@ -19,7 +19,7 @@ const fs = require('fs'), path = require('path');
         document.querySelectorAll('body *').forEach(el => { const r = el.getBoundingClientRect(); if (r.width && r.right > W + 2 && !el.closest('svg')) bad.push(el.tagName + ':' + (el.innerText||'').slice(0,30).replace(/\s+/g,' ') + '@' + Math.round(r.right)); });
         let small = 0; document.querySelectorAll('body *').forEach(el => { if ([...el.childNodes].some(n => n.nodeType===3 && n.textContent.trim())) { if (parseFloat(getComputedStyle(el).fontSize) < 12) small++; } });
         const fn = location.pathname.split('/').pop();
-        const ids = {'Core-': '#core', 'Pains-': '#pains', 'Products-': '#products', 'Trust-': '#trust'};
+        const ids = {'Core-': '#core', 'Pains-': '#pains', 'Products-': '#products', 'Platform-': '#products', 'Trust-': '#trust'};
         const pre = Object.keys(ids).find(k => fn.startsWith(k));
         const blk = pre ? document.querySelector(ids[pre]) : null;
         const hh = blk ? Math.ceil(blk.getBoundingClientRect().bottom + scrollY) : document.documentElement.scrollHeight;
