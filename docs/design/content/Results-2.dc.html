@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore — блок «Результаты для бизнеса» 2</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ucIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+.uc-blink{animation:ucBlink 1.4s ease-in-out infinite}
+.uc-in{animation:ucIn .6s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.uc-ml{display:none}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; min-height: 100vh; overflow: hidden;">
+<div style="padding-top: 48px;"><section id="results" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 36px;"><div style="display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-end;"><div style="flex: 1.2 1 520px; min-width: 0;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #63D5FF; margin-bottom: 14px; letter-spacing: 0.04em;">РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА</div><h2 style="margin: 0; font-size: clamp(32px, 3.6vw, 56px); letter-spacing: -0.03em; line-height: 1.04; font-weight: 800;">UpCore возвращает до трети ФОТ разработки</h2><p style="margin: 16px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 640px;">Деньги, которые сейчас уходят в работу без результата, становятся видны — и возвращаются в разработку. Без найма, без новых процессов, с первого месяца.</p></div><div style="flex: 1 1 360px; min-width: 0;"><div style="font-size: clamp(52px, 6.2vw, 92px); font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; color: #63D5FF; white-space: nowrap; font-variant-numeric: tabular-nums;">≈9,7 млн ₽</div><div style="font-size: 19px; color: rgba(255,255,255,0.88); margin-top: 12px;">в месяц на команду из 100 разработчиков</div><div style="font-size: 15px; color: rgba(255,255,255,0.62); margin-top: 6px;">≈116 млн ₽ в год · это 32% ФОТ разработки</div></div></div><div><div style="display: flex; gap: 3px; height: 14px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;"><div style="flex: 5.0 1 0; min-width: 0; height: 100%; background: #63D5FF;"></div><div style="flex: 3.6 1 0; min-width: 0; height: 100%; background: #7FDB7A;"></div><div style="flex: 1.1 1 0; min-width: 0; height: 100%; background: #B9AEFF;"></div></div><div style="display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);"><span style="display: flex; gap: 10px; align-items: baseline; min-width: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.4;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 3px; background: #63D5FF;"></span>Видно, кто не даёт результата: 20% неэффективных</span><b style="white-space: nowrap; font-size: 18px; font-variant-numeric: tabular-nums;">≈5,0 млн ₽</b></div><div style="display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);"><span style="display: flex; gap: 10px; align-items: baseline; min-width: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.4;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 3px; background: #7FDB7A;"></span>Прозрачность: +12% к выработке остальных</span><b style="white-space: nowrap; font-size: 18px; font-variant-numeric: tabular-nums;">≈3,6 млн ₽</b></div><div style="display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);"><span style="display: flex; gap: 10px; align-items: baseline; min-width: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.4;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 3px; background: #B9AEFF;"></span>Тимлиды освобождаются от ручной оценки: 400 ч</span><b style="white-space: nowrap; font-size: 18px; font-variant-numeric: tabular-nums;">≈1,1 млн ₽</b></div></div><div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px;"><div class="g4" style="gap: 24px;"><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: #7FDB7A; font-variant-numeric: tabular-nums;">+12%</div><div style="font-size: 15px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.4;">производительности сразу после запуска — эффект прозрачности</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: #7FDB7A; font-variant-numeric: tabular-nums;">+14%</div><div style="font-size: 15px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.4;">эффективности разработки за 3 месяца</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: #FFFFFF; font-variant-numeric: tabular-nums;">1 месяц</div><div style="font-size: 15px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.4;">до первых решений — по истории вашего Git</div></div><div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: #FFFFFF; font-variant-numeric: tabular-nums;">0 ₽</div><div style="font-size: 15px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.4;">за пилот: платите после того, как подтвердите точность</div></div></div></div><p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.5);">Допущения: 100 разработчиков, полные затраты 300 тыс. ₽ в месяц на человека (ФОТ разработки 30 млн ₽), ставка тимлида 450 тыс. ₽. Цифры — ориентиры, перед публикацией заменить на подтверждённые показатели UpCore.</p></div>
+</section></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":946}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

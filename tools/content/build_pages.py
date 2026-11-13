@@ -60,13 +60,14 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
 .uc-scan{animation:ucScanY 4.5s linear infinite}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.uc-ml{display:none}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 @media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (max-width:720px){.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </helmet>"""
@@ -439,6 +440,89 @@ RESULTS = {
    calc=('Команда из 50 разработчиков', [('MR в месяц', '≈1 000'), ('Экономия ревью на MR', '≈1 ч'), ('Стоимость часа инженера (300 тыс. ₽ в месяц)', '≈1 900 ₽')],
          ('Экономия в месяц', '≈1,9 млн ₽'), 'Пример расчёта: подставьте число MR и стоимость часа вашей команды.')),
 }
+
+# ---------------------------------------------------------------- раунд 25: «Результаты для бизнеса» — варианты для C-level
+RES_FOOT = 'Допущения: 100 разработчиков, полные затраты 300 тыс. ₽ в месяц на человека (ФОТ разработки 30 млн ₽), ставка тимлида 450 тыс. ₽. Цифры — ориентиры, перед публикацией заменить на подтверждённые показатели UpCore.'
+RES_PARTS = [('Видно, кто не даёт результата: 20% неэффективных', 5.0, '#63D5FF'), ('Прозрачность: +12% к выработке остальных', 3.6, '#7FDB7A'), ('Тимлиды освобождаются от ручной оценки: 400 ч', 1.1, '#B9AEFF')]
+
+def res_label():
+    return '<div style="%s font-size: 13px; color: #63D5FF; margin-bottom: 14px; letter-spacing: 0.04em;">РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА</div>' % MONO
+
+def res_foot(t=RES_FOOT):
+    return '<p style="margin: 0; %s font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.5);">%s</p>' % (MONO, e(t))
+
+def stat_row(items, cls='g4'):
+    return '<div class="%s" style="gap: 24px;">%s</div>' % (cls, ''.join(
+        '<div style="min-width: 0;"><div style="font-size: clamp(28px, 2.6vw, 40px); font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; color: %s; font-variant-numeric: tabular-nums;">%s</div>'
+        '<div style="font-size: 15px; color: rgba(255,255,255,0.72); margin-top: 4px; line-height: 1.4;">%s</div></div>' % (c, e(a), e(b)) for a, b, c in items))
+
+PROOFS = [('+12%', 'производительности сразу после запуска — эффект прозрачности', '#7FDB7A'), ('+14%', 'эффективности разработки за 3 месяца', '#7FDB7A'),
+          ('1 месяц', 'до первых решений — по истории вашего Git', '#FFFFFF'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность', '#FFFFFF')]
+
+def results_variant(n):
+    if n == 1:
+        return results('home')
+    box = 'border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 36px;'
+    h2st = 'margin: 0; font-size: clamp(32px, 3.6vw, 56px); letter-spacing: -0.03em; line-height: 1.04; font-weight: 800;'
+    if n == 2:  # «Одна цифра»: ≈9,7 млн ₽ в месяц, из чего она складывается, 4 доказательства
+        total = sum(v for _, v, _ in RES_PARTS)
+        bar = ''.join('<div style="flex: %s 1 0; min-width: 0; height: 100%%; background: %s;"></div>' % (v, c) for _, v, c in RES_PARTS)
+        legend = ''.join('<div style="display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
+                         '<span style="display: flex; gap: 10px; align-items: baseline; min-width: 0; color: rgba(255,255,255,0.86); font-size: 16px; line-height: 1.4;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 3px; background: %s;"></span>%s</span>'
+                         '<b style="white-space: nowrap; font-size: 18px; font-variant-numeric: tabular-nums;">≈%s млн ₽</b></div>' % (c, e(l), ('%.1f' % v).replace('.', ',')) for l, v, c in RES_PARTS)
+        inner = ('<div style="%s">'
+                 '<div style="display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-end;">'
+                 '<div style="flex: 1.2 1 520px; min-width: 0;">%s<h2 style="%s">UpCore возвращает до трети ФОТ разработки</h2>'
+                 '<p style="margin: 16px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 640px;">Деньги, которые сейчас уходят в работу без результата, становятся видны — и возвращаются в разработку. Без найма, без новых процессов, с первого месяца.</p></div>'
+                 '<div style="flex: 1 1 360px; min-width: 0;"><div style="font-size: clamp(52px, 6.2vw, 92px); font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; color: #63D5FF; white-space: nowrap; font-variant-numeric: tabular-nums;">≈9,7 млн ₽</div>'
+                 '<div style="font-size: 19px; color: rgba(255,255,255,0.88); margin-top: 12px;">в месяц на команду из 100 разработчиков</div>'
+                 '<div style="font-size: 15px; color: rgba(255,255,255,0.62); margin-top: 6px;">≈116 млн ₽ в год · это 32%% ФОТ разработки</div></div></div>'
+                 '<div><div style="display: flex; gap: 3px; height: 14px; border-radius: 8px; overflow: hidden; margin-bottom: 8px;">%s</div>%s</div>'
+                 '<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px;">%s</div>%s</div>') % (
+                     box, res_label(), h2st, bar, legend, stat_row(PROOFS), res_foot())
+        return section(inner, 'results')
+    if n == 3:  # «Найдите свою компанию»: эффект по размеру команды + консервативный сценарий
+        rows = [(50, '15 млн ₽', '≈4,9 млн ₽', '≈58 млн ₽', '≈17 млн ₽'), (100, '30 млн ₽', '≈9,7 млн ₽', '≈116 млн ₽', '≈35 млн ₽'),
+                (300, '90 млн ₽', '≈29 млн ₽', '≈349 млн ₽', '≈105 млн ₽'), (1000, '300 млн ₽', '≈97 млн ₽', '≈1,16 млрд ₽', '≈349 млн ₽')]
+        heads = ['Разработчиков', 'ФОТ разработки в месяц', 'Эффект в месяц', 'Эффект в год', 'Даже при 30% реализации, в год']
+        th = ''.join('<th scope="col" style="text-align: left; padding: 0 16px 12px 0; %s font-size: 12px; font-weight: 400; color: %s;">%s</th>' % (MONO, '#63D5FF' if i == 3 else 'rgba(255,255,255,0.55)', e(h).upper()) for i, h in enumerate(heads))
+        trs = ''
+        for i, (nn, fot, m, y, c) in enumerate(rows):
+            hi = nn == 100
+            td = 'padding: 16px 16px 16px 0; border-top: 1px solid rgba(255,255,255,0.08); font-variant-numeric: tabular-nums; vertical-align: baseline;'
+            ml = lambda t: '<span class="uc-ml">%s</span>' % e(t)
+            trs += ('<tr style="%s"><th scope="row" style="%s text-align: left; font-size: 22px; font-weight: 800;">%s<span class="uc-ml" style="display: none;"> разработчиков</span></th><td style="%s color: rgba(255,255,255,0.72); font-size: 17px;">%s%s</td>'
+                    '<td style="%s font-size: 19px; font-weight: 700;">%s%s</td><td style="%s font-size: clamp(20px, 2vw, 28px); font-weight: 800; color: #63D5FF; white-space: nowrap;">%s%s</td><td style="%s color: rgba(255,255,255,0.8); font-size: 17px;">%s%s</td></tr>') % (
+                        'background: rgba(99,213,255,0.06);' if hi else '', td, '{:,}'.format(nn).replace(',', ' '), td, ml('ФОТ в месяц'), fot, td, ml('эффект в месяц'), m, td, ml('эффект в год'), y, td, ml('при 30% реализации'), c)
+        table = '<div style="overflow-x: auto;"><table class="uc-res" style="width: 100%%; border-collapse: collapse;"><thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>' % (th, trs)
+        inner = ('<div style="%s">'
+                 '<div style="display: flex; flex-wrap: wrap; gap: 24px 56px; align-items: flex-end; justify-content: space-between;">'
+                 '<div style="flex: 1.3 1 560px; min-width: 0;">%s<h2 style="%s">Каждый разработчик приносит ≈1,2 млн ₽ эффекта в год</h2></div>'
+                 '<p style="flex: 1 1 320px; margin: 0; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.78);">Эффект растёт вместе с командой. Найдите свою компанию в таблице — а точную цифру UpCore посчитает по истории вашего кода за первый месяц.</p></div>'
+                 '%s<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 32px;">%s</div>%s</div>') % (
+                     box, res_label(), h2st, table, stat_row(PROOFS), res_foot('Расчёт: эффект ≈97 тыс. ₽ в месяц на разработчика (−20% потерь на неэффективности, +12% от прозрачности, время тимлидов) при затратах 300 тыс. ₽ в месяц на человека. Цифры — ориентиры, перед публикацией заменить на подтверждённые.'))
+        return section(inner, 'results')
+    # n == 4: «Четыре решения — четыре статьи экономии»: деньги по каждому модулю
+    mods = [('grade', 'Grade', '≈5 млн ₽', 'в месяц', 'Перестаёте платить за работу без результата: 20% неэффективных видны сразу — решение за вами: обучение, ротация или расставание.', '100 разработчиков'),
+            ('ai', 'AI', '×1,9', 'отдачи на рубль', 'Бюджет на ИИ идёт туда, где он ускоряет, а не плодит переделки: лицензии и обучение — по реальной отдаче каждого.', 'ориентир: Exceeds AI'),
+            ('projects', 'Projects', '≈1,6 млн ₽', 'в месяц', 'Платите подрядчику за результат в коде, а не за часы в акте: переплата видна по каждому MR.', 'подрядчик из 10 разработчиков'),
+            ('mentor', 'Mentor', '≈1,9 млн ₽', 'в месяц', 'Авто-ревью и ИИ-наставник возвращают сеньорам часы, которые уходили на рутинное ревью и разбор ошибок.', '50 разработчиков')]
+    cards = ''
+    for key, mod, big, unit, text, basis in mods:
+        line, txt = ACC[key]
+        cards += ('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1A 0%%, #1A1925 50%%); border: 1px solid %s4D; padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 12px;">'
+                  '<div style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: 20px;"><span style="color: %s;">&gt;</span> UpCore<span style="color: %s;">.%s</span></div>'
+                  '<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;"><span style="font-size: clamp(44px, 4.4vw, 64px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; color: #FFFFFF; font-variant-numeric: tabular-nums;">%s</span>'
+                  '<span style="font-size: 18px; color: %s; font-weight: 700;">%s</span></div>'
+                  '<p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 16px; line-height: 1.55;">%s</p>'
+                  '<div style="margin-top: auto; %s font-size: 12px; color: rgba(255,255,255,0.5);">%s</div></article>') % (line, line, line, txt, mod, e(big), txt, e(unit), e(text), MONO, e(basis))
+    inner = ('<div style="%s">'
+             '<div style="display: flex; flex-wrap: wrap; gap: 24px 56px; align-items: flex-end; justify-content: space-between;">'
+             '<div style="flex: 1.3 1 560px; min-width: 0;">%s<h2 style="%s">Четыре решения — четыре статьи экономии</h2></div>'
+             '<div style="flex: 1 1 320px; min-width: 0;"><div style="font-size: clamp(40px, 4vw, 56px); font-weight: 800; letter-spacing: -0.03em; color: #7FDB7A; line-height: 1;">+12%%</div>'
+             '<p style="margin: 8px 0 0; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.78);">производительности команды сразу после запуска — ещё до любых решений, только за счёт прозрачности.</p></div></div>'
+             '<div class="g2">%s</div>%s</div>') % (box, res_label(), h2st, cards, res_foot('Цифры — ориентиры из расчётов UpCore и данных рынка (подписаны), перед публикацией заменить на подтверждённые. Затраты 300 тыс. ₽ в месяц на разработчика.'))
+    return section(inner, 'results')
 
 def core_block():
     """Сердце UpCore: запатентованная модель 50+ факторов → человеко-часы. Уникальная механика, отличие от конкурентов."""
@@ -1329,8 +1413,9 @@ def build(out, mode):
         files['Home-%s' % v] = home(v)
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
-    for n in (1, 2, 3):  # раунд 23: новые варианты блока «Принцип + точность» (50+ факторов, очистка от шума)
-        files['Trust-%d' % n] = block_board('Trust', n, trust_v4(n), 'блок «Принцип и точность»')
+    # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
+    for n in (1, 2, 3, 4):  # раунд 25: варианты блока «Результаты для бизнеса» (1 — текущий)
+        files['Results-%d' % n] = block_board('Results', n, results_variant(n), 'блок «Результаты для бизнеса»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
