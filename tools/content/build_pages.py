@@ -613,7 +613,7 @@ RES6_TILES = [('до +30%', 'рост эффективности разрабо�
 def results_v6(n):
     d = RES6[n]
     line, txt = ACC[None]
-    subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 неделя', 'до первых решений — по истории вашего Git'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
+    subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 неделя', 'до первых результатов'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
     sub_html = ''.join('<div style="min-width: 0;"><div style="font-size: clamp(24px, 2.2vw, 34px); font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
                        '<div style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (e(a), e(b)) for a, b in subs)
     banner = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid %s73; box-shadow: inset 0 0 120px rgba(99,213,255,0.06); padding: clamp(28px, 4vw, 48px); display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; margin-bottom: 16px;">'
@@ -631,7 +631,7 @@ def results_v6(n):
             '<div style="flex: 1 1 280px; min-width: 0;"><div style="%s font-size: 13px; color: %s; margin-bottom: 10px;">РАСЧЁТ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">%s</div>'
             '<p style="margin: 14px 0 0; color: rgba(255,255,255,0.62); font-size: 14px; line-height: 1.5;">%s</p></div>'
             '<div style="flex: 1.4 1 420px; min-width: 0;">%s%s</div></div>') % (MONO, txt, e(d['title']), e(d['foot']), lines, tot)
-    out = sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], RESULTS['home'].get('lead')) + banner + '<div class="g3">%s</div>' % tiles + calc
+    out = sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], 'Платформа окупается в десятки раз: эффект виден уже в первый месяц.') + banner + '<div class="g3">%s</div>' % tiles + calc
     return section(out, 'results')
 
 def core_block():
@@ -1031,8 +1031,12 @@ SEC_CARDS = [
     ('Платите за подтверждённый результат', 'Бесплатный пилот на 2–3 ваших проектах. Оплата — только после того, как вы подтвердите точность на своих данных.'),
 ]
 
-def security(full=True, h2='Подключение за минуты. Код остаётся у вас.'):
+def security(full=True, h2='Подключение за минуты. Код остаётся у вас.', home=False):
     items = SEC_CARDS if full else [SEC_CARDS[1], SEC_CARDS[2], SEC_CARDS[5]]
+    if home:  # раунд 28: на главной без «Код не покидает ваш контур» и «Права и конфиденциальность», сетка 2×2
+        items = [SEC_CARDS[0], SEC_CARDS[2], SEC_CARDS[4], SEC_CARDS[5]]
+        cards = ''.join(card('<div style="font-size: 21px; font-weight: 700;">%s</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">%s</p>' % (e(t), e(p))) for t, p in items)
+        return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', h2) + '<div class="g2">%s</div>' % cards)
     cards = ''.join(card('<div style="font-size: 21px; font-weight: 700;">%s</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">%s</p>' % (e(t), e(p))) for t, p in items)
     return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', h2) + '<div class="g3">%s</div>' % cards)
 
@@ -1298,9 +1302,9 @@ def home(variant):
         core_v3(9),
         platform_variant(3),  # раунд 22: принят вариант 3 «Шеврон»
         trust_v4(1),  # раунд 24: принят вариант 1 (без «100+ задач» и «Глаза»)
-        results('home'),
-        security(True),
-        cta('Узнайте реальную эффективность команды уже сегодня', 'Подключите репозиторий или закажите аудит — первые результаты по истории вашего кода, без ожидания.'),
+        results_v6(2),  # раунд 28: принят расчёт 2 (≈780 тыс. ₽ на разработчика)
+        security(True, home=True),
+        cta('Узнайте реальную эффективность команды уже сегодня', 'Подключите репозиторий или закажите аудит — первые результаты по истории вашего кода, без ожидания.', ('Подключить UpCore', REG)),
         footer()]
     return page('UpCore — главная A', '\n'.join(body), 5600, slider=True, name='Home-A')
 
@@ -1524,8 +1528,7 @@ def build(out, mode):
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
     # раунд 24: «Принцип + точность» (вариант 1) зафиксирован на Главной A, Trust-1..3 сняты
-    for n in (1, 2, 3, 4):  # раунд 27: 4 расчёта блока «Результаты для бизнеса» (варианты раунда 26 сняты)
-        files['Results-%d' % n] = block_board('Results', n, results_v6(n), 'блок «Результаты для бизнеса»')
+    # раунд 28: «Результаты для бизнеса» (расчёт 2) зафиксирован на Главной A, артборды Results-1..4 сняты
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
