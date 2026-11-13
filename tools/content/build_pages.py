@@ -172,7 +172,7 @@ def stats(items, note=None):
 # Цифры первых экранов (раунд 8): самые сильные — рост, экономия, деньги. Ориентиры рынка подписаны в note.
 HERO_STATS = {
  ('home', 'A'): ([('96%', 'точность от экспертной оценки'), ('1500+', 'разработчиков уже посчитано'),
-                  ('+14%', 'рост эффективности разработки за 3 месяца'), ('500 тыс. ₽', 'экономии в год на каждого разработчика')], 'данные и расчёт UpCore'),
+                  ('+14%', 'рост эффективности разработки за 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')], 'данные и расчёт UpCore'),
  ('home', 'B'): ([('≈9,7 млн ₽', 'в месяц эффекта на 100 разработчиков'), ('+12%', 'производительности сразу'), ('20% → 4%', 'находим, кто съедает ФОТ')], 'данные и расчёт UpCore'),
  ('home', 'C'): ([('100%', 'кода проверено — а не 5–10%'), ('114 ч', 'ручного ревью в месяц экономии'), ('≈1,1 млн ₽', 'в месяц возвращаем времени тимлидов')], 'данные UpCore; расчёт на 100 разработчиков'),
  ('grade', 'A'): ([('96%', 'совпадение с экспертной оценкой'), ('+12%', 'производительности команды сразу'),
@@ -614,7 +614,7 @@ RES6_TILES = [('до +30%', 'рост эффективности разрабо�
 def results_v6(n):
     d = RES6[n]
     line, txt = ACC[None]
-    subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 неделя', 'до первых результатов'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
+    subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 день', 'до первых результатов'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
     sub_html = ''.join('<div style="min-width: 0;"><div style="font-size: clamp(24px, 2.2vw, 34px); font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
                        '<div style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (e(a), e(b)) for a, b in subs)
     banner = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid %s73; box-shadow: inset 0 0 120px rgba(99,213,255,0.06); padding: clamp(28px, 4vw, 48px); display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; margin-bottom: 16px;">'
@@ -1541,7 +1541,7 @@ def drill_visual():
     return ('<div style="flex: 1.15 1 480px; min-width: 0; position: relative;"><div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); box-shadow: 0 40px 120px rgba(99,213,255,0.10); padding: 22px; display: flex; flex-direction: column; gap: 10px;">'
             '<div style="display: flex; justify-content: space-between; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.72); padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.08);"><span>upcore://grade / от цифры к коду</span><span style="color: #63D5FF;">● прозрачно</span></div>' + out + '</div></div>')
 
-GRADE_STATS = [('96%', 'точность экспертной оценки на 300+ тыс. MR'), ('10+', 'факторов грейда, главный — эффективность в часах'), ('3 мес.', 'до объективного грейда'), ('1 неделя', 'до первых результатов')]
+GRADE_STATS = [('96%', 'точность экспертной оценки на 300+ тыс. MR'), ('10+', 'факторов грейда, главный — эффективность в часах'), ('3 мес.', 'до объективного грейда'), ('1 день', 'до первых результатов')]
 
 def grade_hero(h1, sub, visual, kicker=None, st=None):
     line, txt = ACC['grade']
