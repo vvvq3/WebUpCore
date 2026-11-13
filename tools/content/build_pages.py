@@ -736,6 +736,91 @@ def trust_variant(n):
                  '<div class="g4m2" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px;">%s</div></div>') % (head, big96 % '<div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px;">даже два сильных лида расходятся: один скажет 4 часа, другой — 8</div>', cells)
     return section(inner, 'trust')
 
+# ---------------------------------------------------------------- раунд 23: «Принцип + точность» с 50+ факторами и очисткой от шума
+WITHOUT = ['Без тайм-трекеров', 'Без скриншотов экрана', 'Без отчётов от разработчиков', 'Без субъективных оценок']
+FACTORS = ['Сложность задачи', 'Технологии и их грейд', 'Результирующий код (churn)', 'Архитектурная сложность',
+           'Уровень багов и переделок', 'Когнитивная сложность', 'Логическая сложность', 'Цикломатическая сложность', 'Качество кода и ревью']
+NOISE = ['Автогенерация', 'Копипаст', 'Бойлерплейт', 'Синтаксис и форматирование', 'Переименования']
+CHIP = 'display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border-radius: 16px; font-size: 14px; line-height: 1.3;'
+
+def chips(items, kind='factor', more=None):
+    if kind == 'factor':
+        st = CHIP + ' background: rgba(99,213,255,0.08); border: 1px solid rgba(99,213,255,0.3); color: #FFFFFF;'
+    elif kind == 'noise':
+        st = CHIP + ' background: rgba(232,101,101,0.08); border: 1px dashed rgba(232,101,101,0.5); color: %s; text-decoration: line-through; text-decoration-color: rgba(240,138,138,0.7);' % RED_T
+    else:  # without
+        st = CHIP + ' background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.35); color: #9BE397;'
+    out = ''.join('<span style="%s">%s</span>' % (st, e(x)) for x in items)
+    if more:
+        out += '<span style="%s color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.12);">%s</span>' % (CHIP, e(more))
+    return '<div style="display: flex; flex-wrap: wrap; gap: 8px;">%s</div>' % out
+
+def trust_head(with_chips=True):
+    return ('<div style="%s font-size: 13px; color: #63D5FF; letter-spacing: 0.04em; margin-bottom: 14px;">ПРИНЦИП</div>'
+            '<h2 style="margin: 0; font-size: clamp(30px, 3.2vw, 48px); letter-spacing: -0.03em; line-height: 1.06; font-weight: 800; max-width: 900px;">%s</h2>'
+            '<p style="margin: 16px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.84); max-width: 760px;">%s</p>%s') % (
+                MONO, e(TRUST_H2), e(TRUST_LEAD), ('<div style="margin-top: 20px;">%s</div>' % chips(WITHOUT, 'without')) if with_chips else '')
+
+def big_96(size='clamp(88px, 10vw, 152px)', note=True):
+    return ('<div style="min-width: 0;"><div style="font-size: %s; font-weight: 800; color: #63D5FF; line-height: 0.9; letter-spacing: -0.04em;">96%%</div>'
+            '<div style="font-size: 20px; color: rgba(255,255,255,0.88); margin-top: 10px;">совпадение с экспертной оценкой</div>%s</div>') % (
+                size, '<div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 8px; line-height: 1.45;">Для сравнения: два сильных лида оценят одну задачу в 4 и 8 часов</div>' if note else '')
+
+TRUST_BOX = 'border-radius: 40px; background: #12111C; border: 1px solid rgba(255,255,255,0.08); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 36px;'
+
+def trust_v4(n):
+    """Раунд 23: три варианта на основе Trust-1 + 50+ факторов и очистка от шума; упор на точность и отсутствие токсичности."""
+    if n == 1:  # основа — прежний вариант 1: 96% слева, шесть опор 2×3 справа
+        pillars = [
+            ('50+ факторов оценки', 'Сложность задачи, технологии, результирующий код (churn), архитектурная сложность, уровень багов, когнитивная и логическая сложность — и ещё десятки параметров.'),
+            ('Глубокая очистка от шума', 'Автогенерация, копипаст, бойлерплейт, синтаксис, переименования не добавляют ни часа. В оценку идёт только значимый код.'),
+            ('100+ задач подряд', 'Оценка строится по сотне задач: на дистанции статистика сглаживает любые аномалии.'),
+            ('Математика, а не LLM', 'Детерминированная модель не «галлюцинирует»: один и тот же код — всегда одна и та же оценка.'),
+            ('«Глаз» и апелляции', 'Любой вывод открывается до строчки кода, а сотрудник может оспорить оценку.'),
+            ('1500+ разработчиков', 'Модели откалиброваны на экспертных оценках под каждый стек и проверены на сотнях проектов.')]
+        pil = ''.join('<div style="min-width: 0; border-radius: 20px; border: 1px solid %s; background: %s; padding: 20px;"><div style="font-size: 19px; font-weight: 800; margin-bottom: 6px;">%s</div>'
+                      '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (
+                          'rgba(99,213,255,0.35)' if i < 2 else 'rgba(255,255,255,0.1)', 'rgba(99,213,255,0.05)' if i < 2 else 'transparent', e(a), e(b)) for i, (a, b) in enumerate(pillars))
+        inner = ('<div style="%s">%s<div style="display: flex; flex-wrap: wrap; gap: 32px 48px; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 36px;">'
+                 '<div style="flex: 0 1 300px;">%s</div><div class="g2" style="flex: 1 1 560px; min-width: 0;">%s</div></div></div>') % (TRUST_BOX, trust_head(), big_96(), pil)
+    elif n == 2:  # конвейер точности: шум → 50+ факторов → 96%, внизу — почему это не токсично
+        def step(num, title, text, body):
+            return ('<div style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 14px;">'
+                    '<div style="%s font-size: 13px; color: #63D5FF;">%s</div><div style="font-size: 22px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2;">%s</div>'
+                    '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</p>%s</div>') % (MONO, num, e(title), e(text), body)
+        s1 = step('01 / ОЧИСТКА', 'Убираем шум', 'Перед оценкой код проходит глубокую очистку: всё, что не требует мысли разработчика, не добавляет часов.', chips(NOISE, 'noise', 'и другой шум'))
+        s2 = step('02 / ОЦЕНКА', 'Считаем по 50+ факторам', 'Каждый значимый фрагмент кода переводится в человеко-часы с учётом его реальной сложности и ценности.', chips(FACTORS[:7], 'factor', 'и ещё 40+'))
+        s3 = step('03 / ПРОВЕРКА', 'Сверяем с экспертами', 'Модели откалиброваны на 1500+ разработчиках, а оценка складывается из 100+ задач. Детерминированная математика: один и тот же код — одна оценка.',
+                  big_96('clamp(64px, 6vw, 88px)', note=False))
+        nt = [('Оцениваем код, а не людей', 'Ни трекеров, ни скриншотов, ни отчётов — разработчик просто работает.'),
+              ('Как обычное код-ревью', 'Около секунды на MR, без вмешательства в процесс.'),
+              ('Прозрачно до строчки', 'Каждый вывод открывается в «Глазе»: видно, за что и сколько.'),
+              ('Можно оспорить', 'Апелляция по любой оценке. Правила одни для всех.')]
+        ntc = ''.join('<div style="min-width: 0;"><div style="font-size: 17px; font-weight: 800; margin-bottom: 6px; color: #9BE397;">%s</div><div style="color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.5;">%s</div></div>' % (e(a), e(b)) for a, b in nt)
+        inner = ('<div style="%s">%s<div class="g3">%s%s%s</div>'
+                 '<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px;"><div style="%s font-size: 13px; color: #9BE397; letter-spacing: 0.04em; margin-bottom: 18px;">ПОЧЕМУ ЭТО НЕ ТОКСИЧНО</div><div class="g4">%s</div></div></div>') % (
+                     TRUST_BOX, trust_head(False), s1, s2, s3, MONO, ntc)
+    else:  # две колонки: «Почему точно» и «Почему не токсично»
+        def item(title, body):
+            return '<div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 18px;"><div style="font-size: 19px; font-weight: 800;">%s</div>%s</div>' % (e(title), body)
+        P = lambda t: '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">%s</p>' % e(t)
+        left = ('<div style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(99,213,255,0.3); padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 20px;">'
+                '<div style="%s font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">ПОЧЕМУ ОЦЕНКА ТОЧНАЯ</div>%s%s%s%s</div>') % (
+                    MONO, big_96('clamp(72px, 7vw, 104px)'),
+                    item('50+ факторов оценки', chips(FACTORS[:7], 'factor', 'и ещё 40+')),
+                    item('Глубокая очистка от шума', chips(NOISE, 'noise', 'и другой шум') + P('Сгенерировал 1000 строк и через неделю удалил 950? В оценку пойдут только 50, которые остались в проекте.')),
+                    item('100+ задач и 1500+ разработчиков', P('Оценка складывается на дистанции, а модели откалиброваны на экспертных оценках под каждый стек. В ядре — математика, а не LLM: один код — одна оценка.')))
+        nt = [('Никаких трекеров, скриншотов и отчётов', 'Разработчик просто пишет код. Система смотрит только на результат в репозитории.'),
+              ('Обычное код-ревью', 'То же, что делает тимлид, только по каждому MR и примерно за секунду.'),
+              ('Одна шкала для всех', 'Без любимчиков, усталости и «я так вижу». Сильных видно сразу, даже тихих.'),
+              ('Прозрачно до строчки', 'Каждый вывод открывается в «Глазе»: видно, какой код и сколько часов дал.'),
+              ('Апелляция по любой оценке', 'Не согласен — оспорь. Решение принимает человек, а не алгоритм.'),
+              ('Для роста, а не для наказания', 'UpCore.Mentor превращает оценку в персональный план развития.')]
+        right = ('<div style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(83,192,77,0.3); padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; gap: 20px;">'
+                 '<div style="%s font-size: 13px; color: #9BE397; letter-spacing: 0.04em;">ПОЧЕМУ ЭТО НЕ ТОКСИЧНЫЙ КОНТРОЛЬ</div>%s</div>') % (MONO, ''.join(item(a, P(b)) for a, b in nt))
+        inner = '<div style="%s">%s<div class="g2" style="align-items: stretch;">%s%s</div></div>' % (TRUST_BOX, trust_head(False), left, right)
+    return section(inner, 'trust')
+
 def block_board(prefix, n, html, title):
     return page('UpCore — %s %d' % (title, n), '<div style="padding-top: 48px;">%s</div>' % html, 900, name='%s-%d' % (prefix, n))
 
@@ -1246,8 +1331,8 @@ def build(out, mode):
         files['Home-%s' % v] = home(v)
     # раунд 19: блоки «Сердце» и «Почему это важно» зафиксированы на Главной A, отдельные артборды вариантов сняты
     # раунд 22: блок «Платформа» (вариант 3) зафиксирован на Главной A, артборды Platform-1..4 сняты
-    for n in (1, 2, 3):  # раунд 20: варианты блока «Принцип + доверие»
-        files['Trust-%d' % n] = block_board('Trust', n, trust_variant(n), 'блок «Принцип и точность»')
+    for n in (1, 2, 3):  # раунд 23: новые варианты блока «Принцип + точность» (50+ факторов, очистка от шума)
+        files['Trust-%d' % n] = block_board('Trust', n, trust_v4(n), 'блок «Принцип и точность»')
     # (функции core_board / pains_board оставлены, чтобы можно было снова вывести варианты)
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
