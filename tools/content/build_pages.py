@@ -2718,7 +2718,7 @@ def px_ai():
 
 def px_techmap_panel():
     return pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются ротацией по рекомендации UpCore или новой вакансией.', techmap_rows() +
-                    '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div>')
+                    '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Ротация в команде</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span></div>')
 
 def px_td_panel(n=7):
     return pj_panel('ТЕХДОЛГ', 'Где копится риск', 'Доля тяжести дефектов, ушедших в main, — по категориям качества ISO/IEC 25010.', techdebt_bars(n))
