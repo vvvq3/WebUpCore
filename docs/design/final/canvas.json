@@ -104,33 +104,6 @@
       "x": 3040,
       "y": 0
     },
-    "Projects-1.dc.html": {
-      "expand": "fill",
-      "h": 5756,
-      "page": "projects",
-      "title": "Projects 1 — «Сколько стоит проект? Посчитаем по коду»: сводка проекта, проект на примере, факторы, сценарии",
-      "w": 1440,
-      "x": 0,
-      "y": 0
-    },
-    "Projects-2.dc.html": {
-      "expand": "fill",
-      "h": 5729,
-      "page": "projects",
-      "title": "Projects 2 — «В акте 160 часов. В коде — 40»: аудит акта, контроль подрядчиков, проект на примере, факторы",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Projects-3.dc.html": {
-      "expand": "fill",
-      "h": 5781,
-      "page": "projects",
-      "title": "Projects 3 — «Бюджет проекта и контроль подрядчиков»: техдолг в первом экране, пример, факторы, контроль подрядчиков",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
     "AI-main.dc.html": {
       "expand": "fill",
       "h": 8106,
@@ -139,6 +112,33 @@
       "w": 1440,
       "x": 0,
       "y": 0
+    },
+    "Projects-main.dc.html": {
+      "expand": "fill",
+      "h": 5136,
+      "page": "projects",
+      "title": "Projects — основной макет: единая шапка + блоки, общие для всех 3 макетов (проект на примере, факторы, для кого, вопросы, SaaS, CTA)",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Projects-blk-audit.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "page": "projects",
+      "title": "Отличающийся блок 1 · «Контроль подрядчиков: акт на 1 500 часов» (был в макетах 2, 3) — предлагаю сразу после первого экрана",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Projects-blk-scen.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "page": "projects",
+      "title": "Отличающийся блок 2 · «Три сценария: аудит, ежемесячный контроль, портфель» (был в макете 1) — предлагаю перед «Для кого»",
+      "w": 1440,
+      "x": 1520,
+      "y": 1100
     }
   },
   "createdOnFiles": {
@@ -218,7 +218,7 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "projects",
-      "text": "UpCore Projects: 3 макета страницы на основе главной и Grade",
+      "text": "UpCore Projects: основной макет и отличающиеся блоки (в порядке ценности для C-level)",
       "w": 240,
       "x": 0,
       "y": -300
@@ -230,16 +230,16 @@
     "CommandCenter-V3.dc.html",
     "Home-A.dc.html",
     "Grade-3.dc.html",
-    "Projects-1.dc.html",
-    "Projects-2.dc.html",
-    "Projects-3.dc.html",
     "Mentor-1.dc.html",
     "Mentor-2.dc.html",
     "Mentor-3.dc.html",
     "Blog-1.dc.html",
     "Blog-2.dc.html",
     "Blog-3.dc.html",
-    "AI-main.dc.html"
+    "AI-main.dc.html",
+    "Projects-main.dc.html",
+    "Projects-blk-audit.dc.html",
+    "Projects-blk-scen.dc.html"
   ],
   "pages": [
     {

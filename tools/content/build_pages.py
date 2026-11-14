@@ -2586,6 +2586,22 @@ def ai_page_final():
         cta('Посчитайте реальный эффект ИИ в своей команде', 'Подключите репозиторий — сравним время «с ИИ» и «вручную» по истории вашего кода.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore AI — страница', '\n'.join(body), 8000, name='AI-main')
 
+# ---------------------------------------------------------------- раунд 42: Projects — основной макет (шапка + общие блоки) и отличающиеся блоки отдельно
+PROJ_STATS2 = [('96%', 'точность от экспертной оценки на 300+ тыс. MR'), ('50+', 'факторов в оценке каждого MR'), ('1 час', 'на анализ полугода истории проекта'), ('1 день', 'до первых результатов')]
+
+def proj_main():
+    h1 = 'Бюджет проекта и контроль подрядчиков — в часах и рублях'
+    sub = 'Эффективность команды, техдолг по категориям качества, тех-карта и мэтч команды, прогноз сроков — всё по коду, а не по статусам в Jira.'
+    body = [header('projects'), mod_hero('projects', h1, sub, panel('projects', 'projects / аудит акта', 'пример', act_vs_code()), PROJ_STATS2),
+            proj_example(), proj_deep(),
+            roles('ДЛЯ КОГО', 'Прозрачность, выгодная заказчику и команде', PROJ_ROLES, 'projects'), faq(PROJ_FAQ, acc_key='projects'), saas_variant(2),
+            cta('Проверьте, сколько на самом деле стоит ваш проект', 'Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore Projects — основной макет', '\n'.join(body), 6000, name='Projects-main')
+
+def proj_blk(kind):
+    html = proj_audit() if kind == 'audit' else scenarios()
+    return page('UpCore Projects — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name='Projects-blk-' + kind)
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2607,6 +2623,9 @@ def build(out, mode):
     for k, nm in (('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
         for n in (1, 2, 3):
             files['%s-%d' % (nm, n)] = module_page(k, n)
+    files['Projects-main'] = proj_main()  # раунд 42: основной макет Projects + отличающиеся блоки отдельно
+    files['Projects-blk-audit'] = proj_blk('audit')
+    files['Projects-blk-scen'] = proj_blk('scen')
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
     files['AI-main'] = ai_page_final()  # раунд 40: одна страница AI вместо разбора на блоки (AIbase/AImap/AIblk сняты)
