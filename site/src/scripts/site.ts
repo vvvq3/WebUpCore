@@ -249,7 +249,7 @@ function tagElements() {
   spots.forEach((el) => {
     el.classList.add('uc-spot');
     const c = getComputedStyle(el).borderTopColor;
-    if (c) el.style.setProperty('--spot', c.replace(/rgba?\(([^)]+)\)/, (m, v) => `rgb(${v.split(',').slice(0, 3).join(',')})`));
+    if (c) el.style.setProperty('--spot', c.replace(/rgba?\(([^)]+)\)/, (_m, v) => `rgb(${v.split(',').slice(0, 3).join(',')})`));
   });
   if (finePointer) {
     spots.forEach((el) => el.addEventListener('pointermove', (ev) => {

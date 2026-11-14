@@ -15,5 +15,6 @@ export default defineConfig({
       filter: (page) => !page.includes('/404'),
     }),
   ],
-  vite: { plugins: [tailwindcss()] },
+  // приведение типа: у @tailwindcss/vite и Astro разные версии типов Vite (на сборку не влияет)
+  vite: { plugins: [/** @type {any} */ (tailwindcss())] },
 });
