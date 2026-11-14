@@ -2602,6 +2602,88 @@ def proj_blk(kind):
     html = proj_audit() if kind == 'audit' else scenarios()
     return page('UpCore Projects — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name='Projects-blk-' + kind)
 
+# ---------------------------------------------------------------- раунд 43: Projects — объединённый блок «проект на примере + факторы» (3 варианта) и новый «аудит акта» (2 варианта)
+PJ = '#F2C14E'
+
+def pj_head():
+    return demo_head('projects', 'Проект «UpCore Backend»', 'ДЕМО UPCORE · МЕНЮ «ОТЧЁТЫ ПРОЕКТА» · ОКТЯБРЬ 2026', [
+        ('Сложность', '8 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">/ 10</span>', 'размер сильно больше среднего'), ('Длительность', '1 г. 7 мес', 'легаси 0%'), ('Команда', '8 человек', 'стек Backend, C#')])
+
+def pj_panel(num, title, expl, viz):
+    return ('<div style="min-width: 0; border-radius: 22px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 22px; display: flex; flex-direction: column; gap: 12px;">'
+            '<div style="display: flex; gap: 10px; align-items: baseline;"><span style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + num + '</span><b style="font-size: 19px;">' + e(title) + '</b></div>'
+            '<div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.5;">' + e(expl) + '</div>' + viz + '</div>')
+
+PJ_EFF = ('<div style="display: flex; flex-direction: column; gap: 10px;">' + hbar('Эффективность за месяц', '90% · 1,3 из 1,4 тыс. ч', 90, GREEN) + hbar('За 3 месяца', '88% · 2,9 из 3,3 тыс. ч', 88, GREEN) + hbar('MR с ИИ', '2% · 6 из 273', 4, '#B9AEFF') + '</div>')
+PJ_RISK = '<div class="g2" style="gap: 8px;">' + tile('8 / 10', 'сложность') + tile('0%', 'легаси') + tile('1 г. 7 мес', 'длительность') + tile('≫ среднего', 'размер') + '</div>'
+
+def proj_merged(n):
+    if n == 1:  # отчёт проекта: 4 фактора 2×2, в каждом — объяснение + данные демо
+        grid = ('<div class="g2">'
+                + pj_panel('01', 'Эффективность и стоимость', 'Трудоёмкость каждого MR складывается в объективную стоимость проекта в часах и рублях.', PJ_EFF)
+                + pj_panel('02', 'Техдолг по ISO 25010', 'Какая доля тяжести дефектов, найденных ревью, ушла в main: 35% — 750 из 2 147 баллов.', techdebt_bars(5))
+                + pj_panel('03', 'Тех-карта и мэтч команды', 'Какие технологии есть в коде, их сложность и насколько им соответствует команда: мэтч 78%.', techmap_rows())
+                + pj_panel('04', 'Сложность и риски', 'Размер, сложность, легаси и длительность учитываются в оценке — проекты можно сравнивать честно.', PJ_RISK) + '</div>')
+        return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Из чего складывается картина проекта — на реальном отчёте', 'Четыре фактора, которые UpCore считает по коду. Каждая цифра раскрывается до MR и строчек в «Глазе».', pj_head(), grid)
+    if n == 2:  # слева — навигация по 4 факторам с ключевой цифрой, справа — детали двух главных
+        nav = [('01', 'Эффективность', '<span style="color: ' + GREEN + ';">90%</span>', '1,3 из 1,4 тыс. ч за месяц'), ('02', 'Техдолг', '<span style="color: ' + AMBER + ';">35%</span>', 'тяжести дефектов ушло в main'),
+               ('03', 'Мэтч команды', '78%', 'с тех-картой проекта'), ('04', 'Сложность', '8 / 10', 'размер сильно больше среднего')]
+        left = ('<div style="flex: 0.8 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 8px;">' + ''.join(
+            '<div style="border-radius: 18px; padding: 16px 18px; background: ' + ('rgba(242,193,78,0.10)' if i in (1, 2) else 'rgba(255,255,255,0.04)') + '; border: 1px solid ' + ('rgba(242,193,78,0.45)' if i in (1, 2) else 'rgba(255,255,255,0.08)') + ';">'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; align-items: baseline;"><span><span style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + a + '</span> <b style="font-size: 17px;">' + e(b) + '</b></span><b style="font-size: 26px; white-space: nowrap;">' + c + '</b></div>'
+            '<div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px;">' + e(d) + '</div></div>' for i, (a, b, c, d) in enumerate(nav)) + '</div>')
+        right = ('<div style="flex: 1.6 1 520px; min-width: 0; display: flex; flex-wrap: wrap; gap: 16px;">'
+                 '<div style="flex: 1 1 260px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + '; margin-bottom: 12px;">02 · ТЕХДОЛГ ПО ISO 25010</div>' + techdebt_bars() + '</div>'
+                 '<div style="flex: 1 1 260px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + '; margin-bottom: 12px;">03 · ТЕХ-КАРТА · SENIOR-ТЕХНОЛОГИИ</div>' + techmap_rows() + '</div></div>')
+        return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Всё о проекте — в часах, рисках и технологиях', 'Отчёт проекта из демо UpCore: четыре фактора с ключевой цифрой и подробности по самым важным — техдолгу и тех-карте.', pj_head(),
+                             '<div style="display: flex; flex-wrap: wrap; gap: 24px 32px;">' + left + right + '</div>')
+    # n == 3: полоса из 4 KPI-факторов с объяснением + 2 детальные панели
+    kpi = [('Эффективность', '<span style="color: ' + GREEN + ';">90%</span>', 'часы результата по коду против рабочих: 1,3 из 1,4 тыс. ч'), ('Техдолг', '<span style="color: ' + AMBER + ';">35%</span>', 'тяжести найденных дефектов ушло в main'),
+           ('Мэтч команды', '78%', 'соответствие команды технологиям проекта'), ('Сложность', '8 / 10', 'размер, легаси и длительность учтены')]
+    strip = '<div class="g4">' + ''.join('<div style="min-width: 0; border-radius: 20px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 20px;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + e(a).upper() + '</div><div style="font-size: clamp(34px, 3.4vw, 48px); font-weight: 800; letter-spacing: -0.03em; margin: 6px 0;">' + b + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.45;">' + e(c) + '</div></div>' for a, b, c in kpi) + '</div>'
+    det = ('<div class="g2">' + pj_panel('ТЕХДОЛГ', 'Где копится риск', 'Доля тяжести дефектов, ушедших в main, — по категориям качества ISO/IEC 25010.', techdebt_bars())
+           + pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются вакансией или подбором специалиста.', techmap_rows() +
+                      '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div>') + '</div>')
+    return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Четыре цифры, по которым видно здоровье проекта', 'Все факторы считаются по коду из демо-проекта UpCore и раскрываются до MR и строчек в «Глазе».', pj_head(), strip + det)
+
+AUDIT_PTS = ['Реальная эффективность каждого разработчика подрядчика в часах', 'Подтверждённый грейд и сложность задач', 'Чистая ценность результирующего кода — без шума и часов, потерянных при отладке', 'Техдолг и риски по категориям качества']
+
+def audit_right(numbered=False):
+    items = ''.join('<li style="margin-bottom: 10px; display: flex; gap: 12px;">' + ('<b style="flex: 0 0 auto; width: 28px; height: 28px; border-radius: 8px; background: rgba(242,193,78,0.18); color: ' + PJ + '; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">' + str(i + 1) + '</b>' if numbered else '<span style="color: ' + PJ + ';">•</span>') + '<span>' + e(x) + '</span></li>' for i, x in enumerate(AUDIT_PTS))
+    return ('<div style="flex: 1 1 380px; min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 14px;">'
+            '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; line-height: 1.2;">Вместе с актом — отчёт, который можно проверить</div>'
+            '<ul style="margin: 0; padding: 0; list-style: none; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.84);">' + items + '</ul>'
+            '<p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.7);">Так Dex сам работает со своими клиентами на аутстаффе. Прогоним репозиторий вашего подрядчика через UpCore — и покажем объективную ценность его кода.</p></div>')
+
+def proj_audit2(n):
+    if n == 1:  # слева — отчёт к акту по каждому разработчику подрядчика
+        devs = [('Senior · Backend', 160, 148, 90), ('Middle+ · Backend', 160, 112, 81), ('Middle · Frontend', 160, 72, 64), ('Senior · Frontend', 160, 40, 50)]
+        head = '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px 58px 52px; gap: 8px; ' + MONO + ' font-size: 11.5px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span>РАЗРАБОТЧИК</span><span style="text-align: right;">В АКТЕ</span><span style="text-align: right;">ПО КОДУ</span><span style="text-align: right;">ЭФФ.</span></div>'.replace('11.5px', '12px')
+        rows = ''
+        for nm, a, c, rc in devs:
+            ef = int(round(c / a * 100)); col = GREEN if ef >= 85 else (AMBER if ef >= 60 else RED_T)
+            rows += ('<div style="padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07);"><div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px 58px 52px; gap: 8px; align-items: baseline; font-size: 14px;">'
+                     '<span style="min-width: 0;">' + e(nm) + '</span><span style="text-align: right; color: rgba(255,255,255,0.7);">' + str(a) + ' ч</span><b style="text-align: right;">' + str(c) + ' ч</b><b style="text-align: right; color: ' + col + ';">' + str(ef) + '%</b></div>'
+                     '<div style="height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); margin-top: 6px;"><div style="width: ' + str(ef) + '%; height: 100%; border-radius: 3px; background: ' + col + ';"></div></div>'
+                     '<div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">результирующий код ' + str(rc) + '%</div></div>')
+        tot = ('<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 2px solid ' + PJ + '; padding-top: 14px;"><span style="font-size: 15px;">Итого в акте 640 ч · объективно по коду 372 ч</span><b style="font-size: 24px; color: ' + RED_T + ';">−268 ч · −42%</b></div>')
+        left = ('<div style="flex: 1.15 1 440px; min-width: 0; border-radius: 28px; background: #12111C; border: 1px solid rgba(242,193,78,0.4); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 12px;">'
+                '<div style="display: flex; justify-content: space-between; gap: 12px; ' + MONO + ' font-size: 12px;"><span style="color: ' + PJ + ';">ПРИМЕР ОТЧЁТА К АКТУ ПОДРЯДЧИКА</span><span style="color: rgba(255,255,255,0.5);">ОКТЯБРЬ</span></div>'
+                '<div style="font-size: clamp(22px, 2vw, 28px); font-weight: 800; line-height: 1.2;">4 разработчика — 4 разные истории</div><div>' + head + rows + '</div>' + tot + '</div>')
+        right = audit_right()
+    else:  # слева — акт против кода + 4 фактора отчёта с номерами, совпадающими со списком справа
+        f4 = [('1', 'Эффективность в часах', '<span style="color: ' + AMBER + ';">58%</span>', 'средняя по команде подрядчика'), ('2', 'Грейд и сложность', 'Middle', 'а в акте — ставки Senior'),
+              ('3', 'Результирующий код', '<span style="color: ' + AMBER + ';">71%</span>', 'остальное — переделки и отладка'), ('4', 'Техдолг', '<span style="color: ' + RED_T + ';">40%</span>', 'тяжести дефектов ушло в main')]
+        tiles4 = '<div class="g2" style="gap: 10px;">' + ''.join('<div style="min-width: 0; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 14px 16px;"><div style="display: flex; gap: 8px; align-items: center; font-size: 13px; color: rgba(255,255,255,0.7);"><b style="width: 22px; height: 22px; border-radius: 6px; background: rgba(242,193,78,0.18); color: ' + PJ + '; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">' + a + '</b>' + e(b) + '</div><div style="font-size: 28px; font-weight: 800; margin-top: 6px;">' + c + '</div><div style="font-size: 12px; color: rgba(255,255,255,0.55);">' + e(d) + '</div></div>' for a, b, c, d in f4) + '</div>'
+        left = ('<div style="flex: 1.15 1 440px; min-width: 0; border-radius: 28px; background: #12111C; border: 1px solid rgba(242,193,78,0.4); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;">'
+                '<div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">ПРИМЕР АУДИТА ПОДРЯДЧИКА</div>' + act_vs_code() + '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px;">ПОЧЕМУ ТАК — ПО ФАКТОРАМ</div>' + tiles4 + '</div>')
+        right = audit_right(numbered=True)
+    return section(sec_head('КОНТРОЛЬ ПОДРЯДЧИКОВ', 'Акт на 1 500 часов? Проверьте его по коду', 'При оплате за часы у подрядчика нет стимула ускоряться. UpCore показывает, сколько трудоёмкости в коде на самом деле.', 'projects')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + left + right + '</div>', 'audit')
+
+def pj_board(name, html):
+    return page('UpCore Projects — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name=name)
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2626,6 +2708,10 @@ def build(out, mode):
     files['Projects-main'] = proj_main()  # раунд 42: основной макет Projects + отличающиеся блоки отдельно
     files['Projects-blk-audit'] = proj_blk('audit')
     files['Projects-blk-scen'] = proj_blk('scen')
+    for n in (1, 2, 3):  # раунд 43: объединённый блок «проект на примере + факторы»
+        files['Projects-merge-%d' % n] = pj_board('Projects-merge-%d' % n, proj_merged(n))
+    for n in (1, 2):  # раунд 43: новый блок «аудит акта» с более сильной левой частью
+        files['Projects-audit-%d' % n] = pj_board('Projects-audit-%d' % n, proj_audit2(n))
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
     files['AI-main'] = ai_page_final()  # раунд 40: одна страница AI вместо разбора на блоки (AIbase/AImap/AIblk сняты)
