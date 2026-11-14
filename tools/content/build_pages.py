@@ -3241,7 +3241,11 @@ def an_card(num, title, where, demo, spec):
             '<div style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.72);">' + e(where) + '</div>'
             '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.45);">' + e(spec) + '</div></article>')
 
+ANIM_PARTS = False  # True — anim_board(n) возвращает (css, cards) для сборки итоговой доски
+
 def an_board(n, name, idea, chips, css, cards, extra=''):
+    if ANIM_PARTS:
+        return css, cards
     head = ('<div style="padding: 48px 48px 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">АНИМАЦИИ · ВАРИАНТ ' + str(n) + '</div>'
             '<h2 style="margin: 12px 0 0; font-size: 48px; letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">' + e(name) + '</h2>'
             '<p style="margin: 14px 0 0; max-width: 980px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.74);">' + e(idea) + '</p>'
@@ -3368,6 +3372,39 @@ def anim_board(n):
                     ['максимум вау-эффекта', 'история при прокрутке — 2–3 места', 'на телефоне — упрощённо', 'учитывает «уменьшить движение»'], css, cards)
 
 
+def anim_final():
+    """Раунд 67: утверждённый набор анимаций — вариант 1 как основа + 3 фирменных акцента из варианта 2."""
+    global ANIM_PARTS
+    ANIM_PARTS = True
+    css1, c1 = anim_board(1)
+    css2, c2 = anim_board(2)
+    ANIM_PARTS = False
+    def tag(card, t, col):
+        return card.replace('<b style="font-size: 18px;">', '<b style="font-size: 18px;"><span style="display: inline-block; margin-right: 8px; padding: 3px 8px; border-radius: 7px; font-size: 11px; font-weight: 700; vertical-align: 2px; background: ' + col + '22; color: ' + col + ';">' + t + '</span>', 1)
+    B, F = 'ОСНОВА', 'АКЦЕНТ'
+    import re
+    picked = [(c1[0], B), (c2[1], F), (c1[2], B), (c1[3], B), (c2[3], F), (c1[4], B), (c1[5], B), (c2[2], F)]
+    cards = []
+    for i, (c, t) in enumerate(picked):
+        c = re.sub(r'(color: rgba\(255,255,255,0\.45\);">)0\d(</span>)', r'\g<1>%02d\2' % (i + 1), c, count=1)
+        if i == 7:  # разбор кода — шире, на две колонки
+            c = c.replace('<article style="min-width: 0;', '<article style="grid-column: span 2; min-width: 0;', 1)
+            c = c.replace('Для первого экрана и блока методики: полоса', 'Только в первом экране главной: полоса', 1)
+        cards.append(tag(c, t, '#63D5FF' if t == B else '#7FDB7A'))
+    rules = [('Где «разбор кода»', 'Только первый экран главной — полоса анализа по коду MR с метками. Больше нигде.'),
+             ('Где цифры-табло', 'Ключевые цифры: 96%, 50+, 1 500+, 12,1 млн ₽, −43% — в первых экранах и блоках доверия. Остальные цифры появляются вместе с блоком.'),
+             ('Где подсветка за курсором', 'Карточки продуктов на главной и карточки-плашки «> UpCore.X»; на телефоне — без неё, остаётся проявление.'),
+             ('Общие правила', 'Каждая анимация — один раз при первом показе блока; 200–800 мс; плавное замедление в конце; ничего не крутится постоянно, кроме курсора в разборе кода; при «уменьшить движение» в системе — всё без анимаций.')]
+    rule_html = ('<div class="g2" style="margin-top: 24px;">' + ''.join('<div style="border-radius: 20px; background: rgba(99,213,255,0.06); border: 1px solid rgba(99,213,255,0.25); padding: 18px 20px;"><b style="font-size: 16px;">' + e(a) + '</b>'
+                 '<div style="font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.75); margin-top: 6px;">' + e(b) + '</div></div>' for a, b in rules) + '</div>')
+    head = ('<div style="padding: 48px 48px 0;"><div style="' + MONO + ' font-size: 13px; color: #7FDB7A; letter-spacing: 0.04em;">АНИМАЦИИ · УТВЕРЖДЕНО</div>'
+            '<h2 style="margin: 12px 0 0; font-size: 48px; letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">Спокойная точность + фирменные акценты</h2>'
+            '<p style="margin: 14px 0 0; max-width: 1000px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.74);">Основа на всём сайте — вариант 1: проявление блоков, рост графиков, отклик карточек и кнопок, шапка при прокрутке. '
+            'Три фирменных акцента из варианта 2: цифры-табло для ключевых цифр, подсветка за курсором на карточках продуктов, разбор кода MR — только в первом экране главной.</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(127,219,122,0.1); color: #A9EBA6;">' + e(c) + '</span>' for c in ['8 анимаций на весь сайт', '5 — основа, 3 — фирменные акценты', '200–800 мс', 'учитывает «уменьшить движение»']) + '</div></div>')
+    body = '<style>' + css1 + css2 + '</style>' + head + '<div style="padding: 32px 48px 64px;"><div class="g3">' + ''.join(cards) + '</div>' + rule_html + '</div>'
+    return page('UpCore — анимации, утверждено', body, 1500, name='Anim-final')
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -3388,8 +3425,7 @@ def build(out, mode):
             files['%s-%s' % (n, v)] = product(k, v)
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
     # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
-    for n in (1, 2, 3):
-        files['Anim-%d' % n] = anim_board(n)  # раунд 66: анимации — 3 варианта стиля
+    files['Anim-final'] = anim_final()  # раунд 67: утверждено — вариант 1 + акценты 2.02, 2.03, 2.04; доски Anim-1..3 сняты
     files['Menu-1'] = mobile_menu(1)  # раунд 64: на телефоне выбран вариант 1 (бургер + меню на весь экран); 2 и 3 сняты
     files['Menu-D3'] = desktop_menu(3)  # раунд 65: на компьютере выбран вариант 3 «капсула продуктов» (применён в header()); D1, D2 сняты
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
