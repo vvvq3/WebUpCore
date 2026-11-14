@@ -2982,10 +2982,19 @@ def mentor_ai_combo():
                    + part('01', 'РЕВЬЮ ПРОМПТОВ: ЧЕМ СЛАБЫЕ ОТЛИЧАЮТСЯ ОТ СИЛЬНЫХ') + '<div class="g2">' + a + b + '</div>'
                    + '<div style="height: 28px;"></div>' + part('02', 'ПАТТЕРНЫ СИЛЬНЫХ — В ПРОЕКТ, ЧТОБЫ ИИ РАБОТАЛ ЛУЧШЕ У ВСЕХ') + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + c + d + '</div>', 'mentor-ai')
 
+def mentor_grade():
+    """Раунд 58: блок грейда из Grade (method_example) в цветах Mentor, с новым заголовком."""
+    h = method_example('Наставник видит все 50+ факторов грейда — и знает, куда расти', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ')
+    h = h.replace('МЕТОДИКА НА ПРИМЕРЕ', 'ГРЕЙД ГЛАЗАМИ НАСТАВНИКА')
+    h = h.replace('Реальный профиль из демо UpCore: не просто «Senior», а все факторы, из которых он сложился, — с динамикой за полгода и местом в рейтинге.',
+                  'Реальный профиль из демо UpCore: не просто «Senior», а все факторы, из которых он сложился. Mentor видит, какие из них просели, и строит план роста именно по ним.')
+    h = h.replace('#63D5FF', '#7FDB7A').replace('rgba(99,213,255,', 'rgba(83,192,77,').replace('id="method"', 'id="mentor-grade"')
+    return h
+
 def mentor_main2():
     h1, sub = 'ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Это существенно упрощает работу тимлида и HR.'
     vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', mentor_queue())
-    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), ex_variant(1), growth_variant(1), mentor_ai_combo(),
+    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), mentor_ai_combo(), ex_variant(2), mentor_grade(),
             roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq(MENTOR_FAQ, acc_key='mentor'), saas_variant(2),
             cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore Mentor — основной макет', '\n'.join(body), 6000, name='Mentor-main')
@@ -3013,11 +3022,7 @@ def build(out, mode):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
-    for n in (1, 2, 3):
-        files['Mentor-ex-%d' % n] = m_board('Mentor-ex-%d' % n, ex_variant(n))
-        files['Mentor-gr-%d' % n] = m_board('Mentor-gr-%d' % n, growth_variant(n))
-        # раунд 57: ИИ-наставник собран в mentor_ai_combo() на Mentor-main, доски Mentor-ai-1..3 сняты
-    files['Mentor-grade'] = m_board('Mentor-grade', method_example('Грейд — сложная математика по 50+ факторам', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ'))
+    # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
