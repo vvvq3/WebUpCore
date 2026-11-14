@@ -63,7 +63,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
 .uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
-@media (max-width:720px){.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
+@media (max-width:720px){.uc-nav,.uc-hide-m{display:none!important}.uc-burger{display:inline-flex!important}.uc-hlogo{height:22px!important}.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
@@ -137,21 +137,33 @@ def page(title, body, height, slider=False, name=None):
 CUR_KEY = None  # модуль текущей страницы (задаёт header) — цвет блока контактов внизу
 
 def header(active=None):
+    """Раунд 65: меню на компьютере — вариант 3 «капсула продуктов»; на телефоне — вариант 1 (логотип, «Подключить», бургер)."""
     global CUR_KEY
     CUR_KEY = active
-    items = [('Платформа', None), ('Grade', 'grade'), ('AI', 'ai'), ('Projects', 'projects'), ('Mentor', 'mentor'), ('Блог', 'blog'), ('Контакты', 'contacts')]
-    links = []
-    for name, key in items:
+    def plain(name, key):
         on = (key == active) or (active is None and key is None)
-        st = ('color: #FFFFFF; background: rgba(255,255,255,0.08); border-radius: 12px;' if on else 'color: rgba(255,255,255,0.78);')
-        links.append('<a href="#%s" style="%s text-decoration: none; padding: 10px 14px;">%s</a>' % (key or 'top', st, name))
-    return ('<header style="max-width: 1280px; margin: 0 auto; padding: 24px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between;">\n'
-            '<a href="#top" aria-label="UpCore — на главную" style="display: flex; align-items: center;"><img src="%s" alt="UpCore" style="height: 28px; width: auto; display: block;"></a>\n'
-            '<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 15px;">%s</nav>\n'
-            '<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"><a href="#lang" style="color: rgba(255,255,255,0.78); text-decoration: none; %s font-size: 13px; padding: 10px 8px;">RU / EN</a>'
-            '<span style="display: flex; gap: 10px;"><a href="' + DEMO.replace('%', '%%') + '" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
-            '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a></span></div>\n'
-            '</header>') % (src('logo'), ''.join(links), MONO)
+        st = 'color: #FFFFFF; background: rgba(255,255,255,0.08); border-radius: 12px;' if on else 'color: rgba(255,255,255,0.78);'
+        return '<a href="#' + (key or 'top') + '" style="' + st + ' text-decoration: none; padding: 10px 14px;">' + name + '</a>'
+    chips = ''
+    for name, key in [('Grade', 'grade'), ('AI', 'ai'), ('Projects', 'projects'), ('Mentor', 'mentor')]:
+        c = ACC[key][1]
+        if key == active:
+            chips += '<a href="#' + key + '" aria-current="page" style="display: inline-flex; align-items: center; padding: 8px 11px; border-radius: 10px; background: ' + c + '; color: #0D0C15; font-weight: 700; text-decoration: none;">' + name + '</a>'
+        else:
+            chips += ('<a href="#' + key + '" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; color: #FFFFFF; text-decoration: none;">'
+                      '<span style="width: 8px; height: 8px; border-radius: 50%; background: ' + c + ';"></span>' + name + '</a>')
+    capsule = ('<span style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; margin: 0 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);">'
+               '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.5); padding: 0 6px 0 8px;">UpCore.</span>' + chips + '</span>')
+    nav = plain('Платформа', None) + capsule + plain('Блог', 'blog') + plain('Контакты', 'contacts')
+    burger = ('<a href="#menu" class="uc-burger" aria-label="Меню" style="display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.22);">'
+              '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/></svg></a>')
+    return ('<header style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; justify-content: space-between;">\n'
+            '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;"><img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;"></a>\n'
+            '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
+            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><a href="#lang" class="uc-hide-m" style="color: rgba(255,255,255,0.78); text-decoration: none; ' + MONO + ' font-size: 13px; padding: 10px 6px; white-space: nowrap;">RU / EN</a>'
+            '<a href="' + DEMO + '" class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
+            '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a>' + burger + '</div>\n'
+            '</header>')
 
 CHEVRON = '<svg aria-hidden="true" viewBox="0 0 375 645" style="position: absolute; right: -120px; top: -40px; width: 560px; height: auto; opacity: 0.14; filter: blur(2px);"><path fill="#63D5FF" d="M340.243 410.873C322.404 436.777 298.363 465.078 268.118 495.774L166.429 598.984C149.417 616.251 135.926 628.481 125.958 635.674C116.005 643.826 105.711 645.5 95.078 640.695C84.4595 636.849 69.8902 625.803 51.3702 607.556L9.90889 566.705L249.7 322.254L0.000749597 79.9674L43.9849 35.3256C61.4698 17.5791 75.6986 6.54952 86.6712 2.23669C96.6839 -2.07669 106.793 -0.151217 116.998 8.01309C126.716 15.6972 140.347 28.1827 157.893 45.4695L271.54 157.442C294.446 180.011 314.443 200.659 331.531 219.385C348.146 238.591 359.968 258.274 366.999 278.434C373.542 298.114 374.78 322.343 370.134 347.567C365.05 375.17 358.57 385.448 340.243 410.873Z"></path></svg>'
 
@@ -3239,8 +3251,7 @@ def build(out, mode):
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
     # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
     files['Menu-1'] = mobile_menu(1)  # раунд 64: на телефоне выбран вариант 1 (бургер + меню на весь экран); 2 и 3 сняты
-    for n in (1, 2, 3):
-        files['Menu-D%d' % n] = desktop_menu(n)  # раунд 64: меню на компьютере — 3 варианта
+    files['Menu-D3'] = desktop_menu(3)  # раунд 65: на компьютере выбран вариант 3 «капсула продуктов» (применён в header()); D1, D2 сняты
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
