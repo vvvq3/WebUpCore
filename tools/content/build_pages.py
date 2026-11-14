@@ -2286,6 +2286,56 @@ def blog_page(n):
     return page('UpCore — блог, макет %d' % n, '\n'.join(page_body), 3000, name='Blog-%d' % n)
 
 
+# ---------------------------------------------------------------- раунд 37: блог — основа вариант 3, пагинация на 3 страницы
+BLOG_MORE = [  # остальные посты канала с самого начала (без оффтопа и без постов страницы 1)
+    (3, '21 августа 2026', 162, 'Интервью', 'Давайте знакомиться: зачем мы создали UpCore', 'Когда штат разработки переваливает за 100 человек, интуитивное управление превращается в финансовую дыру. Как мы в Dex перестали понимать отдачу от собственного ФОТ — и что из этого выросло.'),
+    (5, '21 августа 2026', 170, 'Методика', 'Почему сильные разработчики ненавидят тайм-трекеры, но любят UpCore?', 'Никаких скриншотов и отчётов: лучший отчёт — это код. Цифровой тимлид проводит классическое код-ревью, только оценивает весь код за месяц, а не 5–10%.'),
+    (10, '22 августа 2026', 156, 'Деньги', 'Как выглядит оцифрованная неэффективность?', 'Как перейти от «он хороший парень, давайте поднимем ЗП» к фактам «он приносит 600 тысяч убытка». Инфляция грейдов и субъективные performance review.'),
+    (30, '28 августа 2026', 169, 'Методика', 'Под капотом UpCore: что такое архитектурная ценность кода?', 'Почему 50 строк в ядре системы могут быть дороже 1000 строк формочек: цифровой тимлид строит дерево связей проекта и смотрит на код глазами архитектора.'),
+    (32, '31 августа 2026', 172, 'Деньги', 'Акт на 1500 часов: как проверить ИТ-подрядчика и не переплатить?', 'Подрядчик выставляет 160 часов Senior-разработчика, хотя задачу можно было решить вчетверо быстрее. Автоматический аудит показывает, сколько часов объективно стоил код.'),
+    (33, '1 сентября 2026', 174, 'Менторство', 'Будущее UpCore: от оценки к развитию', 'Объективная оценка — лишь фундамент. Следующая задача сложнее: вырастить сильных инженеров внутри компании, когда код растёт по экспоненте, а вайбкодинг прячет костыли.'),
+    (34, '3 сентября 2026', 158, 'Методика', 'Аудит команды за 1 клик: как протестировать UpCore на своих данных?', 'Быстро и безопасно: on-premise в закрытом контуре без интернета или локальный агент. Нужен только read-only доступ к Git или файл репозитория.'),
+    (36, '7 сентября 2026', 144, 'Деньги', 'Считаем ROI: экономика внедрения UpCore на команду из 100 разработчиков', 'Три главные статьи окупаемости: «дыра» от 20% неэффективных, прирост выработки от прозрачности и время тимлидов, которое больше не уходит на ручную оценку.'),
+    (37, '9 сентября 2026', 152, 'ИИ', 'Закон Гудхарта в эпоху ИИ, или почему старые метрики программистов мертвы', 'Строки кода, коммиты и закрытые задачи в Jira с ИИ «хакаются» за пару кликов. Метрики сломаны, а оценивать людей «на глаз» — слишком дорого.'),
+    (38, '11 сентября 2026', 147, 'Менторство', 'Умная приоритизация код-ревью: как UpCore экономит время тимлидов', 'Писать код стало легко, проверять — долго. Система подсвечивает MR, которым нужен человек: ядро, логические ошибки, время сильно больше сложности.'),
+    (39, '15 сентября 2026', 121, 'ИИ', '5+1 суровых цифр о том, как ИИ реально меняет ИТ', 'Статистика мировых исследований без розовых очков: выгорание от ИИ-KPI, рост переписанного кода и ревью как новое узкое место.'),
+    (40, '17 сентября 2026', 167, 'Методика', '«Я разбирался в задаче 3 дня, а написал 2 строчки». Как честно оценить это по коду?', 'Да, такие задачи бывают. Но разработка — марафон: на сотне задач подряд статистика сглаживает любые аномалии, и вдумчивый разработчик не пострадает.'),
+    (44, '20 октября 2026', 114, 'Менторство', 'Эпоха слепого вайбкодинга заканчивается. Время учить команду работать с ИИ', 'Большое обновление UpCore: к математической оценке эффективности добавился модуль обучения и развития — от дефектов кода к персональному плану роста.'),
+]
+
+def tg_banner_v2():
+    gel = '<a href="https://t.me/IvanGel_Dex" style="color: #63D5FF; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(99,213,255,0.5);">Иван Гель</a>'
+    return ('<div style="border-radius: 32px; background: linear-gradient(135deg, rgba(99,213,255,0.16), #12111C 60%); border: 1px solid rgba(99,213,255,0.4); padding: clamp(24px, 3.4vw, 44px); display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; justify-content: space-between;">'
+            '<div style="display: flex; gap: 20px; align-items: center; flex: 1 1 420px; min-width: 0;"><div style="flex: 0 0 auto; width: 72px; height: 72px; border-radius: 22px; background: #63D5FF; display: flex; align-items: center; justify-content: center;">' + tg_icon(36, '#0D0C15') + '</div>'
+            '<div style="min-width: 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">TELEGRAM · @UPCORE_AI</div><div style="font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; line-height: 1.15; margin-top: 4px;">ИИ-тимлид UpCore</div>'
+            '<p style="margin: 8px 0 0; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.78); max-width: 640px;">Канал об эффективности разработки. Ведёт основатель Dex ' + gel + ': как работает цифровой тимлид, как измерять ИИ в разработке и переводить код в деньги. Дневник продукта и разборы реальных кейсов.</p></div></div>'
+            + btn('Подписаться на канал', TG_URL) + '</div>')
+
+def pagination(cur, total=3):
+    def cell(label, active=False, muted=False):
+        st = ('background: #63D5FF; color: #0D0C15; border: 1px solid #63D5FF;' if active else ('border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.3);' if muted else 'border: 1px solid rgba(255,255,255,0.18); color: #FFFFFF;'))
+        return '<a href="#blog-' + label + '" style="display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px; padding: 0 14px; border-radius: 14px; ' + st + ' font-weight: 700; font-size: 16px; text-decoration: none;">' + label + '</a>'
+    cells = cell('←', muted=(cur == 1)) + ''.join(cell(str(i), active=(i == cur)) for i in range(1, total + 1)) + cell('→', muted=(cur == total))
+    return ('<nav aria-label="Страницы блога" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);">'
+            '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.55);">СТРАНИЦА ' + str(cur) + ' ИЗ ' + str(total) + '</span><div style="display: flex; flex-wrap: wrap; gap: 8px;">' + cells + '</div></nav>')
+
+def blog_page2(pg):
+    chips = '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + ''.join('<span style="font-size: 14px; padding: 8px 14px; border-radius: 12px; border: 1px solid ' + ('#63D5FF' if i == 0 else 'rgba(255,255,255,0.14)') + '; background: ' + ('rgba(99,213,255,0.12)' if i == 0 else 'transparent') + '; color: #FFFFFF;">' + e(x) + '</span>' for i, x in enumerate(['Все', 'Методика', 'ИИ', 'Деньги', 'Менторство', 'Интервью'])) + '</div>'
+    right = '<div style="flex: 0 1 auto; position: relative;">' + btn('Подписаться в Telegram', TG_URL) + '</div>'
+    if pg == 1:
+        sub = 'Самые популярные посты канала «ИИ-тимлид UpCore»: как работает цифровой тимлид и что он находит в коде.'
+        posts = post_card(BLOG[0], big=True) + '<div class="g2" style="margin-top: 16px;">' + ''.join(post_card(p) for p in BLOG[1:]) + '</div>'
+    elif pg == 2:
+        sub = 'Все посты канала «ИИ-тимлид UpCore» — с самого начала: знакомство, методика, деньги и менторство.'
+        posts = post_card(BLOG_MORE[0], big=True) + '<div class="g2" style="margin-top: 16px;">' + ''.join(post_card(p) for p in BLOG_MORE[1:7]) + '</div>'
+    else:
+        sub = 'Все посты канала «ИИ-тимлид UpCore» — с самого начала: ИИ в разработке, экономика и обучение команды.'
+        posts = '<div class="g2">' + ''.join(post_card(p) for p in BLOG_MORE[7:]) + '</div>'
+    top = blog_hero('Об эффективности разработки — без воды', sub, right)
+    body = [header('blog'), top, section('<div style="margin-bottom: 20px;">' + chips + '</div>' + posts + pagination(pg), 'posts', pb=56), section(tg_banner_v2(), pb=72),
+            cta('Посмотрите на свою команду глазами цифрового тимлида', 'Подключите репозиторий — первые результаты за 1 день.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore — блог, страница %d' % pg, '\n'.join(body), 3000, name='Blog-%d' % pg)
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2307,8 +2357,8 @@ def build(out, mode):
     for k, nm in (('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
         for n in (1, 2, 3):
             files['%s-%d' % (nm, n)] = module_page(k, n)
-    for n in (1, 2, 3):
-        files['Blog-%d' % n] = blog_page(n)
+    for n in (1, 2, 3):  # раунд 37: страницы 1–3 блога (основа — вариант 3 раунда 36)
+        files['Blog-%d' % n] = blog_page2(n)
     ext = '.dc.html' if mode == 'dc' else '.html'
     for name, txt in files.items():
         with open(os.path.join(out, name + ext), 'w', encoding='utf-8') as f:
