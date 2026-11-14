@@ -2865,7 +2865,6 @@ def mentor_queue():
                   ('7', 'критических логических ошибок и уязвимостей', RED_T),
                   ('7 → 2,4', 'резкое падение качества кода', RED_T),
                   ('52%', 'выявленных дефектов попадают в main', RED_T),
-                  ('2', 'класса архитектурного ядра затронуто', AMBER),
                   ('3', 'нетипичных технологии или паттерна', AMBER)])]
     def row(n, t, c):
         return ('<div style="display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px; line-height: 1.4;">'
