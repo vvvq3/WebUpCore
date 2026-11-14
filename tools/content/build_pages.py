@@ -2545,6 +2545,47 @@ def ai_block_board(i):
            '<span style="font-size: 17px; font-weight: 700;">' + e(t) + '</span><span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.7);">· в макетах ' + where + '</span></div></div>')
     return page('UpCore AI — блок ' + k, tag + f(), 1000, name='AIblk-' + k)
 
+# ---------------------------------------------------------------- раунд 40: AI — одна страница, порядок для C-level, без отмеченных владельцем частей
+def ai_gap_block2():  # блок A без строки-сноски про Senior/Middle/Junior
+    cols = [('РАНЬШЕ', '30%', RED_T, 'Проблемой был разработчик, который работает на 30% от нормы.'),
+            ('СЕЙЧАС', '100%', AMBER, 'Проблема — работать «как раньше». С ИИ 100% — это уже отставание.'),
+            ('НОРМА С ИИ', '300%', GREEN, 'С ИИ эффективность может и должна быть 300% — наша цель 300–400%.')]
+    c3 = ''.join(box(lbl(a, c) + '<div style="font-size: clamp(48px, 5vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: ' + c + ';">' + b + '</div>' + para(d, 15)) for a, b, c, d in cols)
+    return section(sec_head('ПРОБЛЕМА', 'С ИИ эффективность изменилась до неузнаваемости', 'Один и тот же инструмент даёт сеньору +300%, а джуну — минус. Разрыв между людьми стал огромным, и его важно измерять и контролировать.', 'ai') + '<div class="g3">' + c3 + '</div>', 'gap')
+
+def ai_cost_block():  # из блока C остались карточки «токены» и «результирующий код»
+    items = [('ФАКТОР · ТОКЕНЫ', 'Нормы на час и на задачу', '<div class="g2" style="gap: 8px;">' + tile('<span style="color: ' + GREEN + ';">−35%</span>', 'потраченных токенов') + tile('<span style="color: ' + GREEN + ';">−20%</span>', 'переделок') + '</div>',
+              'UpCore вычислил среднюю норму токенов на час работы и на задачу: видно, где ИИ окупается, а где сжигает бюджет.'),
+             ('ФАКТОР · РЕЗУЛЬТИРУЮЩИЙ КОД', 'Сколько ИИ-кода дошло до релиза', '<div style="display: flex; height: 18px; border-radius: 9px; overflow: hidden; gap: 3px;"><div style="flex: 50 1 0; background: #9B8CFF;"></div><div style="flex: 50 1 0; background: rgba(232,101,101,0.5);"></div></div>',
+              'ИИ пишет быстро, но если половину назавтра переписывают — эффекта нет. Считаем только то, что осталось в продукте.')]
+    cards = ''.join('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 16px;">'
+                    '<div style="' + MONO + ' font-size: 12px; color: #B9AEFF;">' + e(a) + '</div><div style="font-size: 22px; font-weight: 800; line-height: 1.2;">' + e(b) + '</div>' + viz +
+                    '<p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 15px; line-height: 1.55;">' + e(t) + '</p></article>' for a, b, viz, t in items)
+    return section(sec_head('ЗАТРАТЫ НА ИИ', 'Платите за результат, а не за токены', 'Нормы токенов и результирующий код показывают, во что на самом деле превращается бюджет на ИИ.', 'ai') + '<div class="g2">' + cards + '</div>', 'cost')
+
+def ai_detect_block2():  # блок G без полос «100 строк / месяц / 3 месяца»
+    a = box(lbl('АВТООПРЕДЕЛЕНИЕ ИИ-КОДА') + '<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;"><span style="font-size: clamp(56px, 6vw, 88px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #B9AEFF;">92%+</span><span style="font-size: 17px; color: rgba(255,255,255,0.8);">точность определения ИИ-кода — без промпт-коллектора</span></div>' +
+            para('Наши формулы и модели для ручного и ИИ-кода различаются. Поэтому важно знать, как именно работает специалист, — чтобы точно вычислять его эффективность и грейд.'), strong=True, flex='1.3 1 460px')
+    b = box(lbl('КОГДА ЕСТЬ ТОЛЬКО КОД') + ttl('Аудит проекта и подрядчика') + para('Автоопределение работает и тогда, когда проект целиком делает подрядчик и у вас есть только репозиторий: видно, сколько кода написано с ИИ и какова реальная эффективность и бюджет.', 15) +
+            '<div style="display: flex; flex-direction: column; gap: 8px;">' + xlink('projects', 'эффективность и бюджет проекта') + xlink('grade', 'уровень людей с учётом ИИ') + '</div>', flex='1 1 360px')
+    return section(sec_head('АВТОДЕТЕКТ', 'Отличаем ИИ-код от ручного — по самому коду', 'На 100 строках это сложно. Но мы работаем с объёмом кода человека за месяц, а для грейда — за 3 месяца.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + a + b + '</div>', 'detect')
+
+def ai_page_final():
+    h1 = 'Реальная эффективность внедрения ИИ в вашу разработку'
+    sub = 'Авто-детект ИИ-кода и промпт-коллектор показывают, сколько часов ИИ на самом деле экономит каждому разработчику, где он плодит переделки и окупается ли каждый рубль на лицензии и токены.'
+    blocks = [ai_gap_block2(),          # 1. ставка для бизнеса: норма с ИИ — 300%
+              ai_measure_block(),       # 2. как мы это знаем + контроль накруток
+              ai_result_block(),        # 3. что получает компания: рост в часах ценности и цель
+              ai_growth_block(False),   # 4. как разгоняем: +32% скилы, +24% план
+              ai_cost_block(),          # 5. контроль затрат: токены −35%, переделки −20%
+              ai_detect_block2(),       # 6. работает только по коду: автодетект 92%+, аудит подрядчика
+              ai_prompt_block()]        # 7. глубже: промпт-ревью (опционально)
+    body = [header('ai'), mod_hero('ai', h1, sub, panel('ai', 'ai / разрыв эффективности', 'с ИИ', ai_range_rows()), AI_STATS2)] + blocks + [
+        roles('ДЛЯ КОГО', 'Одни данные об ИИ для CTO, финансов, тимлида и разработчика', AI_ROLES, 'ai'), faq(AI_FAQ2, acc_key='ai'), saas_variant(2),
+        cta('Посчитайте реальный эффект ИИ в своей команде', 'Подключите репозиторий — сравним время «с ИИ» и «вручную» по истории вашего кода.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore AI — страница', '\n'.join(body), 8000, name='AI-main')
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2568,10 +2609,7 @@ def build(out, mode):
             files['%s-%d' % (nm, n)] = module_page(k, n)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
-    files['AIbase'] = ai_base()  # раунд 39: разбор макетов AI на общие и отличающиеся блоки
-    files['AImap'] = ai_map()
-    for i in range(len(AI_BLOCKS)):
-        files['AIblk-' + AI_BLOCKS[i][0]] = ai_block_board(i)
+    files['AI-main'] = ai_page_final()  # раунд 40: одна страница AI вместо разбора на блоки (AIbase/AImap/AIblk сняты)
     for n in (1, 2, 3):  # раунд 37: страницы 1–3 блога (основа — вариант 3 раунда 36)
         files['Blog-%d' % n] = blog_page2(n)
     ext = '.dc.html' if mode == 'dc' else '.html'
