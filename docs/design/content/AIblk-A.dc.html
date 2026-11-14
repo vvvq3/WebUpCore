@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>UpCore AI — блок A</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Onest:wght@400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0C15}
+a{color:#63D5FF}a:hover{color:#A8E8FF}
+@keyframes ucBlink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ucIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+@keyframes ucProg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ucScanY{0%{top:0}100%{top:100%}}
+.uc-blink{animation:ucBlink 1.4s ease-in-out infinite}
+.uc-in{animation:ucIn .6s ease-out both}
+.uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
+.uc-scan{animation:ucScanY 4.5s linear infinite}
+.uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.uc-ml{display:none}
+.uc-rl{}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.g4m2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.uc-rl{display:none}.uc-sc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.uc-sc>span:first-child{grid-column:1/-1}.uc-sc>span:first-child:empty{display:none}.uc-ml{display:block!important;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:2px;white-space:normal}th .uc-ml{display:inline!important;font-family:inherit;font-size:inherit;color:inherit}.uc-res thead{display:none}.uc-res tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-res th[scope=row]{grid-column:1/-1}.uc-res td,.uc-res th{border-top:0!important;padding:4px 8px 4px 0!important}.uc-res tr{border-top:1px solid rgba(255,255,255,0.1);padding:12px 0}.uc-row{grid-template-columns:minmax(0,1fr);gap:16px}.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.g4m2{grid-template-columns:repeat(2,minmax(0,1fr))}.uc-cmp thead{display:none}.uc-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.uc-cmp th[scope=row]{grid-column:1/-1;padding:14px 0 6px!important}.uc-cmp td{padding:6px 10px 14px!important;border-top:0!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="background: #0D0C15; color: #FFFFFF; font-family: 'Bricolage Grotesque', 'Onest', system-ui, sans-serif; min-height: 100vh; overflow: hidden;">
+<div style="max-width: 1280px; margin: 0 auto; padding: 32px 32px 32px;"><div style="display: inline-flex; gap: 12px; align-items: center; padding: 10px 16px; border-radius: 14px; background: #F08A8A1F; border: 2px solid #F08A8A;"><b style="width: 34px; height: 34px; border-radius: 10px; background: #F08A8A; color: #0D0C15; display: flex; align-items: center; justify-content: center; font-size: 18px;">A</b><span style="font-size: 17px; font-weight: 700;">Проблема: 30% → 100% → 300%</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: rgba(255,255,255,0.7);">· в макетах 1, 2</span></div></div><section id="gap" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #B9AEFF; margin-bottom: 14px; letter-spacing: 0.04em;">ПРОБЛЕМА</div><div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px;"><h2 style="margin: 0; font-size: clamp(32px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800; max-width: 760px;">С ИИ эффективность изменилась до неузнаваемости</h2><p style="margin: 0; max-width: 420px; color: rgba(255,255,255,0.74); font-size: 17px; line-height: 1.55;">Один и тот же инструмент даёт сеньору +300%, а джуну — минус. Разрыв между людьми стал огромным, и его важно измерять и контролировать.</p></div><div class="g3"><div style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #F08A8A; letter-spacing: 0.04em;">РАНЬШЕ</div><div style="font-size: clamp(48px, 5vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #F08A8A;">30%</div><p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8);">Проблемой был разработчик, который работает на 30% от нормы.</p></div><div style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #F2C14E; letter-spacing: 0.04em;">СЕЙЧАС</div><div style="font-size: clamp(48px, 5vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #F2C14E;">100%</div><p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8);">Проблема — работать «как раньше». С ИИ 100% — это уже отставание.</p></div><div style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #7FDB7A; letter-spacing: 0.04em;">НОРМА С ИИ</div><div style="font-size: clamp(48px, 5vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #7FDB7A;">300%</div><p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.8);">С ИИ эффективность может и должна быть 300% — наша цель 300–400%.</p></div></div><div style="margin-top: 16px; border-radius: 20px; border: 1px solid rgba(155,140,255,0.35); background: rgba(155,140,255,0.08); padding: 18px 24px; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.88);">Senior с ИИ даёт <b style="color: #7FDB7A;">+100…300%</b>, Middle — <b style="color: #F2C14E;">−20…+50%</b>, Junior — <b style="color: #F08A8A;">−50…0%</b>. Без измерений этот разрыв не виден: в Jira у всех задачи закрыты.</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -2482,6 +2482,69 @@ def ai_page2(n):
     return page('UpCore AI — макет %d' % n, '\n'.join(body), 7000, name='AI-%d' % n)
 
 
+# ---------------------------------------------------------------- раунд 39: AI — общие блоки отдельно, отличающиеся блоки и схема рядом
+AI_BLOCKS = [  # код, название, цвет, функция, в каких макетах (номер позиции в макете)
+    ('A', 'Проблема: 30% → 100% → 300%', '#F08A8A', lambda: ai_gap_block(), {1: 1, 2: 1}),
+    ('B', 'Измерение: вручную vs с ИИ + накрутки', '#63D5FF', lambda: ai_measure_block(), {1: 2, 3: 1}),
+    ('C', 'Подробно о факторах (4 карточки)', '#F2C14E', lambda: ai_deep2(), {1: 3}),
+    ('D', 'Пример из демо: ИИ-эффективность', '#9B8CFF', lambda: ai_example(), {1: 4}),
+    ('E', 'Промпт-ревью: слабый vs сильный', '#7FDB7A', lambda: ai_prompt_block(), {2: 2, 3: 4}),
+    ('F', 'Рост +32% / +24% и токены −35%', '#F2A65E', lambda: ai_growth_block(), {2: 3, 3: 5}),
+    ('G', 'Автоопределение ИИ-кода 92%+', '#B9AEFF', lambda: ai_detect_block(), {2: 4, 3: 2}),
+]
+AI_COMMON = ['Первый экран', 'Итог: 140 → 200 ч, цель 300–400%', 'Для кого', 'Вопросы', 'SaaS и безопасность', 'CTA «Подключить UpCore»']
+AI_ORDER = {1: ['Первый экран', 'A', 'B', 'C', 'D', 'Итог'], 2: ['Первый экран', 'A', 'E', 'F', 'G', 'Итог'], 3: ['Первый экран', 'B', 'G', 'Итог', 'E', 'F']}
+
+def ai_base():
+    slot = ('<section style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px;"><div style="border-radius: 32px; border: 2px dashed rgba(155,140,255,0.6); background: rgba(155,140,255,0.06); padding: 48px 32px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center;">'
+            '<div style="' + MONO + ' font-size: 13px; color: #B9AEFF;">МЕСТО ДЛЯ БЛОКОВ, КОТОРЫЕ ОТЛИЧАЮТСЯ</div>'
+            '<div style="font-size: clamp(26px, 2.6vw, 36px); font-weight: 800;">Здесь стоят блоки A–G — в каждом макете свой набор и порядок</div>'
+            '<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; border: 1px solid ' + c + '; color: ' + c + ';"><b>' + k + '</b> · ' + e(t) + '</span>' for k, t, c, f, m in AI_BLOCKS) + '</div>'
+            '<div style="font-size: 15px; color: rgba(255,255,255,0.7);">Схема отличий и сами блоки — справа на холсте</div></div></section>')
+    h1 = 'Реальная эффективность внедрения ИИ в вашу разработку'
+    sub = 'Авто-детект ИИ-кода и промпт-коллектор показывают, сколько часов ИИ на самом деле экономит каждому разработчику, где он плодит переделки и окупается ли каждый рубль на лицензии и токены.'
+    body = [header('ai'), mod_hero('ai', h1, sub, panel('ai', 'ai / разрыв эффективности', 'с ИИ', ai_range_rows()), AI_STATS2), slot, ai_result_block(),
+            roles('ДЛЯ КОГО', 'Одни данные об ИИ для CTO, финансов, тимлида и разработчика', AI_ROLES, 'ai'), faq(AI_FAQ2, acc_key='ai'), saas_variant(2),
+            cta('Посчитайте реальный эффект ИИ в своей команде', 'Подключите репозиторий — сравним время «с ИИ» и «вручную» по истории вашего кода.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore AI — общие блоки', '\n'.join(body), 6000, name='AIbase')
+
+def ai_map():
+    col = {k: c for k, t, c, f, m in AI_BLOCKS}
+    name = {k: t for k, t, c, f, m in AI_BLOCKS}
+    def chip(x):
+        if x in col:
+            return ('<div style="display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 14px; background: ' + col[x] + '1F; border: 2px solid ' + col[x] + ';">'
+                    '<b style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; background: ' + col[x] + '; color: #0D0C15; display: flex; align-items: center; justify-content: center; font-size: 18px;">' + x + '</b><span style="font-size: 16px; font-weight: 600;">' + e(name[x]) + '</span></div>')
+        return ('<div style="display: flex; gap: 12px; align-items: center; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.25); color: rgba(255,255,255,0.6);">'
+                '<span style="flex: 0 0 auto; width: 34px; text-align: center; ' + MONO + ' font-size: 12px;">общ.</span><span style="font-size: 15px;">' + e(x) + '</span></div>')
+    descr = {1: 'Основа — вариант 3: проблема, измерение, факторы и пример из демо', 2: 'Акцент на промптах и росте эффективности', 3: 'Акцент на измерении, контроле и автодетекте'}
+    cols = ''.join('<div style="min-width: 0; border-radius: 24px; background: #12111C; border: 1px solid rgba(255,255,255,0.1); padding: 22px; display: flex; flex-direction: column; gap: 10px;">'
+                   '<div style="font-size: 26px; font-weight: 800;">Макет ' + str(n) + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.66); margin-bottom: 6px;">' + e(descr[n]) + '</div>'
+                   + ''.join(chip(x) for x in AI_ORDER[n]) + ''.join(chip(x) for x in ['Для кого', 'Вопросы', 'SaaS и безопасность', 'CTA']) + '</div>' for n in (1, 2, 3))
+    th = ''.join('<th style="padding: 12px; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 400; text-align: center;">МАКЕТ ' + str(n) + '</th>' for n in (1, 2, 3))
+    rows = ''
+    for k, t, c, f, m in AI_BLOCKS:
+        cells = ''.join('<td style="padding: 12px; text-align: center; border-top: 1px solid rgba(255,255,255,0.08);">' + ('<span style="display: inline-flex; width: 36px; height: 36px; border-radius: 10px; background: ' + c + '; color: #0D0C15; font-weight: 800; align-items: center; justify-content: center;">' + str(m[n]) + '</span>' if n in m else '<span style="color: rgba(255,255,255,0.2);">—</span>') + '</td>' for n in (1, 2, 3))
+        rows += '<tr><th scope="row" style="text-align: left; padding: 12px; border-top: 1px solid rgba(255,255,255,0.08); font-weight: 600; font-size: 16px;"><span style="color: ' + c + '; font-weight: 800; margin-right: 10px;">' + k + '</span>' + e(t) + '</th>' + cells + '</tr>'
+    table = ('<div style="border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 22px; overflow-x: auto;"><div style="font-size: 22px; font-weight: 800; margin-bottom: 4px;">Какой блок в каком макете</div>'
+             '<div style="font-size: 14px; color: rgba(255,255,255,0.66); margin-bottom: 12px;">Цифра — место блока в макете после первого экрана. Прочерк — блока в макете нет.</div>'
+             '<table style="width: 100%; border-collapse: collapse;"><thead><tr><th></th>' + th + '</tr></thead><tbody>' + rows + '</tbody></table></div>')
+    common = ('<div style="border-radius: 24px; border: 1px dashed rgba(255,255,255,0.3); padding: 22px;"><div style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">Одинаково во всех макетах</div>'
+              '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8);">' + e(x) + '</span>' for x in AI_COMMON) + '</div>'
+              '<div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 10px;">Эти блоки собраны на холсте слева — «AI: общие блоки».</div></div>')
+    body = ('<div style="max-width: 1280px; margin: 0 auto; padding: 48px 32px 64px; display: flex; flex-direction: column; gap: 20px;">'
+            '<div style="' + MONO + ' font-size: 13px; color: #B9AEFF;">UPCORE AI · СРАВНЕНИЕ МАКЕТОВ</div><h1 style="margin: 0; font-size: clamp(34px, 3.6vw, 52px); line-height: 1.05; letter-spacing: -0.03em;">Чем отличаются 3 макета</h1>'
+            '<div class="g3">' + cols + '</div>' + table + common + '</div>')
+    return page('UpCore AI — схема отличий', body, 2000, name='AImap')
+
+def ai_block_board(i):
+    k, t, c, f, m = AI_BLOCKS[i]
+    where = ', '.join(str(n) for n in sorted(m))
+    tag = ('<div style="max-width: 1280px; margin: 0 auto; padding: 32px 32px 32px;"><div style="display: inline-flex; gap: 12px; align-items: center; padding: 10px 16px; border-radius: 14px; background: ' + c + '1F; border: 2px solid ' + c + ';">'
+           '<b style="width: 34px; height: 34px; border-radius: 10px; background: ' + c + '; color: #0D0C15; display: flex; align-items: center; justify-content: center; font-size: 18px;">' + k + '</b>'
+           '<span style="font-size: 17px; font-weight: 700;">' + e(t) + '</span><span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.7);">· в макетах ' + where + '</span></div></div>')
+    return page('UpCore AI — блок ' + k, tag + f(), 1000, name='AIblk-' + k)
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2505,6 +2568,10 @@ def build(out, mode):
             files['%s-%d' % (nm, n)] = module_page(k, n)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
+    files['AIbase'] = ai_base()  # раунд 39: разбор макетов AI на общие и отличающиеся блоки
+    files['AImap'] = ai_map()
+    for i in range(len(AI_BLOCKS)):
+        files['AIblk-' + AI_BLOCKS[i][0]] = ai_block_board(i)
     for n in (1, 2, 3):  # раунд 37: страницы 1–3 блога (основа — вариант 3 раунда 36)
         files['Blog-%d' % n] = blog_page2(n)
     ext = '.dc.html' if mode == 'dc' else '.html'
