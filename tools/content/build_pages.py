@@ -1100,15 +1100,15 @@ def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex
     contact = lambda cap, t, h: ('<a href="' + h + '" style="display: inline-flex; flex-direction: column; min-width: 0; color: #0D0C15; text-decoration: none;">'
                                  '<span style="' + MONO + ' font-size: 12px; color: rgba(13,12,21,0.6);">' + cap + '</span><b style="font-size: 18px; white-space: nowrap;">' + e(t) + '</b></a>')
     contacts = ('<div style="display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(13,12,21,0.18);">'
-                + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + '</div>')
+                + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + contact('ПОЧТА', secondary[0], secondary[1]) + '</div>')
     inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: %s; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
-             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn(secondary[0], secondary[1], False, True), contacts)
+             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
     return section(inner, 'contacts', pb=72)
 
 def footer():
     return ('<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7);">'
-            '<img src="%s" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (985) 848-35-55 · office@dex-it.ru · @upcore_ai</span></div></footer>') % src('logo')
+            '<img src="%s" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (930) 066-46-20 · office@dex-it.ru · @upcore_ai</span></div></footer>') % src('logo')
 
 PRODUCT_TEXTS = {  # раунд 20: три варианта абзаца и 3 пунктов в карточках продуктов
  1: ('РЕЗУЛЬТАТ ДЛЯ БИЗНЕСА', {
