@@ -2963,10 +2963,29 @@ def mentor_ai_variant(n):
     return section(sec_head('ИИ-НАСТАВНИК', 'От антипаттернов — к скилам для всей команды', 'Mentor анализирует код и промпты, находит, где ИИ сжигает время, и сам насыщает проект спецификациями и скилами.', 'mentor')
                    + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + a + '<div style="flex: 0 0 auto; align-self: center; font-size: 32px; color: ' + MG + ';">→</div>' + b + c + '</div>', 'mentor-ai')
 
+def mentor_ai_combo():
+    """Раунд 57: основа — вариант 2 («как было» / «что советует»), плюс шаги из варианта 1 и «автоматически добавил в проект» из варианта 3."""
+    def part(num, t):
+        return ('<div style="display: flex; align-items: center; gap: 12px; margin: 8px 0 14px;"><span style="' + MONO + ' font-size: 13px; color: ' + MG + ';">' + num + '</span>'
+                '<span style="' + MONO + ' font-size: 13px; letter-spacing: 0.04em; color: rgba(255,255,255,0.8);">' + e(t) + '</span><span style="flex: 1 1 auto; height: 1px; background: rgba(83,192,77,0.25);"></span></div>')
+    bad = [('11:00', 'Один промпт: задача скопирована из Jira'), ('14:00', 'После обеда: «всё не так, переделай»'), ('16:00', 'ИИ упёрся в дневной лимит — человек ушёл домой')]
+    good = ['Насыщает задачу контекстом проекта', 'Сначала строит план решения', 'Запускает несколько агентов параллельно', 'Следит за токенами и лимитами']
+    a = box(lbl('КАК БЫЛО · АНТИПАТТЕРН', RED_T) + ttl('Один промпт и дневной лимит') + ''.join('<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="' + MONO + ' font-size: 13px; color: ' + RED_T + ';">' + x + '</span><span>' + e(y) + '</span></div>' for x, y in bad), key='mentor')
+    b = box(lbl('ЧТО СОВЕТУЕТ MENTOR · ПАТТЕРН СИЛЬНЫХ', MG) + ttl('Контекст, план, параллельные агенты') + ''.join('<div style="display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="color: ' + GREEN + '; font-weight: 800;">✓</span><span>' + e(x) + '</span></div>' for x in good), key='mentor', strong=True)
+    added = [('Спецификации проекта', 'контекст собирается один раз и подключается к каждой задаче'), ('Скилы под типовые задачи команды', 'приёмы сильных разработчиков доступны каждому'),
+             ('Шаблон «сначала план, потом код»', 'план становится обязательным шагом, а не советом'), ('Рекомендации по промптам каждому', 'как ставить задачу ИИ и где теряется время')]
+    c = box(lbl('И САМ ДОБАВЛЯЕТ В ПРОЕКТ', MG) + '<div style="display: flex; flex-direction: column; gap: 8px;">' + ''.join(
+            '<div style="padding: 12px 16px; border-radius: 14px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.25);"><div style="font-size: 16px; font-weight: 700;">' + e(x) + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.45; margin-top: 2px;">' + e(y) + '</div></div>' for x, y in added) + '</div>', key='mentor', strong=True, flex='1.4 1 440px')
+    d = box(lbl('ЭФФЕКТ · ДАННЫЕ DEX', MG) + '<div style="display: flex; flex-direction: column; gap: 10px;">' + tile('<span style="color: ' + GREEN + ';">+32%</span>', 'в среднем — когда разработчик начинает использовать скилы')
+            + tile('<span style="color: ' + GREEN + ';">+24%</span>', 'ещё в среднем — когда решает задачу с предварительным планом') + '</div>' + '<div>' + xlink('ai', 'эффективность ИИ в часах и деньгах') + '</div>', key='mentor', flex='1 1 320px')
+    return section(sec_head('ИИ-НАСТАВНИК', 'Учим команду работать с ИИ, а не просто измеряем', 'Промпты — новый язык программирования. Mentor ревьюит их так же, как код: видит, какие задачи с ИИ дали результат, а какие — день багов и переделок.', 'mentor')
+                   + part('01', 'РЕВЬЮ ПРОМПТОВ: ЧЕМ СЛАБЫЕ ОТЛИЧАЮТСЯ ОТ СИЛЬНЫХ') + '<div class="g2">' + a + b + '</div>'
+                   + '<div style="height: 28px;"></div>' + part('02', 'ПАТТЕРНЫ СИЛЬНЫХ — В ПРОЕКТ, ЧТОБЫ ИИ РАБОТАЛ ЛУЧШЕ У ВСЕХ') + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + c + d + '</div>', 'mentor-ai')
+
 def mentor_main2():
     h1, sub = 'ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Это существенно упрощает работу тимлида и HR.'
     vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', mentor_queue())
-    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), ex_variant(1), growth_variant(1), mentor_ai_variant(1),
+    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), ex_variant(1), growth_variant(1), mentor_ai_combo(),
             roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq(MENTOR_FAQ, acc_key='mentor'), saas_variant(2),
             cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore Mentor — основной макет', '\n'.join(body), 6000, name='Mentor-main')
@@ -2997,7 +3016,7 @@ def build(out, mode):
     for n in (1, 2, 3):
         files['Mentor-ex-%d' % n] = m_board('Mentor-ex-%d' % n, ex_variant(n))
         files['Mentor-gr-%d' % n] = m_board('Mentor-gr-%d' % n, growth_variant(n))
-        files['Mentor-ai-%d' % n] = m_board('Mentor-ai-%d' % n, mentor_ai_variant(n))
+        # раунд 57: ИИ-наставник собран в mentor_ai_combo() на Mentor-main, доски Mentor-ai-1..3 сняты
     files['Mentor-grade'] = m_board('Mentor-grade', method_example('Грейд — сложная математика по 50+ факторам', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ'))
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
