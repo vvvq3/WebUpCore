@@ -62,6 +62,8 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
+.uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
+@media (max-width:720px){.uc-btns{grid-auto-flow:row}}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
@@ -158,7 +160,7 @@ def btn(text, href, primary=True, dark=False):
         st = 'background: #0D0C15; color: #FFFFFF;' if primary else 'border: 1.5px solid #0D0C15; color: #0D0C15;'
     else:
         st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF;'
-    return ('<a href="%s" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, st, e(text)))
+    return ('<a href="%s" style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, st, e(text)))
 
 REG = 'https://demo.up-core.ru/'
 MAIL = 'mailto:office@dex-it.ru'
@@ -248,7 +250,7 @@ def hero(badge, h1, sub, ctas, stat_items, visual, note=None, acc_key=None, h1_s
             '<div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid %s; %s font-size: 13px; color: %s;"><span class="uc-blink" style="width: 8px; height: 8px; border-radius: 50%%; background: %s; display: inline-block;"></span><span>%s</span></div>\n'
             '<h1 style="margin: 0; font-size: %s; line-height: 1.03; letter-spacing: -0.03em; font-weight: 800;">%s</h1>\n'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">%s</p>\n'
-            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">%s</div>\n%s\n</div>\n%s\n</section>') % (
+            '<div class="uc-btns">%s</div>\n%s\n</div>\n%s\n</section>') % (
         CHEVRON, line + '59', MONO, txt, dot, e(badge), h1_size, e(h1), e(sub), ''.join(ctas), stats(stat_items, note), visual)
 
 def sec_head(label, h2, lead=None, acc_key=None):
@@ -1105,7 +1107,7 @@ def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex
                 + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + contact('ПОЧТА', secondary[0], secondary[1]) + '</div>')
     inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: %s; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
-             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn('Провести демо', DEMO, False, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
+             '<div style="min-width: 0;"><div class="uc-btns">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn('Провести демо', DEMO, False, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
     return section(inner, 'contacts', pb=72)
 
 def footer():
@@ -1616,7 +1618,7 @@ def grade_hero(h1, sub, visual, kicker=None, st=None):
             + name + kick +
             '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
-            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + ctas + '</div>' + stats(st or GRADE_STATS) + '</div>' + visual + '</section>')
+            '<div class="uc-btns">' + ctas + '</div>' + stats(st or GRADE_STATS) + '</div>' + visual + '</section>')
 
 GRADE_FAQ = [
     ('Это слежка за разработчиками?', 'Нет. Мы не считаем время в IDE, клики, скриншоты и активность в мессенджерах. Оценивается только результат — код, который вошёл в продукт. Это обычное код-ревью, только его делает цифровой тимлид.'),
@@ -1965,7 +1967,7 @@ def mod_hero(key, h1, sub, visual, st):
             + name +
             '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
-            '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + btn('Подключить UpCore', REG) + sec + '</div>' + stats(st) + '</div>' + visual + '</section>')
+            '<div class="uc-btns">' + btn('Подключить UpCore', REG) + sec + '</div>' + stats(st) + '</div>' + visual + '</section>')
 
 def panel(key, path, right, body, flex='1.15 1 480px'):
     line, txt = ACC[key]
