@@ -60,6 +60,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-prog{transform-origin:left;animation:ucProg 4.5s linear both}
 .uc-scan{animation:ucScanY 4.5s linear infinite}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -2854,12 +2855,19 @@ def mentor_blk(kind):
 Q32 = '3,2 → <span style="color: ' + GREEN + ';">8,0</span>'
 
 def mentor_queue():
-    items = [('затронуто архитектурное ядро', RED_T), ('найдена логическая ошибка или уязвимость', RED_T), ('23% промптов в духе «всё переделай»', RED_T),
-             ('45% результирующего кода — остальное переписано', AMBER), ('на 72% больше токенов на 1 час, чем в среднем по компании', AMBER),
-             ('время сильно больше объективной сложности', AMBER), ('нетипичная технология или паттерн', AMBER)]
-    rows = ''.join('<div style="display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + ';"></span><span style="min-width: 0;">' + e(t) + '</span></div>' for t, c in items)
-    return ('<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>' + rows +
-            '<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px;">' + tile('<span style="color: ' + GREEN + ';">94%</span>', 'MR проверено авто-ревью · 457 из 488') + tile('15 мин', 'у лида на критичное вместо часов') + '</div>')
+    items = [('7', 'критических логических ошибок и уязвимостей', RED_T),
+             ('17%', 'эффективности — время сильно выше объективной сложности', RED_T),
+             ('23%', 'промптов в духе «всё переделай»', RED_T),
+             ('45%', 'результирующего кода — остальное переписано', AMBER),
+             ('2', 'класса архитектурного ядра затронуто', AMBER),
+             ('3', 'нетипичных технологии или паттерна', AMBER),
+             ('+129%', 'перерасход токенов на 1 час к среднему в компании', AMBER),
+             ('7 → 2,4', 'резкое падение качества кода', RED_T),
+             ('52%', 'выявленных дефектов попадают в main', RED_T)]
+    rows = ''.join('<div style="display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px; line-height: 1.4;">'
+                   '<span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + '; align-self: center;"></span>'
+                   '<span style="min-width: 0;"><b style="font-size: 17px; color: ' + c + '; white-space: nowrap;">' + e(n) + '</b> ' + e(t) + '</span></div>' for n, t, c in items)
+    return '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>' + rows
 
 def q_summary():
     return ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">' + tile(Q32, 'качество кода до и после ревью') + tile('41 из 47', 'MR разобрано ИИ-ревью')
