@@ -3120,6 +3120,104 @@ def mobile_menu(n):
                     ['удобно одной рукой', 'максимум места под текст', 'как в мобильных приложениях'])
 
 
+# ---------- раунд 64: меню на компьютере — 3 варианта, продукты в своих цветах ----------
+DM_NUM = {'grade': ('96%', 'точность от экспертной оценки'), 'ai': ('300%', 'норма эффективности с ИИ'),
+          'projects': ('−43%', 'к оплате по акту в примере аудита'), 'mentor': ('80%', 'экономия времени тимлида')}
+
+def dm_right():
+    return ('<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.7); padding: 0 6px; white-space: nowrap;">RU / EN</span>'
+            '<span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); font-weight: 700; font-size: 15px; white-space: nowrap;">Провести демо</span>'
+            '<span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 15px; white-space: nowrap;">Подключить</span></div>')
+
+def dm_head(nav):
+    return ('<div style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">'
+            + mm_logo(28) + '<nav style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>' + dm_right() + '</div>')
+
+def dm_plain(t, on=False):
+    return '<span style="padding: 10px 14px; border-radius: 12px; ' + ('background: rgba(255,255,255,0.08); color: #FFFFFF;' if on else 'color: rgba(255,255,255,0.78);') + '">' + t + '</span>'
+
+def dm_ctx(key=None):  # кусок первого экрана под шапкой — для контекста
+    h = {None: ('цифровой тимлид · онлайн', 'Цифровой тимлид для автоматической оценки эффективности'), 'grade': ('01 · грейд и рейтинг', 'Объективная оценка разработчика'),
+         'ai': ('02 · эффективность ИИ', 'Реальная эффективность внедрения ИИ'), 'projects': ('03 · бюджет проекта', 'Бюджет проекта и контроль подрядчиков'),
+         'mentor': ('04 · ИИ-наставник', 'ИИ-наставник для каждого разработчика')}[key]
+    c = ACC[key][1]
+    return ('<div style="max-width: 1280px; margin: 0 auto; padding: 18px 32px 0; opacity: 0.55;"><div style="' + MONO + ' font-size: 13px; color: ' + c + ';">' + e(h[0]) + '</div>'
+            '<div style="font-size: 44px; font-weight: 800; letter-spacing: -0.03em; margin-top: 10px; white-space: nowrap;">' + e(h[1]) + '</div></div>')
+
+def dm_frame(cap, inner, h, note):
+    return ('<div style="display: flex; flex-direction: column; gap: 10px;"><div style="display: flex; justify-content: space-between; gap: 16px;"><span style="' + MONO + ' font-size: 13px; color: #63D5FF;">' + cap + '</span>'
+            '<span style="font-size: 14px; color: rgba(255,255,255,0.6);">' + e(note) + '</span></div>'
+            '<div style="position: relative; height: ' + str(h) + 'px; overflow: hidden; border-radius: 24px; border: 1px solid rgba(255,255,255,0.14); background: #0D0C15;">' + inner + '</div></div>')
+
+def dm_board(n, title, lead, frames, pros):
+    head = ('<div style="padding: 48px 32px 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">МЕНЮ НА КОМПЬЮТЕРЕ · ВАРИАНТ ' + str(n) + '</div>'
+            '<h2 style="margin: 12px 0 0; font-size: 44px; letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">' + e(title) + '</h2>'
+            '<p style="margin: 14px 0 0; max-width: 900px; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.74);">' + e(lead) + '</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(99,213,255,0.1); color: #A8E8FF;">' + e(p) + '</span>' for p in pros) + '</div></div>')
+    return page('UpCore — меню на компьютере, вариант %d' % n, head + '<div style="padding: 32px 32px 64px; display: flex; flex-direction: column; gap: 32px;">' + ''.join(frames) + '</div>', 1200, name='Menu-D%d' % n)
+
+def desktop_menu(n):
+    prods = [(k, nm) for k, nm, _ in MM_PROD]
+    desc = {k: d for k, _, d in MM_PROD}
+    if n == 1:  # имена продуктов в своих цветах, активный — цветная плашка
+        def nav(active=None, hover=None):
+            out = dm_plain('Платформа', active is None)
+            for k, nm in prods:
+                c = ACC[k][1]
+                if k == active:
+                    st = 'background: ' + ACC[k][0] + '24; box-shadow: inset 0 0 0 1px ' + ACC[k][0] + '80; color: ' + c + '; font-weight: 700;'
+                else:
+                    st = 'color: ' + c + ';' + (' text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px;' if k == hover else '')
+                out += '<span style="position: relative; padding: 10px 14px; border-radius: 12px; ' + st + '"><b style="font-weight: 800;">›</b> ' + nm
+                if k == hover:
+                    out += ('<span style="position: absolute; left: 0; top: 52px; width: 240px; padding: 12px 14px; border-radius: 14px; background: #1A1925; border: 1px solid ' + ACC[k][0] + '66; color: #FFFFFF; font-weight: 400; box-shadow: 0 12px 30px rgba(0,0,0,0.4);">'
+                            '<b style="color: ' + c + ';">&gt;</b> UpCore<b style="color: ' + c + ';">.' + nm + '</b><span style="display: block; font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px;">' + e(desc[k]) + '</span></span>')
+                out += '</span>'
+            return out + dm_plain('Блог') + dm_plain('Контакты')
+        return dm_board(1, 'Цветные названия продуктов', 'Меню остаётся в одну строку, но четыре продукта набраны своими цветами со знаком «›» из логотипа. На странице продукта его пункт — плашка в цвете продукта. При наведении — короткая подсказка «> UpCore.AI — эффективность ИИ и вайбкодинга».',
+                        [dm_frame('НА ГЛАВНОЙ', dm_head(nav()) + dm_ctx(), 190, 'Продукты сразу выделены цветом, остальные пункты — серые'),
+                         dm_frame('НА СТРАНИЦЕ MENTOR', dm_head(nav('mentor')) + dm_ctx('mentor'), 190, 'Активный продукт — плашка в его цвете'),
+                         dm_frame('НАВЕДЕНИЕ НА AI', dm_head(nav(None, 'ai')) + dm_ctx(), 230, 'Подсказка с описанием продукта')],
+                        ['минимум изменений', 'меню в одну строку', 'цвет = продукт'])
+    if n == 2:  # мега-меню «Продукты»
+        dots = ''.join('<span style="width: 7px; height: 7px; border-radius: 50%; background: ' + ACC[k][1] + ';"></span>' for k, _ in prods)
+        def nav(open_=False, active=None):
+            lab = 'Продукты' if not active else 'Продукты · <b style="color: ' + ACC[active][1] + ';">' + dict(prods)[active] + '</b>'
+            st = 'background: rgba(255,255,255,0.08); color: #FFFFFF;' if (open_ or active) else 'color: rgba(255,255,255,0.86);'
+            return (dm_plain('Платформа', not open_ and not active) + '<span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; ' + st + '">' + lab
+                    + '<span style="display: inline-flex; gap: 3px;">' + dots + '</span><span style="font-size: 11px; opacity: 0.7;">' + ('▲' if open_ else '▼') + '</span></span>' + dm_plain('Блог') + dm_plain('Контакты'))
+        cards = ''.join('<div style="border-radius: 18px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid ' + ACC[k][0] + '; padding: 18px;">'
+                        '<div style="font-size: 18px; font-weight: 700;"><b style="color: ' + ACC[k][1] + ';">&gt;</b> UpCore<b style="color: ' + ACC[k][1] + ';">.' + nm + '</b></div>'
+                        '<div style="font-size: 14px; color: rgba(255,255,255,0.66); margin-top: 4px;">' + e(desc[k]) + '</div>'
+                        '<div style="margin-top: 14px; font-size: 26px; font-weight: 800; color: ' + ACC[k][1] + ';">' + DM_NUM[k][0] + '</div><div style="font-size: 13px; color: rgba(255,255,255,0.6);">' + e(DM_NUM[k][1]) + '</div></div>' for k, nm in prods)
+        mega = ('<div style="position: absolute; left: 50%; top: 84px; transform: translateX(-50%); width: 1180px; border-radius: 24px; background: #12111C; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 24px 60px rgba(0,0,0,0.5); padding: 20px; display: flex; gap: 16px;">'
+                '<div style="flex: 1 1 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">' + cards + '</div>'
+                '<div style="flex: 0 0 200px; border-radius: 18px; background: rgba(99,213,255,0.08); border: 1px solid rgba(99,213,255,0.3); padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">'
+                '<div><div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПЛАТФОРМА</div><div style="font-size: 16px; font-weight: 700; margin-top: 8px;">Все четыре продукта на одном ядре</div></div><div style="color: #63D5FF; font-weight: 700;">Смотреть →</div></div></div>')
+        return dm_board(2, 'Мега-меню «Продукты»', 'Меню короче: «Платформа · Продукты · Блог · Контакты». У пункта «Продукты» — четыре цветные точки. По наведению раскрывается панель: четыре карточки в цветах продуктов с описанием и главной цифрой, справа — переход на платформу. На странице продукта пункт показывает, где вы: «Продукты · AI».',
+                        [dm_frame('НА ГЛАВНОЙ', dm_head(nav()) + dm_ctx(), 190, 'Короткое меню: 4 пункта и цветные точки продуктов'),
+                         dm_frame('ОТКРЫТО «ПРОДУКТЫ»', dm_head(nav(True)) + dm_ctx() + mega, 340, 'Панель с карточками: цвет, описание, главная цифра'),
+                         dm_frame('НА СТРАНИЦЕ AI', dm_head(nav(False, 'ai')) + dm_ctx('ai'), 190, 'В пункте видно текущий продукт')],
+                        ['самое короткое меню', 'продукты продаются уже в меню', 'цифры в выпадающей панели'])
+    # n == 3: капсула продуктов
+    def nav(active=None):
+        chips = ''
+        for k, nm in prods:
+            c = ACC[k][1]
+            if k == active:
+                chips += '<span style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; background: ' + c + '; color: #0D0C15; font-weight: 700;">' + nm + '</span>'
+            else:
+                chips += '<span style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; color: #FFFFFF;"><span style="width: 8px; height: 8px; border-radius: 50%; background: ' + c + ';"></span>' + nm + '</span>'
+        cap = ('<span style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; margin: 0 6px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);">'
+               '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.5); padding: 0 6px 0 8px;">UpCore.</span>' + chips + '</span>')
+        return dm_plain('Платформа', active is None) + cap + dm_plain('Блог') + dm_plain('Контакты')
+    return dm_board(3, 'Капсула продуктов', 'Четыре продукта собраны в одну капсулу «UpCore. Grade · AI · Projects · Mentor» — сразу видно, что это одна платформа. У каждого — точка своего цвета, а на странице продукта его кнопка заливается этим цветом.',
+                    [dm_frame('НА ГЛАВНОЙ', dm_head(nav()) + dm_ctx(), 190, 'Капсула отделяет продукты от служебных пунктов'),
+                     dm_frame('НА СТРАНИЦЕ GRADE', dm_head(nav('grade')) + dm_ctx('grade'), 190, 'Активный продукт залит своим цветом'),
+                     dm_frame('НА СТРАНИЦЕ PROJECTS', dm_head(nav('projects')) + dm_ctx('projects'), 190, 'Так же на AI — фиолетовым, на Mentor — зелёным')],
+                    ['одна платформа — 4 продукта', 'самый заметный акцент', 'меню в одну строку'])
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -3140,8 +3238,9 @@ def build(out, mode):
             files['%s-%s' % (n, v)] = product(k, v)
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
     # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
+    files['Menu-1'] = mobile_menu(1)  # раунд 64: на телефоне выбран вариант 1 (бургер + меню на весь экран); 2 и 3 сняты
     for n in (1, 2, 3):
-        files['Menu-%d' % n] = mobile_menu(n)  # раунд 63: меню на телефоне
+        files['Menu-D%d' % n] = desktop_menu(n)  # раунд 64: меню на компьютере — 3 варианта
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
