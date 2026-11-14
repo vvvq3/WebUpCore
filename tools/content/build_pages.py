@@ -2076,11 +2076,13 @@ def techmap_rows():
     return head + ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; align-items: baseline; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;">'
                           '<span style="min-width: 0;">' + e(a) + '</span><span>' + str(b) + '</span><span style="white-space: nowrap;">' + e(c) + '</span><b style="text-align: right; color: ' + (GREEN if d >= 75 else (AMBER if d >= 30 else RED_T)) + ';">' + str(d) + '%</b></div>' for a, b, c, d in TECHMAP)
 
-def act_vs_code():
+def act_vs_code(act=160, code=40):
+    fmt = lambda v: '{:,}'.format(v).replace(',', ' ')
+    diff = act - code; pct = int(round(diff / act * 100)); w = int(round(code / act * 100))
     return ('<div style="display: flex; flex-direction: column; gap: 14px;">'
-            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Часов в акте подрядчика</span><b>160 ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.25);"></div></div>'
-            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Объективно по коду</span><b style="color: #F2C14E;">40 ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.06);"><div style="width: 25%; height: 100%; border-radius: 8px; background: #F2C14E;"></div></div></div>'
-            '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;"><span style="font-size: 15px; color: rgba(255,255,255,0.8);">К оплате по факту кода</span><b style="font-size: 26px; color: ' + RED_T + ';">−120 ч · −75%</b></div></div>')
+            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Часов в акте подрядчика</span><b>' + fmt(act) + ' ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.25);"></div></div>'
+            '<div><div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><span>Объективно по коду</span><b style="color: #F2C14E;">' + fmt(code) + ' ч</b></div><div style="height: 22px; border-radius: 8px; background: rgba(255,255,255,0.06);"><div style="width: ' + str(w) + '%; height: 100%; border-radius: 8px; background: #F2C14E;"></div></div></div>'
+            '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;"><span style="font-size: 15px; color: rgba(255,255,255,0.8);">К оплате по факту кода</span><b style="font-size: 26px; color: ' + RED_T + ';">−' + fmt(diff) + ' ч · −' + str(pct) + '%</b></div></div>')
 
 def proj_example():
     head = demo_head('projects', 'Проект «UpCore Backend»', 'ДЕМО UPCORE · МЕНЮ «ОТЧЁТЫ ПРОЕКТА» · ОКТЯБРЬ 2026', [
@@ -2760,11 +2762,69 @@ def proj_px(n):
 def proj_main2():
     h1 = 'Бюджет проекта и контроль подрядчиков — в часах и рублях'
     sub = 'Эффективность команды, техдолг по категориям качества, тех-карта и мэтч команды, прогноз сроков — всё по коду, а не по статусам в Jira.'
-    body = [header('projects'), mod_hero('projects', h1, sub, panel('projects', 'projects / аудит акта', 'пример', act_vs_code()), PROJ_STATS2),
+    body = [header('projects'), mod_hero('projects', h1, sub, panel('projects', 'projects / аудит акта', 'пример', act_vs_code(1500, 860)), PROJ_STATS2),
             proj_px(1), proj_audit2(1), scenarios(),
             roles('ДЛЯ КОГО', 'Прозрачность, выгодная заказчику и команде', PROJ_ROLES, 'projects'), faq(PROJ_FAQ, acc_key='projects'), saas_variant(2),
             cta('Проверьте, сколько на самом деле стоит ваш проект', 'Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore Projects — основной макет', '\n'.join(body), 6000, name='Projects-main')
+
+# ---------------------------------------------------------------- раунд 46: UpCore Mentor — 3 макета по эталону главной/Grade/AI/Projects
+MG = '#7FDB7A'
+MENTOR_STATS2 = [('94%', 'MR проверено авто-ревью'), ('6,0 → 8,0', 'качество кода после ревью'), ('+32%', 'эффективности, когда разработчик работает со скилами'), ('1 день', 'до первых результатов')]
+
+def mentor_from_grade():
+    rows = [('Архитектурная сложность', '3,1', RED_T, '80% времени — периферия, в ядре системы только 7%.', 'Давать задачи в ядре и разбирать архитектурные решения на ревью.'),
+            ('Технологии', '6,4 ↓', AMBER, 'Доля сложных технологий снизилась: 7,4 → 6,4 за полгода.', 'Топ-3 технологии проекта для изучения — по тех-метчу.'),
+            ('Уровень багов', '5,1 ↓', AMBER, '49% MR переделывались, в среднем 2 исправления на MR.', 'Разбор системных дефектов из ИИ-ревью и чек-лист перед MR.')]
+    cards = ''.join('<article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 12px;">'
+                    '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);">ФАКТОР ГРЕЙДА</div><div style="display: flex; justify-content: space-between; gap: 12px; align-items: baseline;"><b style="font-size: 19px;">' + e(a) + '</b><b style="font-size: 30px; color: ' + c + '; white-space: nowrap;">' + b + '</b></div>'
+                    '<div style="font-size: 15px; color: rgba(255,255,255,0.74); line-height: 1.5;">' + e(d) + '</div>'
+                    '<div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 6px;">РЕКОМЕНДАЦИЯ MENTOR</div><div style="font-size: 15px; line-height: 1.5;">' + e(r) + '</div></div></article>' for a, b, c, d, r in rows)
+    return section(sec_head('ПЛАН РОСТА', 'Из слабых факторов грейда — в конкретные шаги', 'Mentor берёт звезду грейда из UpCore.Grade и превращает каждую просадку в рекомендацию. Пример — профиль Лукьянова Александра из демо (Senior 8,5).', 'mentor')
+                   + '<div class="g3">' + cards + '</div><div style="margin-top: 16px;">' + xlink('grade', 'звезда грейда и 50+ факторов') + '</div>', 'growth')
+
+def mentor_ai():
+    steps = [('01', 'Анализ кода и промптов', 'Mentor видит, какие задачи с ИИ дали результат, а какие — день багов и переделок.'),
+             ('02', 'Паттерны и антипаттерны', 'Сравнивает работу сильных и слабых: контекст, параллельные агенты, контроль токенов — или один промпт из Jira.'),
+             ('03', 'Спецификации и скилы в проект', 'Автоматически насыщает проект спецификациями и скилами, чтобы ИИ работал лучше у всех.'),
+             ('04', 'Рекомендации каждому', 'Разработчик получает конкретные советы: как ставить задачу ИИ и где теряется время.')]
+    st = ''.join('<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
+                 '<div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(83,192,77,0.14); color: ' + MG + '; display: flex; align-items: center; justify-content: center; ' + MONO + ' font-size: 14px;">' + a + '</div>'
+                 '<div style="min-width: 0;"><div style="font-size: 18px; font-weight: 700;">' + e(b) + '</div><div style="font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.5; margin-top: 2px;">' + e(c) + '</div></div></div>' for a, b, c in steps)
+    left = box(lbl('КАК MENTOR УЧИТ РАБОТАТЬ С ИИ', MG) + ttl('Промпты — новый язык программирования. Их тоже нужно ревьюить') + '<div>' + st + '</div>', key='mentor', strong=True, flex='1.3 1 460px')
+    right = box(lbl('ЧТО ДАЁТ РОСТ · ВНУТРЕННИЕ ДАННЫЕ DEX', MG) + ttl('Два скачка эффективности') +
+                '<div style="display: flex; flex-direction: column; gap: 10px;">' + tile('<span style="color: ' + GREEN + ';">+32%</span>', 'в среднем — когда разработчик начинает использовать скилы') + tile('<span style="color: ' + GREEN + ';">+24%</span>', 'ещё в среднем — когда решает задачу с предварительным планом') + '</div>' +
+                para('Mentor находит такие паттерны у сильных и подсказывает их всей команде.', 15) + '<div>' + xlink('ai', 'эффективность ИИ в часах и деньгах') + '</div>', key='mentor', flex='1 1 340px')
+    return section(sec_head('ИИ-НАСТАВНИК', 'Учим команду работать с ИИ, а не просто измеряем', 'Цель — довести эффективность с ИИ до 300–400% относительно ручной работы. Mentor показывает каждому, как туда дойти.', 'mentor')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + left + right + '</div>', 'mentor-ai')
+
+def mentor_deep2(skip=None):
+    items = [('ФАКТОР · ИИ-РЕВЬЮ КОДА', 'Ревью каждого MR, а не 5–10%', quality_summary().replace('margin-bottom: 16px;', ''),
+              'ИИ-агент разбирает каждый MR: дефекты по тяжести и категориям ISO 25010, что ушло в main и сколько времени заняли исправления.', 'review'),
+             ('ФАКТОР · ПЛАН РОСТА', 'ИПР по тех-метчу — точечно', ipr_card(),
+              'Накладываем цифровое резюме разработчика на тех-карту проекта и вычисляем Топ-3 технологии, которые дадут максимальный рост прямо сейчас.', 'ipr'),
+             ('ФАКТОР · ПРИОРИТИЗАЦИЯ РЕВЬЮ', 'Лиду — только критичное', review_queue(),
+              'Система подсвечивает MR, которым нужен человек. Остальное ревьюит цифровой тимлид — лид тратит 15 минут вместо часов.', 'queue')]
+    its = [(a, b, v, t) for a, b, v, t, k in items if k != skip]
+    return deep_block('mentor', 'Разбираем подробно, как работает цифровое менторство', 'Mentor видит всю историю разработчика — задачи, промпты, код и оценки — и превращает её в конкретные шаги роста.', its, cols='g2' if len(its) == 2 else 'g3')
+
+def mentor_page2(n):
+    if n == 1:
+        h1, sub = 'ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Сеньоры возвращаются к архитектуре.'
+        vis = panel('mentor', 'mentor / качество', 'демо', quality_summary() + defects_bars())
+        blocks = [mentor_example(), mentor_from_grade(), mentor_ai(), mentor_deep2('review')]
+    elif n == 2:
+        h1, sub = 'Тимлид успевает менторить троих. UpCore.Mentor — всю команду', 'Ревью каждого MR, разбор системных ошибок и план роста — автоматически, каждый день. Лид тратит 15 минут на критичное, а не часы на всё подряд.'
+        vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', review_queue())
+        blocks = [mentor_deep2('queue'), mentor_example(), mentor_ai(), mentor_from_grade()]
+    else:
+        h1, sub = 'Из оценки — в план роста каждого разработчика', 'UpCore превращает слабые факторы грейда и тех-метч в конкретные шаги: что исправить в коде, как работать с ИИ и какие технологии прокачать.'
+        vis = panel('mentor', 'mentor / план роста', 'ИПР', ipr_card())
+        blocks = [mentor_from_grade(), mentor_ai(), mentor_example(), mentor_deep2('ipr')]
+    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS2)] + blocks + [
+        roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq(MENTOR_FAQ, acc_key='mentor'), saas_variant(2),
+        cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore Mentor — макет %d' % n, '\n'.join(body), 6000, name='Mentor-%d' % n)
 
 def build(out, mode):
     global MODE
@@ -2784,9 +2844,8 @@ def build(out, mode):
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
-    for k, nm in (('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
-        for n in (1, 2, 3):
-            files['%s-%d' % (nm, n)] = module_page(k, n)
+    for n in (1, 2, 3):  # раунд 46: Mentor — 3 новых макета (module_page('mentor') раунда 36 заменён)
+        files['Mentor-%d' % n] = mentor_page2(n)
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
