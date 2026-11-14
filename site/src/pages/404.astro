@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui } from '../data/i18n';
+const t = ui.ru.notFound;
+const te = ui.en.notFound;
+---
+<Base lang="ru" page="404" title={`${t.title} — UpCore`} description={t.text} route="" noindex>
+  <section style="min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 48px 16px; text-align: center;">
+    <div style="max-width: 560px;">
+      <a href="/" aria-label="UpCore"><img src="/img/logo.svg" alt="UpCore" width="180" height="28" style="height: 28px; width: auto; margin: 0 auto 40px;" /></a>
+      <div style="font-family: var(--font-mono); font-size: 14px; color: #63D5FF; letter-spacing: .04em;">404</div>
+      <h1 style="margin: 12px 0 0; font-size: clamp(36px, 6vw, 56px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05;">{t.title}</h1>
+      <p style="margin: 16px 0 28px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,.72);">{t.text}<br /><span lang="en" style="color: rgba(255,255,255,.5); font-size: 15px;">{te.text}</span></p>
+      <a href="/" class="uc-mbtn uc-mbtn--primary" style="min-height: 52px; padding: 0 28px; font-size: 17px;">{t.home}</a>
+    </div>
+  </section>
+</Base>

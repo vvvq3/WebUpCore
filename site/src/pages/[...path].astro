@@ -1,0 +1,60 @@
+---
+// Все страницы сайта (RU и EN) из утверждённых макетов: фрагменты site/src/generated/<lang>/<page>.html
+// создаёт tools/content/export_web.py. Править тексты и вёрстку — в tools/content/build_pages.py.
+import Base from '../layouts/Base.astro';
+import { SEO, ROUTES, type PageKey } from '../data/seo';
+import type { Lang } from '../data/i18n';
+
+export function getStaticPaths() {
+  const files = import.meta.glob('../generated/*/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+  const out: { params: { path: string | undefined }; props: { lang: Lang; key: PageKey; html: string } }[] = [];
+  for (const [file, html] of Object.entries(files)) {
+    const m = file.match(/generated\/(ru|en)\/([\w-]+)\.html$/);
+    if (!m) continue;
+    const lang = m[1] as Lang;
+    const key = m[2] as PageKey;
+    if (!(key in ROUTES)) continue;
+    const route = ROUTES[key].replace(/\/$/, '');
+    const path = [lang === 'en' ? 'en' : '', route].filter(Boolean).join('/') || undefined;
+    out.push({ params: { path }, props: { lang, key, html } });
+  }
+  return out;
+}
+
+const { lang, key, html } = Astro.props;
+const meta = SEO[lang][key];
+const site = Astro.site!.toString().replace(/\/$/, '');
+const url = `${site}${lang === 'en' ? '/en' : ''}/${ROUTES[key]}`;
+
+// FAQPage из блоков «Вопросы» (data-faq-q / data-faq-a)
+const strip = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+const qs = [...html.matchAll(/data-faq-q[^>]*>([\s\S]*?)<\/div>/g)].map((m) => strip(m[1]));
+const as = [...html.matchAll(/data-faq-a[^>]*>([\s\S]*?)<\/p>/g)].map((m) => strip(m[1]));
+
+const org = {
+  '@context': 'https://schema.org', '@type': 'Organization', name: 'UpCore', url: site + '/', logo: site + '/img/logo.svg',
+  email: 'office@dex-it.ru', telephone: '+7 985 848-35-55', sameAs: ['https://t.me/upcore_ai'],
+  parentOrganization: { '@type': 'Organization', name: 'Dex', url: 'https://dex-it.ru/' },
+};
+const app = {
+  '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: key === 'home' || key.startsWith('blog') ? 'UpCore' : `UpCore ${{ grade: 'Grade', ai: 'AI', projects: 'Projects', mentor: 'Mentor' }[key as 'grade']}`,
+  applicationCategory: 'BusinessApplication', operatingSystem: 'Web, on-premise', url, description: meta.description, inLanguage: lang,
+  publisher: { '@type': 'Organization', name: 'UpCore' },
+};
+const jsonLd: object[] = [org];
+if (!key.startsWith('blog')) jsonLd.push(app);
+if (qs.length && qs.length === as.length) jsonLd.push({
+  '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: lang,
+  mainEntity: qs.map((q, i) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: as[i] } })),
+});
+if (key !== 'home') jsonLd.push({
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'UpCore', item: `${site}${lang === 'en' ? '/en' : ''}/` },
+    { '@type': 'ListItem', position: 2, name: meta.title.split(' — ')[0], item: url },
+  ],
+});
+---
+<Base lang={lang} page={key} title={meta.title} description={meta.description} keywords={meta.keywords} route={ROUTES[key]} jsonLd={jsonLd}>
+  <Fragment set:html={html} />
+</Base>

@@ -1,0 +1,6 @@
+---
+// Яндекс Метрика: номер счётчика — PUBLIC_YM_ID в .env. Скрипт грузится только после согласия в cookie-баннере
+// (site.ts → loadMetrika). Цели отправляются из site.ts: connect, form_open_*, form_sent_*, phone, telegram, email.
+const id = import.meta.env.PUBLIC_YM_ID || '';
+---
+{id && <meta name="uc-ym" content={id} />}

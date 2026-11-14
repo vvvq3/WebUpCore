@@ -1,0 +1,16 @@
+---
+// Cookie-баннер (раунд 69): показывается, только если подключена аналитика (PUBLIC_YM_ID).
+import { ui, type Lang } from '../data/i18n';
+interface Props { lang: Lang }
+const t = ui[Astro.props.lang].cookie;
+const enabled = Boolean(import.meta.env.PUBLIC_YM_ID);
+---
+{enabled && (
+  <div id="uc-cookie" class="uc-cookie" role="region" aria-label="Cookie" hidden>
+    <p>{t.text}</p>
+    <div class="uc-cookie__btns">
+      <button type="button" class="uc-mbtn uc-mbtn--ghost" data-cookie="decline">{t.decline}</button>
+      <button type="button" class="uc-mbtn uc-mbtn--primary" data-cookie="accept">{t.accept}</button>
+    </div>
+  </div>
+)}

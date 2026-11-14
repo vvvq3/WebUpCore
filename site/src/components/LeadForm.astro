@@ -1,0 +1,47 @@
+---
+// Форма заявки (раунд 69): «Провести демо», «Получить демо-отчёт», «Заказать аудит» — одна форма с разной темой.
+// Отправка: PUBLIC_FORM_ENDPOINT (POST multipart/form-data) или, если не задан, письмо на почту с заполненными полями.
+import { ui, CONTACTS, type Lang } from '../data/i18n';
+interface Props { lang: Lang; page: string }
+const { lang, page } = Astro.props;
+const t = ui[lang].form;
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || '';
+const email = import.meta.env.PUBLIC_FORM_EMAIL || CONTACTS.email;
+---
+<dialog id="uc-lead" class="uc-lead" aria-labelledby="uc-lead-title" data-endpoint={endpoint} data-email={email} data-page={page}
+  data-titles={JSON.stringify(t.titles)} data-leads={JSON.stringify(t.leads)}
+  data-msg-required={t.required} data-msg-sending={t.sending} data-msg-submit={t.submit} data-msg-error={t.error}
+  data-msg-ok-title={t.okTitle} data-msg-ok-text={t.okText} data-msg-mail-title={t.mailTitle} data-msg-mail-text={t.mailText}>
+  <form method="dialog" class="uc-lead__form" novalidate>
+    <button type="button" class="uc-icon-btn uc-lead__close" data-lead-close aria-label={t.close}>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" /></svg>
+    </button>
+    <div class="uc-lead__body">
+      <p class="uc-lead__kicker">UpCore</p>
+      <h2 id="uc-lead-title" class="uc-lead__title">{t.titles.demo}</h2>
+      <p class="uc-lead__lead" data-lead-lead>{t.leads.demo}</p>
+      <input type="hidden" name="topic" value="demo" />
+      <input type="hidden" name="page" value={page} />
+      <input type="hidden" name="lang" value={lang} />
+      <label class="uc-field"><span>{t.name} *</span><input name="name" autocomplete="name" required maxlength="120" /></label>
+      <label class="uc-field"><span>{t.company}</span><input name="company" autocomplete="organization" maxlength="160" /></label>
+      <label class="uc-field"><span>{t.team}</span>
+        <select name="team">
+          <option value="">{t.teamPh}</option>
+          {t.teamOpts.map((o) => <option value={o}>{o}</option>)}
+        </select>
+      </label>
+      <label class="uc-field"><span>{t.contact} *</span><input name="contact" required maxlength="160" placeholder={t.contactPh} /></label>
+      <label class="uc-field"><span>{t.comment}</span><textarea name="comment" rows="3" maxlength="2000" placeholder={t.commentPh}></textarea></label>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" class="uc-hp" aria-hidden="true" />
+      <p class="uc-lead__error" role="alert" data-lead-error hidden></p>
+      <button type="submit" class="uc-mbtn uc-mbtn--primary uc-lead__submit" data-lead-submit>{t.submit}</button>
+      <p class="uc-lead__note">{t.note}</p>
+    </div>
+    <div class="uc-lead__done" data-lead-done hidden>
+      <div class="uc-lead__check" aria-hidden="true">✓</div>
+      <h2 class="uc-lead__title" data-lead-done-title>{t.okTitle}</h2>
+      <p class="uc-lead__lead" data-lead-done-text>{t.okText}</p>
+    </div>
+  </form>
+</dialog>

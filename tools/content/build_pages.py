@@ -27,6 +27,8 @@ MODE = 'dc'
 HEIGHTS = {}
 
 def src(key):
+    if MODE == 'web':  # сайт на Astro (tools/content/export_web.py): ассеты из site/public/img
+        return '/img/logo.svg' if key == 'logo' else '/img/screens/' + IMG[key][1].replace('.jpg', '.webp')
     if key == 'logo':
         return '/_blob/' + LOGO if MODE == 'dc' else 'file://' + REPO + '/docs/brand/logo.svg'
     b, f = IMG[key]
@@ -131,6 +133,8 @@ def page(title, body, height, slider=False, name=None):
     if MODE == 'dc':
         return ('<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<title>%s</title>\n<script src="./support.js"></script>\n</head>\n<body>\n<x-dc>\n%s\n%s\n</x-dc>\n'
                 '<script type="text/x-dc" data-dc-script data-props=\'{"$preview":{"width":1440,"height":%d}}\'>\n%s\n</script>\n</body>\n</html>\n') % (H.escape(title), HELMET, root, height, script)
+    if MODE == 'web':  # фрагмент страницы для Astro; overflow-x: clip вместо hidden — чтобы работала липкая шапка
+        return root.replace('min-height: 100vh; overflow: hidden;', 'overflow-x: clip;', 1)
     head = HELMET.replace('<helmet>', '').replace('</helmet>', '')
     return '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>%s</title>%s</head><body>%s</body></html>' % (H.escape(title), head, root)
 
@@ -161,7 +165,7 @@ def header(active=None):
             '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;"><img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;"></a>\n'
             '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
             '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><a href="#lang" class="uc-hide-m" style="color: rgba(255,255,255,0.78); text-decoration: none; ' + MONO + ' font-size: 13px; padding: 10px 6px; white-space: nowrap;">RU / EN</a>'
-            '<a href="' + DEMO + '" class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
+            '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else '') + ' class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
             '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a>' + burger + '</div>\n'
             '</header>')
 
@@ -172,7 +176,10 @@ def btn(text, href, primary=True, dark=False):
         st = 'background: #0D0C15; color: #FFFFFF;' if primary else 'border: 1.5px solid #0D0C15; color: #0D0C15;'
     else:
         st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF;'
-    return ('<a href="%s" style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, st, e(text)))
+    form = ''
+    if MODE == 'web' and href.startswith('mailto:'):  # на сайте кнопки с почтой открывают форму заявки
+        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit'}.get(text, 'demo')
+    return ('<a href="%s"%s style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, form, st, e(text)))
 
 REG = 'https://demo.up-core.ru/'
 MAIL = 'mailto:office@dex-it.ru'
@@ -182,7 +189,7 @@ def stats(items, note=None):
     cells = []
     for i, (big, small) in enumerate(items):
         col = '#63D5FF' if i == 0 else ('#7FDB7A' if big.startswith('+') else '#FFFFFF')
-        cells.append('<div style="min-width: 0;"><div style="font-size: clamp(24px, 6.4vw, 34px); font-weight: 800; color: %s; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
+        cells.append('<div style="min-width: 0;"><div' + (' data-odo' if MODE == 'web' else '') + ' style="font-size: clamp(24px, 6.4vw, 34px); font-weight: 800; color: %s; letter-spacing: -0.02em; line-height: 1.1; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
                      '<div style="font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.4; margin-top: 4px;">%s</div></div>' % (col, e(big), e(small)))
     cols = 'repeat(2, minmax(0, 1fr))' if len(items) == 4 else 'repeat(auto-fit, minmax(150px, 1fr))'
     out = '<div style="display: grid; grid-template-columns: %s; gap: 18px 20px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 24px;">%s</div>' % (cols, ''.join(cells))
@@ -235,6 +242,26 @@ def slider_console():
 </div>
 </div>
 </div>"""
+
+def slider_web():
+    """Слайдер скриншотов для сайта: все слайды в разметке, переключение — site/src/scripts/site.ts ([data-slider])."""
+    imgs = ''.join('<img src="%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="1000" data-slide="%d" class="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top center; display: block;%s">'
+                   % (src(i), e(t), e(c), 'eager' if n == 0 else 'lazy', n, 'uc-in' if n == 0 else '', '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, i) in enumerate(SLIDES))
+    chips = ''.join('<button type="button" role="tab" aria-selected="%s" data-slide-btn="%d" class="uc-chip" style="position: relative; overflow: hidden; flex: 0 0 auto; white-space: nowrap; min-height: 44px; padding: 0 12px; border-radius: 10px; font: 600 13px Onest, sans-serif; cursor: pointer;">%s<span class="uc-prog" aria-hidden="true" style="position: absolute; left: 0; bottom: 0; height: 2px; width: 100%%; background: #63D5FF;"></span></button>'
+                    % ('true' if n == 0 else 'false', n, e(k)) for n, (k, t, c, i) in enumerate(SLIDES))
+    k0, t0, c0, _ = SLIDES[0]
+    meta = ' '.join('data-k%d="%s" data-t%d="%s" data-c%d="%s"' % (n, e(k), n, e(t), n, e(c)) for n, (k, t, c, i) in enumerate(SLIDES))
+    return ('<div data-slider ' + meta + ' style="flex: 1.15 1 520px; min-width: 0; position: relative;">'
+            '<div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.3); box-shadow: 0 0 0 1px rgba(99,213,255,0.06), 0 40px 120px rgba(99,213,255,0.12); overflow: hidden;">'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span>upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="color: #63D5FF;"><span data-slide-num>01</span> / 08</span></div>'
+            '<div style="position: relative; aspect-ratio: 16 / 10; background: #FFFFFF; overflow: hidden;">' + imgs +
+            '<div class="uc-scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 2px; background: #63D5FF; box-shadow: 0 0 18px 4px rgba(99,213,255,0.6);"></div></div>'
+            '<div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">'
+            '<div style="font-size: 17px; font-weight: 700; min-width: 0;" aria-live="polite"><span data-slide-title>' + e(t0) + '</span> <span style="font-weight: 400; color: rgba(255,255,255,0.72); font-family: \'Onest\', sans-serif; font-size: 15px;">— <span data-slide-caption>' + e(c0) + '</span></span></div>'
+            '<button type="button" data-slide-play aria-label="Остановить автопрокрутку" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">'
+            '<svg data-icon-pause width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/></svg>'
+            '<svg data-icon-play width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style="display: none;"><path d="M3 1.5v11l9-5.5z" fill="#FFFFFF"/></svg></button></div>'
+            '<div class="uc-chips" role="tablist" aria-label="Экраны продукта">' + chips + '</div></div></div></div>')
 
 def static_slider_preview():
     """Для превью: консоль с первым слайдом без шаблонов."""
@@ -311,7 +338,8 @@ def roles(label, h2, items, acc_key=None):
     return section(sec_head(label, h2, None, acc_key) + '<div class="g4">%s</div>' % ''.join(cards))
 
 def faq(items, h2='Честные ответы на неудобные вопросы', acc_key=None):
-    cards = [card('<div style="font-size: 20px; font-weight: 700; line-height: 1.3;">%s</div><p style="margin: 0; color: %s; font-size: 16px; line-height: 1.6;">%s</p>' % (e(q), DIM, e(a)), pad='28px 30px') for q, a in items]
+    qa = (' data-faq-q', ' data-faq-a') if MODE == 'web' else ('', '')  # для FAQPage (JSON-LD) на сайте
+    cards = [card(('<div' + qa[0] + ' style="font-size: 20px; font-weight: 700; line-height: 1.3;">%s</div><p' + qa[1] + ' style="margin: 0; color: %s; font-size: 16px; line-height: 1.6;">%s</p>') % (e(q), DIM, e(a)), pad='28px 30px') for q, a in items]
     return section(sec_head('ВОПРОСЫ', h2, None, acc_key) + '<div class="g2">%s</div>' % ''.join(cards))
 
 def compare(label, h2, left_title, left, right_title, right, lead=None, acc_key=None):
@@ -1738,7 +1766,7 @@ def home(variant):
                   sub='Живой тимлид глубоко проверяет 5–10% кода. Цифровой тимлид — 100%, по секунде на каждый Merge Request: реальная эффективность, грейд, отдача от ИИ и техдолг каждого разработчика.',
                   st=[('100%', 'кода проверено'), ('1 сек', 'на один Merge Request'), ('5–10%', 'успевает проверить человек')], note=None),
     }[variant]
-    visual = slider_console() if MODE == 'dc' else static_slider_preview()
+    visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
     st, note = HERO_STATS.get(('home', variant), (hv['st'], hv['note']))
     body = [header(None), hero('цифровой тимлид · онлайн', hv['h1'], hv['sub'], [btn('Подключить репозиторий', REG), btn('Заказать аудит', MAIL, False)], st, visual, note)]
     if variant != 'A':
@@ -2345,6 +2373,10 @@ def tg_banner_v2():
 def pagination(cur, total=3):
     def cell(label, active=False, muted=False):
         st = ('background: #63D5FF; color: #0D0C15; border: 1px solid #63D5FF;' if active else ('border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.3);' if muted else 'border: 1px solid rgba(255,255,255,0.18); color: #FFFFFF;'))
+        if MODE == 'web':
+            tgt = {'←': cur - 1, '→': cur + 1}.get(label, int(label) if label.isdigit() else cur)
+            href = '/blog/' if tgt <= 1 else '/blog/%d/' % min(tgt, total)
+            return '<a href="' + href + '"' + (' aria-current="page"' if active else '') + (' aria-disabled="true" tabindex="-1"' if muted else '') + (' aria-label="' + ('Предыдущая страница' if label == '←' else 'Следующая страница') + '"' if label in '←→' else '') + ' style="display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px; padding: 0 14px; border-radius: 14px; ' + st + ' font-weight: 700; font-size: 16px; text-decoration: none;">' + label + '</a>'
         return '<a href="#blog-' + label + '" style="display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px; padding: 0 14px; border-radius: 14px; ' + st + ' font-weight: 700; font-size: 16px; text-decoration: none;">' + label + '</a>'
     cells = cell('←', muted=(cur == 1)) + ''.join(cell(str(i), active=(i == cur)) for i in range(1, total + 1)) + cell('→', muted=(cur == total))
     return ('<nav aria-label="Страницы блога" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);">'
