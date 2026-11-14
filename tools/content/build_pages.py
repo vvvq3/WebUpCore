@@ -2850,6 +2850,115 @@ def mentor_blk(kind):
              '<p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 16px; line-height: 1.6;">' + e(t) + '</p></div><div style="flex: 1.2 1 380px; min-width: 0;">' + viz + '</div></div>')
     return page('UpCore Mentor — блок', '<div style="padding-top: 48px;">' + section(inner, 'blk') + '</div>', 900, name='Mentor-blk-' + kind)
 
+# ---------------------------------------------------------------- раунд 50: Mentor — по 3 варианта блоков «пример», «план роста», «ИИ-наставник»; блок грейда; новая очередь в шапке
+Q32 = '3,2 → <span style="color: ' + GREEN + ';">8,0</span>'
+
+def mentor_queue():
+    items = [('затронуто архитектурное ядро', RED_T), ('найдена логическая ошибка или уязвимость', RED_T), ('23% промптов в духе «всё переделай»', RED_T),
+             ('45% результирующего кода — остальное переписано', AMBER), ('на 72% больше токенов на 1 час, чем в среднем по компании', AMBER),
+             ('время сильно больше объективной сложности', AMBER), ('нетипичная технология или паттерн', AMBER)]
+    rows = ''.join('<div style="display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px;"><span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + ';"></span><span style="min-width: 0;">' + e(t) + '</span></div>' for t, c in items)
+    return ('<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>' + rows +
+            '<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px;">' + tile('<span style="color: ' + GREEN + ';">94%</span>', 'MR проверено авто-ревью · 457 из 488') + tile('15 мин', 'у лида на критичное вместо часов') + '</div>')
+
+def q_summary():
+    return ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">' + tile(Q32, 'качество кода до и после ревью') + tile('41 из 47', 'MR разобрано ИИ-ревью')
+            + tile('86', 'дефектов найдено') + tile('30,9 ч', 'на исправления · 7% времени') + '</div>')
+
+ISO5 = [('Функциональная пригодность', '0/9/16/6', 31), ('Сопровождаемость', '0/0/5/19', 24), ('Гибкость', '1/1/7/2', 11), ('Совместимость', '0/0/3/1', 4), ('Надёжность', '0/0/3/1', 4)]
+EX_LEAD = 'Профиль из демо UpCore: ИИ-ревью нашло дефекты по тяжести и категориям качества, после исправлений качество кода выросло с 3,2 до 8,0.'
+
+def m_head():
+    return demo_head('mentor', 'Лукьянов Александр · Backend, C#', 'ДЕМО UPCORE · ВКЛАДКА «КАЧЕСТВО» · АНАЛИЗ КОД-РЕВЬЮ', [
+        ('Качество кода', Q32, 'до и после ревью'), ('MR разобрано', '41 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 47</span>', '38 с дефектами'), ('На исправления', '30,9 ч', '7% времени UpCore')])
+
+def m_note(t='Из системных ошибок Mentor собирает персональный план: что исправить в коде, как ставить задачи и писать промпты, какие технологии прокачать для следующего грейда.'):
+    return '<div style="border-radius: 18px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.3); padding: 16px 20px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.86);">' + e(t) + '</div>'
+
+def ex_variant(n):
+    if n == 1:  # прежняя раскладка, качество 3,2 → 8,0
+        isoh = ('<div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 10px;">ДЕФЕКТЫ ПО БЛОКАМ ISO 25010 · К / В / С / М</div>'
+                + ''.join('<div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;"><span>' + e(a) + '</span><b style="white-space: nowrap;">' + b + '</b></div>' for a, b, c in ISO5))
+        body = ('<div style="display: flex; flex-wrap: wrap; gap: 32px 48px;"><div style="flex: 1 1 340px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 12px;">86 ДЕФЕКТОВ ПО ТЯЖЕСТИ</div>' + defects_bars() + '</div>'
+                '<div style="flex: 1 1 340px; min-width: 0;">' + isoh + '</div></div>' + m_note())
+        return example_shell('mentor', 'НАСТАВНИК НА ПРИМЕРЕ', 'Каждый MR разобран — и превращён в план роста', EX_LEAD, m_head(), body)
+    if n == 2:  # «до и после»: крупное сравнение качества
+        def qbar(label, v, col):
+            return ('<div><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px;"><span style="font-size: 15px;">' + label + '</span><b style="font-size: 28px; color: ' + col + ';">' + v.replace('.', ',') + '<span style="font-size: 15px; color: rgba(255,255,255,0.5);"> / 10</span></b></div>'
+                    '<div style="height: 16px; border-radius: 8px; background: rgba(255,255,255,0.06);"><div style="width: ' + str(int(float(v) * 10)) + '%; height: 100%; border-radius: 8px; background: ' + col + ';"></div></div></div>')
+        left = ('<div style="flex: 1.2 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 18px;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + ';">КАЧЕСТВО КОДА ПО ИИ-РЕВЬЮ</div>'
+                + qbar('До ревью', '3.2', RED_T) + qbar('После исправлений', '8.0', GREEN) +
+                '<div style="font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.5;">Рост в 2,5 раза — за 30,9 часа исправлений, это 7% рабочего времени.</div></div>')
+        right = ('<div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 10px;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + ';">ЧТО ИСПРАВЛЕНО</div>'
+                 + ''.join(hbar(a, str(c) + ' дефектов', int(c / 31 * 100), MG) for a, b, c in ISO5[:4]) + '</div>')
+        body = '<div style="display: flex; flex-wrap: wrap; gap: 32px 48px;">' + left + right + '</div>' + m_note()
+        return example_shell('mentor', 'НАСТАВНИК НА ПРИМЕРЕ', 'Качество кода: 3,2 → 8,0 после разбора с наставником', EX_LEAD, m_head(), body)
+    # n == 3: полоса из 4 цифр + дефекты по тяжести
+    strip = ('<div class="g4">' + px_kpi('КАЧЕСТВО КОДА', Q32, 'до и после ревью').replace(PJ, MG) + px_kpi('ДЕФЕКТОВ', '86', '1 критический, 11 высоких').replace(PJ, MG)
+             + px_kpi('УШЛО В MAIN', '33 из 79', 'дефектов — остальные исправлены до релиза').replace(PJ, MG) + px_kpi('ИСПРАВЛЕНИЯ', '30,9 ч', '7% времени — цена качества').replace(PJ, MG) + '</div>')
+    body = strip + '<div style="display: flex; flex-wrap: wrap; gap: 32px 48px;"><div style="flex: 1 1 340px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 12px;">ДЕФЕКТЫ ПО ТЯЖЕСТИ</div>' + defects_bars() + '</div><div style="flex: 1 1 340px; min-width: 0; align-self: center;">' + m_note() + '</div></div>'
+    return example_shell('mentor', 'НАСТАВНИК НА ПРИМЕРЕ', 'Четыре цифры качества одного разработчика', EX_LEAD, m_head(), body)
+
+GROWTH = [  # по 10 факторам звезды Лукьянова (демо): слабые и падающие факторы → рекомендации
+    ('Код-ревью', '7,7 ↓', AMBER, 'Получил 597 замечаний в 60% своих MR, а сам не сделал ни одного ревью из 442 MR команды.', 'Подключить к ревью коллег: 3–5 MR в неделю. Для Senior это обязательная зона — передаёт опыт и растит архитектурное мышление.', '8,5'),
+    ('Количество и сложность задач', '6,8', AMBER, 'Сложных задач лишь 11%, простых — 46%. Для уровня Senior это мало.', 'Брать больше сложных задач, а простые отдавать Junior — растёт и он, и команда.', '7,5'),
+    ('Уровень багов', '5,1 ↓', RED_T, '49% MR переделывались, в среднем 2 исправления на MR.', 'Чек-лист по трём самым частым дефектам из ИИ-ревью и самопроверка перед MR.', '6,5'),
+    ('Технологии', '6,4 ↓', AMBER, 'Senior-технологий в работе — 2 (1,8 ч), Middle — 16 (191 ч).', 'Задачи на Senior-технологии проекта: Multithreading Advanced, EF Advanced — по тех-карте.', '7,5')]
+G_HEAD = ('ПЛАН РОСТА', 'Из слабых факторов грейда — в конкретные шаги', 'Mentor берёт звезду грейда из UpCore.Grade и превращает каждую просадку в рекомендацию. Пример — профиль Лукьянова Александра из демо (Senior 8,5).')
+
+def growth_variant(n):
+    if n == 1:  # 4 карточки 2×2: фактор → что видно → рекомендация
+        cards = ''.join('<article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 12px;">'
+                        '<div style="display: flex; justify-content: space-between; gap: 12px; align-items: baseline;"><b style="font-size: 19px;">' + e(a) + '</b><b style="font-size: 28px; color: ' + c + '; white-space: nowrap;">' + b + '</b></div>'
+                        '<div style="font-size: 15px; color: rgba(255,255,255,0.74); line-height: 1.5;">' + e(d) + '</div>'
+                        '<div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 6px;">РЕКОМЕНДАЦИЯ MENTOR</div><div style="font-size: 15px; line-height: 1.5;">' + e(r) + '</div></div></article>' for a, b, c, d, r, t in GROWTH)
+        return section(sec_head(*G_HEAD, 'mentor') + '<div class="g2">' + cards + '</div><div style="margin-top: 16px;">' + xlink('grade', 'звезда грейда и 50+ факторов') + '</div>', 'growth')
+    if n == 2:  # звезда слева, нумерованные рекомендации справа
+        star = '<div style="flex: 1 1 380px; min-width: 0; max-width: 520px; margin: 0 auto;">' + star_demo([(nm, v) for nm, v, w, d in LEVEL]) + star_legend() + '</div>'
+        recs = ''.join('<div style="display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08);"><b style="width: 36px; height: 36px; border-radius: 10px; background: rgba(83,192,77,0.15); color: ' + MG + '; display: flex; align-items: center; justify-content: center;">' + str(i + 1) + '</b>'
+                       '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;"><b style="font-size: 17px;">' + e(a) + '</b><b style="color: ' + c + ';">' + b + '</b></div><div style="font-size: 15px; line-height: 1.5; margin-top: 4px;">' + e(r) + '</div></div></div>' for i, (a, b, c, d, r, t) in enumerate(GROWTH))
+        right = '<div style="flex: 1.1 1 420px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + '; margin-bottom: 4px;">4 ШАГА РОСТА ОТ MENTOR</div>' + recs + '<div style="margin-top: 12px;">' + xlink('grade', 'звезда грейда и 50+ факторов') + '</div></div>'
+        return section(sec_head(*G_HEAD, 'mentor') + '<div style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; border-radius: 32px; background: #12111C; border: 1px solid rgba(83,192,77,0.35); padding: clamp(24px, 3.4vw, 44px);">' + star + right + '</div>', 'growth')
+    # n == 3: таблица ИПР «фактор · сейчас · цель на квартал · шаг»
+    head = '<div class="uc-gr" style="display: grid; grid-template-columns: minmax(0, 1.1fr) 80px 90px minmax(0, 2fr); gap: 16px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5); padding-bottom: 8px;"><span>ФАКТОР</span><span>СЕЙЧАС</span><span>ЦЕЛЬ</span><span>ШАГ ИЗ ПЛАНА</span></div>'
+    rows = ''.join('<div class="uc-gr" style="display: grid; grid-template-columns: minmax(0, 1.1fr) 80px 90px minmax(0, 2fr); gap: 8px 16px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08); align-items: baseline;">'
+                   '<b style="font-size: 16px;">' + e(a) + '</b><b style="font-size: 20px; color: ' + c + ';">' + b + '</b><b style="font-size: 20px; color: ' + GREEN + ';">→ ' + t + '</b><span style="font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.84);">' + e(r) + '</span></div>' for a, b, c, d, r, t in GROWTH)
+    box_ = ('<div style="border-radius: 32px; background: #12111C; border: 1px solid rgba(83,192,77,0.35); padding: clamp(24px, 3.4vw, 44px);"><div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-bottom: 16px;"><div><div style="' + MONO + ' font-size: 12px; color: ' + MG + ';">ПЕРСОНАЛЬНЫЙ ПЛАН РАЗВИТИЯ · НА КВАРТАЛ</div><div style="font-size: 22px; font-weight: 800; margin-top: 6px;">Лукьянов Александр · Senior 8,5 → 9,0</div></div>'
+            '<div>' + xlink('grade', 'прогресс по каждому фактору') + '</div></div>' + head + rows + '<div style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 12px;">Цели — пример плана; Mentor отслеживает прогресс каждый месяц.</div></div>')
+    return section(sec_head(*G_HEAD, 'mentor') + box_, 'growth')
+
+def mentor_ai_variant(n):
+    if n == 1:
+        return mentor_ai()
+    gain = ('<div style="display: flex; flex-direction: column; gap: 10px;">' + tile('<span style="color: ' + GREEN + ';">+32%</span>', 'в среднем — когда разработчик начинает использовать скилы') + tile('<span style="color: ' + GREEN + ';">+24%</span>', 'ещё в среднем — когда решает задачу с предварительным планом') + '</div>')
+    if n == 2:  # слабый vs сильный + что советует Mentor
+        bad = [('11:00', 'Один промпт: задача скопирована из Jira'), ('14:00', 'После обеда: «всё не так, переделай»'), ('16:00', 'ИИ упёрся в дневной лимит — человек ушёл домой')]
+        good = ['Насыщает задачу контекстом проекта', 'Сначала строит план решения', 'Запускает несколько агентов параллельно', 'Следит за токенами и лимитами']
+        a = box(lbl('КАК БЫЛО', RED_T) + ttl('Один промпт и дневной лимит') + ''.join('<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="' + MONO + ' font-size: 13px; color: ' + RED_T + ';">' + x + '</span><span>' + e(y) + '</span></div>' for x, y in bad), key='mentor', flex='1 1 320px')
+        b = box(lbl('ЧТО СОВЕТУЕТ MENTOR', MG) + ttl('Контекст, план, параллельные агенты') + ''.join('<div style="display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="color: ' + GREEN + '; font-weight: 800;">✓</span><span>' + e(x) + '</span></div>' for x in good), key='mentor', strong=True, flex='1 1 320px')
+        c = box(lbl('ЭФФЕКТ · ДАННЫЕ DEX', MG) + gain + '<div>' + xlink('ai', 'эффективность ИИ в часах и деньгах') + '</div>', key='mentor', flex='0.8 1 280px')
+        return section(sec_head('ИИ-НАСТАВНИК', 'Учим команду работать с ИИ, а не просто измеряем', 'Промпты — новый язык программирования. Mentor ревьюит их так же, как код, и показывает, как работают сильные.', 'mentor')
+                       + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + a + b + c + '</div>', 'mentor-ai')
+    # n == 3: антипаттерны → скилы и спецификации → эффект
+    anti = [('23%', 'промптов в духе «всё переделай»'), ('45%', 'результирующего кода — остальное переписано'), ('+72%', 'токенов на 1 час, чем в среднем по компании')]
+    a = box(lbl('MENTOR НАШЁЛ АНТИПАТТЕРНЫ', RED_T) + ''.join('<div style="display: flex; gap: 14px; align-items: baseline; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.07);"><b style="font-size: 30px; color: ' + RED_T + '; white-space: nowrap; min-width: 80px;">' + x + '</b><span style="font-size: 15px; line-height: 1.45;">' + e(y) + '</span></div>' for x, y in anti), key='mentor', flex='1 1 320px')
+    b = box(lbl('И АВТОМАТИЧЕСКИ ДОБАВИЛ В ПРОЕКТ', MG) + '<div style="display: flex; flex-direction: column; gap: 8px;">' + ''.join('<div style="padding: 12px 14px; border-radius: 12px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.25); font-size: 15px;">' + e(x) + '</div>' for x in ['Спецификации проекта для контекста ИИ', 'Скилы под типовые задачи команды', 'Шаблон «сначала план, потом код»', 'Рекомендации по промптам каждому']) + '</div>', key='mentor', strong=True, flex='1 1 320px')
+    c = box(lbl('РЕЗУЛЬТАТ · ДАННЫЕ DEX', MG) + gain + '<div>' + xlink('ai', 'эффективность ИИ в часах и деньгах') + '</div>', key='mentor', flex='0.8 1 280px')
+    return section(sec_head('ИИ-НАСТАВНИК', 'От антипаттернов — к скилам для всей команды', 'Mentor анализирует код и промпты, находит, где ИИ сжигает время, и сам насыщает проект спецификациями и скилами.', 'mentor')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + a + '<div style="flex: 0 0 auto; align-self: center; font-size: 32px; color: ' + MG + ';">→</div>' + b + c + '</div>', 'mentor-ai')
+
+def mentor_main2():
+    h1, sub = 'ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Сеньоры возвращаются к архитектуре.'
+    vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', mentor_queue())
+    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), ex_variant(1), growth_variant(1), mentor_ai_variant(1),
+            roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq(MENTOR_FAQ, acc_key='mentor'), saas_variant(2),
+            cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore Mentor — основной макет', '\n'.join(body), 6000, name='Mentor-main')
+
+def m_board(name, html):
+    return page('UpCore Mentor — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name=name)
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2868,9 +2977,12 @@ def build(out, mode):
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
-    files['Mentor-main'] = mentor_main()  # раунд 49: основной макет Mentor + отличающиеся блоки отдельно (Mentor-1..3 сняты)
-    for k in ('review', 'ipr', 'queue'):
-        files['Mentor-blk-' + k] = mentor_blk(k)
+    files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
+    for n in (1, 2, 3):
+        files['Mentor-ex-%d' % n] = m_board('Mentor-ex-%d' % n, ex_variant(n))
+        files['Mentor-gr-%d' % n] = m_board('Mentor-gr-%d' % n, growth_variant(n))
+        files['Mentor-ai-%d' % n] = m_board('Mentor-ai-%d' % n, mentor_ai_variant(n))
+    files['Mentor-grade'] = m_board('Mentor-grade', method_example('Грейд — сложная математика по 50+ факторам', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ'))
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
