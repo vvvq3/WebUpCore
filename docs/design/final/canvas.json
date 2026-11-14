@@ -4,7 +4,7 @@
   "boards": {
     "AI-main.dc.html": {
       "expand": "fill",
-      "h": 8000,
+      "h": 8099,
       "page": "ai",
       "title": "UpCore AI — страница (порядок для C-level): проблема → измерение → итог → рост → затраты → автодетект → промпт-ревью",
       "w": 1440,
@@ -115,48 +115,12 @@
     },
     "Projects-main.dc.html": {
       "expand": "fill",
-      "h": 6069,
+      "h": 6067,
       "page": "projects",
-      "title": "Projects — основной макет: шапка → «Акт на 1 500 часов» → «Четыре цифры» (ПроектX, вариант 1) → «Три сценария» → для кого → вопросы → SaaS → CTA",
+      "title": "Projects — основной макет: шапка → «Цифры, по которым видно здоровье проекта» (ПроектX) → «Акт на 1 500 часов» → «Три сценария» → для кого → вопросы → SaaS → CTA",
       "w": 1440,
       "x": 0,
       "y": 0
-    },
-    "Projects-px-1.dc.html": {
-      "expand": "fill",
-      "h": 1401,
-      "page": "projects",
-      "title": "«Цифры проекта» · вариант 1 — «Четыре цифры, по которым видно здоровье проекта» (стоит в основном макете)",
-      "w": 1440,
-      "x": 1520,
-      "y": 0
-    },
-    "Projects-px-2.dc.html": {
-      "expand": "fill",
-      "h": 1427,
-      "page": "projects",
-      "title": "«Цифры проекта» · вариант 2 — «Сколько стоит проект и кто его делает»: деньги и люди крупно",
-      "w": 1440,
-      "x": 3040,
-      "y": 0
-    },
-    "Projects-px-3.dc.html": {
-      "expand": "fill",
-      "h": 1155,
-      "page": "projects",
-      "title": "«Цифры проекта» · вариант 3 — «Проект под рентгеном»: деньги, люди, ИИ, риски",
-      "w": 1440,
-      "x": 1520,
-      "y": 1627
-    },
-    "Projects-px-4.dc.html": {
-      "expand": "fill",
-      "h": 1371,
-      "page": "projects",
-      "title": "«Цифры проекта» · вариант 4 — «Во что превратился бюджет проекта»: бюджет первым",
-      "w": 1440,
-      "x": 3040,
-      "y": 1627
     }
   },
   "createdOnFiles": {
@@ -236,7 +200,7 @@
       "kind": "title1",
       "maxW": 4480,
       "page": "projects",
-      "text": "UpCore Projects: основной макет и 4 варианта блока «цифры проекта» (ПроектX)",
+      "text": "UpCore Projects: основной макет страницы",
       "w": 240,
       "x": 0,
       "y": -300
@@ -255,11 +219,7 @@
     "Blog-2.dc.html",
     "Blog-3.dc.html",
     "AI-main.dc.html",
-    "Projects-main.dc.html",
-    "Projects-px-1.dc.html",
-    "Projects-px-2.dc.html",
-    "Projects-px-3.dc.html",
-    "Projects-px-4.dc.html"
+    "Projects-main.dc.html"
   ],
   "pages": [
     {

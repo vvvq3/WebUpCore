@@ -1,0 +1,255 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AI-main.dc.html": {
+      "expand": "fill",
+      "h": 8099,
+      "page": "ai",
+      "title": "UpCore AI — страница (порядок для C-level): проблема → измерение → итог → рост → затраты → автодетект → промпт-ревью",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Blog-1.dc.html": {
+      "expand": "fill",
+      "h": 2664,
+      "page": "blog",
+      "title": "Блог — страница 1: интервью крупно + 6 популярных постов, пагинация 1 из 3",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Blog-2.dc.html": {
+      "expand": "fill",
+      "h": 2642,
+      "page": "blog",
+      "title": "Блог — страница 2: посты с начала канала (знакомство → аудит за 1 клик)",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Blog-3.dc.html": {
+      "expand": "fill",
+      "h": 2356,
+      "page": "blog",
+      "title": "Блог — страница 3: посты с начала канала (ROI → эпоха вайбкодинга)",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "CommandCenter-R1.dc.html": {
+      "expand": "fill",
+      "h": 3490,
+      "page": "design",
+      "title": "Командный центр (исходный, раунд 1)",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "CommandCenter-V3.dc.html": {
+      "expand": "fill",
+      "h": 3950,
+      "is_interactive": true,
+      "page": "design",
+      "title": "v3 — исходный + консоль со слайдами и продукты 2×2 из A1",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Grade-3.dc.html": {
+      "expand": "fill",
+      "h": 5243,
+      "page": "grade",
+      "title": "Grade — основной макет (на базе Grade 3) · «Объективная оценка разработчика — и рейтинг всей команды каждый месяц»",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Home-A.dc.html": {
+      "expand": "fill",
+      "h": 6932,
+      "is_interactive": true,
+      "page": "home",
+      "title": "Главная A — полная страница · «Цифровой тимлид для автоматической оценки эффективности вашей разработки»",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 4110,
+      "is_interactive": true,
+      "page": "design",
+      "title": "A1 — Командный центр (консоль со слайдами)",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Mentor-1.dc.html": {
+      "expand": "fill",
+      "h": 5353,
+      "page": "mentor",
+      "title": "Mentor 1 — «ИИ-наставник для каждого разработчика»: качество и дефекты, наставник на примере, факторы",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Mentor-2.dc.html": {
+      "expand": "fill",
+      "h": 5426,
+      "page": "mentor",
+      "title": "Mentor 2 — «Тимлид менторит троих, Mentor — всю команду»: приоритизация ревью, факторы, пример",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Mentor-3.dc.html": {
+      "expand": "fill",
+      "h": 5374,
+      "page": "mentor",
+      "title": "Mentor 3 — «Из оценки — в план роста»: ИПР и Топ-3 технологии, пример, факторы",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Projects-main.dc.html": {
+      "expand": "fill",
+      "h": 6067,
+      "page": "projects",
+      "title": "Projects — основной макет: шапка → «Цифры, по которым видно здоровье проекта» (ПроектX) → «Акт на 1 500 часов» → «Три сценария» → для кого → вопросы → SaaS → CTA",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-11T19:50:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "home",
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "t",
+    "t_home",
+    "t_grade",
+    "t_ai",
+    "t_projects",
+    "t_mentor",
+    "t_blog"
+  ],
+  "notes": {
+    "t": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "design",
+      "text": "UpCore — «Командный центр»: два варианта и объединённый v3",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_ai": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "ai",
+      "text": "UpCore AI: страница, собранная из блоков (без отмеченного владельцем)",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_blog": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "blog",
+      "text": "Блог: страницы 1, 2 и 3 (основа — вариант 3, пагинация)",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_grade": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "grade",
+      "text": "UpCore Grade: основной макет страницы",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_home": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "home",
+      "text": "Главная: полная страница A",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_mentor": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "mentor",
+      "text": "UpCore Mentor: 3 макета страницы на основе главной и Grade",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t_projects": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "projects",
+      "text": "UpCore Projects: основной макет страницы",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "CommandCenter-R1.dc.html",
+    "CommandCenter-V3.dc.html",
+    "Home-A.dc.html",
+    "Grade-3.dc.html",
+    "Mentor-1.dc.html",
+    "Mentor-2.dc.html",
+    "Mentor-3.dc.html",
+    "Blog-1.dc.html",
+    "Blog-2.dc.html",
+    "Blog-3.dc.html",
+    "AI-main.dc.html",
+    "Projects-main.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "design",
+      "name": "Дизайн главной"
+    },
+    {
+      "id": "home",
+      "name": "Главная — тексты"
+    },
+    {
+      "id": "grade",
+      "name": "UpCore Grade"
+    },
+    {
+      "id": "ai",
+      "name": "UpCore AI"
+    },
+    {
+      "id": "projects",
+      "name": "UpCore Projects"
+    },
+    {
+      "id": "mentor",
+      "name": "UpCore Mentor"
+    },
+    {
+      "id": "blog",
+      "name": "Блог"
+    }
+  ],
+  "title": "UpCore — дизайн и тексты сайта"
+}

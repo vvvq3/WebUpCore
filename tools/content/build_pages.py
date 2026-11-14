@@ -2355,8 +2355,8 @@ def ai_range_rows(note=True):
 
 def xlink(key, text):
     line, txt = ACC[key]; mod = {'grade': 'Grade', 'ai': 'AI', 'projects': 'Projects', 'mentor': 'Mentor'}[key]
-    return ('<a href="#' + key + '-page" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 14px; border: 1px solid ' + line + '66; background: ' + line + '14; color: #FFFFFF; text-decoration: none; font-size: 15px;">'
-            '<b style="color: ' + line + ';">&gt;</b><span>UpCore<b style="color: ' + txt + ';">.' + mod + '</b></span><span style="color: rgba(255,255,255,0.7);">— ' + e(text) + '</span></a>')
+    return ('<a href="#' + key + '-page" style="display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; max-width: 100%; box-sizing: border-box; min-height: 44px; padding: 11px 16px; border-radius: 14px; border: 1px solid ' + line + '66; background: ' + line + '14; color: #FFFFFF; text-decoration: none; font-size: 15px; line-height: 1.35;">'
+            '<span style="white-space: nowrap;"><b style="color: ' + line + ';">&gt;</b> UpCore<b style="color: ' + txt + ';">.' + mod + '</b></span><span style="min-width: 0; color: rgba(255,255,255,0.7);">' + e(text) + '</span></a>')
 
 def box(inner, key='ai', strong=False, flex=None):
     line, _ = ACC[key]
@@ -2644,7 +2644,7 @@ def proj_merged(n):
     det = ('<div class="g2">' + pj_panel('ТЕХДОЛГ', 'Где копится риск', 'Доля тяжести дефектов, ушедших в main, — по категориям качества ISO/IEC 25010.', techdebt_bars())
            + pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются вакансией или подбором специалиста.', techmap_rows() +
                       '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div>') + '</div>')
-    return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Четыре цифры, по которым видно здоровье проекта', 'Все факторы считаются по коду из демо-проекта UpCore и раскрываются до MR и строчек в «Глазе».', pj_head(), strip + det)
+    return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Цифры, по которым видно здоровье проекта', 'Все факторы считаются по коду из демо-проекта UpCore и раскрываются до MR и строчек в «Глазе».', pj_head(), strip + det)
 
 AUDIT_PTS = ['Реальная эффективность каждого разработчика подрядчика в часах', 'Подтверждённый грейд и сложность задач', 'Чистая ценность результирующего кода — без шума и часов, потерянных при отладке', 'Техдолг и риски по категориям качества']
 
@@ -2707,7 +2707,7 @@ def px_team(compact=False):
             + ('' if compact else '<div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.5;">Эффективность, грейд и вклад каждого — детально в модуле Grade.</div>') + '<div>' + xlink('grade', 'эффективность каждого в команде') + '</div></div>')
 
 def px_budget(size='clamp(48px, 5vw, 72px)'):
-    return ('<div><div style="font-size: ' + size + '; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: ' + GREEN + '; white-space: nowrap;">12,1 млн ₽</div>'
+    return ('<div><div style="font-size: ' + size + '; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #63D5FF; white-space: nowrap;">12,1 млн ₽</div>'
             '<div style="font-size: 16px; color: rgba(255,255,255,0.8); margin-top: 8px; line-height: 1.5;">общий бюджет проекта — столько ценности создано по коду с учётом всех переделок и качества</div></div>')
 
 def px_ai():
@@ -2761,7 +2761,7 @@ def proj_main2():
     h1 = 'Бюджет проекта и контроль подрядчиков — в часах и рублях'
     sub = 'Эффективность команды, техдолг по категориям качества, тех-карта и мэтч команды, прогноз сроков — всё по коду, а не по статусам в Jira.'
     body = [header('projects'), mod_hero('projects', h1, sub, panel('projects', 'projects / аудит акта', 'пример', act_vs_code()), PROJ_STATS2),
-            proj_audit2(1), proj_px(1), scenarios(),
+            proj_px(1), proj_audit2(1), scenarios(),
             roles('ДЛЯ КОГО', 'Прозрачность, выгодная заказчику и команде', PROJ_ROLES, 'projects'), faq(PROJ_FAQ, acc_key='projects'), saas_variant(2),
             cta('Проверьте, сколько на самом деле стоит ваш проект', 'Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore Projects — основной макет', '\n'.join(body), 6000, name='Projects-main')
@@ -2788,8 +2788,7 @@ def build(out, mode):
         for n in (1, 2, 3):
             files['%s-%d' % (nm, n)] = module_page(k, n)
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
-    for n in (1, 2, 3, 4):  # раунд 44: варианты блока «цифры проекта» для ПроектX
-        files['Projects-px-%d' % n] = pj_board('Projects-px-%d' % n, proj_px(n))
+    # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
     files['AI-main'] = ai_page_final()  # раунд 40: одна страница AI вместо разбора на блоки (AIbase/AImap/AIblk сняты)

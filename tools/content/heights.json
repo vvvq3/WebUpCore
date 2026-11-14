@@ -1,11 +1,11 @@
 {
  "AI-1": 7171,
- "AI-2": 6906,
- "AI-3": 7212,
+ "AI-2": 6904,
+ "AI-3": 7211,
  "AI-A": 6602,
  "AI-B": 1015,
  "AI-C": 1015,
- "AI-main": 8106,
+ "AI-main": 8099,
  "Blog-1": 2664,
  "Blog-2": 2642,
  "Blog-3": 2356,
@@ -30,9 +30,5 @@
  "Projects-A": 7558,
  "Projects-B": 1015,
  "Projects-C": 1015,
- "Projects-main": 6069,
- "Projects-px-1": 1401,
- "Projects-px-2": 1427,
- "Projects-px-3": 1155,
- "Projects-px-4": 1371
+ "Projects-main": 6067
 }
