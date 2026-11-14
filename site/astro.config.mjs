@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://up-core.ru',
   trailingSlash: 'always',
-  build: { format: 'directory' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   compressHTML: true,
   integrations: [
     sitemap({

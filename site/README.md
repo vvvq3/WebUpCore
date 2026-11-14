@@ -1,5 +1,7 @@
 # Сайт UpCore (up-core.ru)
 
+> Полная архитектура, правка и публикация — **`docs/ARCHITECTURE.md`** в корне репозитория.
+
 Astro + TypeScript + Tailwind. Статический сайт: RU (`/`) и EN (`/en/`), 8 страниц на язык —
 главная, Grade, AI, Projects, Mentor, блог (3 страницы).
 
@@ -50,3 +52,10 @@ npm run build
 
 Порядок правки текста: `tools/content/build_pages.py` → `python3 tools/content/export_web.py` → при новых строках дописать `site/i18n/en.json`
 → снова `export_web.py` → `npm run build`.
+
+## Проверка качества
+При работающем `npm run preview` (из корня репозитория):
+```bash
+node tools/qa/check_layout.js
+node tools/qa/check_interactions.js
+```

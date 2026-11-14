@@ -1,6 +1,10 @@
 ---
 // Общий шаблон страницы: SEO, шрифты, стили, меню на телефоне, форма заявки, cookie-баннер, аналитика.
 import '../styles/global.css';
+// предзагрузка основных шрифтов (заголовки — Bricolage, кириллица — Onest)
+import bricolageLatin from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url';
+import onestCyr from '@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2?url';
+import onestLatin from '@fontsource-variable/onest/files/onest-latin-wght-normal.woff2?url';
 import MobileMenu from '../components/MobileMenu.astro';
 import LeadForm from '../components/LeadForm.astro';
 import CookieBanner from '../components/CookieBanner.astro';
@@ -58,6 +62,8 @@ const t = ui[lang];
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <link rel="preload" href={bricolageLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={lang === 'ru' ? onestCyr : onestLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/img/logo.svg" as="image" type="image/svg+xml" />
     {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <Analytics />

@@ -5,6 +5,8 @@ const root = document.documentElement;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const lang = (document.body.dataset.lang || 'ru') as 'ru' | 'en';
+// класс анимаций ставится сразу, до разметки элементов — иначе скрытие запустится переходом с задержкой
+if (!reduced && 'IntersectionObserver' in window) root.classList.add('uc-js');
 
 /* ---------------- Аналитика: Яндекс Метрика после согласия ---------------- */
 const ymId = Number(document.querySelector<HTMLMetaElement>('meta[name="uc-ym"]')?.content || 0);
@@ -120,7 +122,7 @@ function initMenu() {
     }
   });
   document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !menu.hidden) close(); });
-  window.matchMedia('(min-width: 721px)').addEventListener('change', (m) => { if (m.matches && !menu.hidden) close(); });
+  window.matchMedia('(min-width: 1161px)').addEventListener('change', (m) => { if (m.matches && !menu.hidden) close(); });
 }
 
 /* ---------------- Форма заявки ---------------- */
@@ -245,6 +247,47 @@ function initSlider() {
   });
 }
 
+/* ---------------- Главная: анимация блока #core ---------------- */
+function initCore() {
+  const core = document.querySelector<HTMLElement>('#core');
+  if (!core || reduced || !('IntersectionObserver' in window)) return;
+  const strikes = [...core.querySelectorAll<HTMLElement>('span')].filter((s) => (s.getAttribute('style') || '').includes('line-through'));
+  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 200 + i * 220 + 'ms'); });
+  const circles = core.querySelectorAll<SVGCircleElement>('svg circle');
+  const arc = circles[1];
+  const full = arc ? (arc.getAttribute('stroke-dasharray') || '').split(' ').map(Number) : [];
+  const num = core.querySelector<SVGTextElement>('svg text');
+  if (arc && full.length === 2) {
+    arc.style.strokeDasharray = `${full[1]} ${full[1]}`; // старт: полное кольцо — «160 часов выглядят продуктивно»
+    arc.getBoundingClientRect();
+    requestAnimationFrame(() => arc.classList.add('uc-core-arc'));
+  }
+  const rows = [...core.querySelectorAll<HTMLElement>('svg + div > div')];
+  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1100 + i * 450 + 'ms'); });
+  const loss = [...core.querySelectorAll<HTMLElement>('b')].find((b) => /140/.test(b.textContent || ''));
+  loss?.classList.add('uc-core-loss');
+  const target = Number(num?.textContent || 0);
+  if (num && target) num.textContent = String(target * 2); // до анимации — «160 часов выглядят продуктивно»
+  const box = (arc?.closest('div[style*="flex-direction: column"]') as HTMLElement) || core;
+  const io = new IntersectionObserver((ents) => {
+    if (!ents.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    box.classList.add('uc-core-on');
+    if (arc && full.length === 2) requestAnimationFrame(() => { arc.style.strokeDasharray = `${full[0]} ${full[1]}`; });
+    if (num && target) {
+      const from = target * 2; const t0 = performance.now() + 1100; const dur = 1400;
+      const tick = (t: number) => {
+        const k = Math.min(1, Math.max(0, (t - t0) / dur));
+        const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        num.textContent = String(Math.round(from - (from - target) * e));
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  }, { threshold: 0.35 });
+  io.observe(box);
+}
+
 /* ---------------- Фильтр блога по темам ---------------- */
 function initBlogFilter() {
   const bar = document.querySelector<HTMLElement>('[data-blog-filter]');
@@ -310,7 +353,7 @@ function initMotion() {
   root.classList.add('uc-js');
   // кандидаты на появление: заголовки секций, карточки, элементы сеток; оставляем самые «мелкие» (без вложенных кандидатов)
   const sel = 'section > *, article, .g2 > *, .g3 > *, .g4 > *, .g4m2 > *, .uc-row > *';
-  const cands = new Set<HTMLElement>([...main.querySelectorAll<HTMLElement>(sel)].filter((el) => !el.closest('header') && !el.closest('[data-slider]') && el.getAttribute('aria-hidden') !== 'true' && !el.closest('[data-blog-all]')));
+  const cands = new Set<HTMLElement>([...main.querySelectorAll<HTMLElement>(sel)].filter((el) => !el.closest('header') && !el.closest('[data-slider]') && el.getAttribute('aria-hidden') !== 'true' && !el.closest('[data-blog-all]') && !el.closest('main > div > section:first-of-type') && !(el.closest('#core') && el.closest('div[style*="background: #0B0A12"]'))));
   const leaves = [...cands].filter((el) => ![...cands].some((o) => o !== el && el.contains(o)));
   leaves.forEach((el) => {
     const sibs = [...(el.parentElement?.children || [])].filter((s) => leaves.includes(s as HTMLElement));
@@ -324,14 +367,20 @@ function initMotion() {
     el.style.setProperty('--d', Math.min(sibs.indexOf(el), 8) * 100 + 'ms');
     el.classList.add('uc-bar');
   });
+  // главная: крупные цифры блоков «Принцип и точность» и «Результаты для бизнеса» — тоже табло
+  if (document.body.dataset.page === 'home') {
+    main.querySelectorAll<HTMLElement>('#trust *, #results *').forEach((el) => {
+      if (el.children.length || !/\d/.test(el.textContent || '') || (el.textContent || '').trim().length > 16 || el.closest('[data-odo]')) return;
+      if (parseFloat(getComputedStyle(el).fontSize) >= 24) el.setAttribute('data-odo', '');
+    });
+  }
   // цифры-табло: ключевые цифры первых экранов (data-odo)
   const odos = [...main.querySelectorAll<HTMLElement>('[data-odo]')];
   odos.forEach((el, i) => {
     const text = el.textContent || '';
-    el.setAttribute('aria-label', text);
-    el.innerHTML = [...text].map((ch, k) => (/\d/.test(ch)
+    el.innerHTML = `<span class="uc-sr">${text}</span>` + [...text].map((ch, k) => (/\d/.test(ch)
       ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 120 + k * 60}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
-      : `<span aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
+      : `<span class="uc-odo-ch" aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
   });
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
@@ -351,6 +400,7 @@ initMenu();
 initSlider();
 initLeadForm();
 initBlogFilter();
+initCore();
 initCookie();
 initGoals();
 tagElements();

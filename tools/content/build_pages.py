@@ -67,7 +67,10 @@ html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-tg{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px 24px;align-items:center}.uc-tg-ic{grid-row:1/span 2}.uc-tg-h{align-self:end}.uc-tg-p{grid-column:2;align-self:start}.uc-tg-b{grid-column:3;grid-row:1/span 2}
 @media (max-width:720px){.uc-tg{grid-template-columns:56px minmax(0,1fr);gap:16px 16px}.uc-tg-ic{grid-row:auto;width:56px!important;height:56px!important;border-radius:18px!important}.uc-tg-h{align-self:center}.uc-tg-p,.uc-tg-b{grid-column:1/-1;grid-row:auto}.uc-tg-b .uc-btn,.uc-tg-b a{width:100%;justify-content:center}}
 .uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
-@media (max-width:720px){.uc-nav,.uc-hide-m{display:none!important}.uc-burger{display:inline-flex!important}.uc-hlogo{height:22px!important}.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
+@media (max-width:1160px){.uc-nav,.uc-hide-m{display:none!important}.uc-burger{display:inline-flex!important}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
+@media (min-width:1161px) and (max-width:1359px){.uc-cap-l{display:none}.uc-nav a{padding-left:9px!important;padding-right:9px!important}}
+@media (min-width:1161px) and (max-width:1239px){.uc-lang-d{display:none!important}}
+@media (max-width:720px){.uc-hlogo{height:22px!important}.uc-btns{grid-auto-flow:row}}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
@@ -159,14 +162,14 @@ def header(active=None):
             chips += ('<a href="#' + key + '" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; color: #FFFFFF; text-decoration: none;">'
                       '<span style="width: 8px; height: 8px; border-radius: 50%; background: ' + c + ';"></span>' + name + '</a>')
     capsule = ('<span style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; margin: 0 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);">'
-               '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.5); padding: 0 6px 0 8px;">UpCore.</span>' + chips + '</span>')
+               '<span class="uc-cap-l" style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.5); padding: 0 6px 0 8px;">UpCore.</span>' + chips + '</span>')
     nav = plain('Платформа', None) + capsule + plain('Блог', 'blog') + plain('Контакты', 'contacts')
     burger = ('<a href="#menu" class="uc-burger" aria-label="Меню" style="display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.22);">'
               '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/></svg></a>')
     return ('<header style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; justify-content: space-between;">\n'
             '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;"><img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;"></a>\n'
             '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
-            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><a href="#lang" class="uc-hide-m" style="color: rgba(255,255,255,0.78); text-decoration: none; ' + MONO + ' font-size: 13px; padding: 10px 6px; white-space: nowrap;">RU / EN</a>'
+            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><a href="#lang" class="uc-hide-m uc-lang-d" style="color: rgba(255,255,255,0.78); text-decoration: none; ' + MONO + ' font-size: 13px; padding: 10px 6px; white-space: nowrap;">RU / EN</a>'
             '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else '') + ' class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
             '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a>' + burger + '</div>\n'
             '</header>')
@@ -2732,7 +2735,7 @@ def audit_right(numbered=False):
 def proj_audit2(n):
     if n == 1:  # слева — отчёт к акту по каждому разработчику подрядчика
         devs = [('Senior · Backend', 160, 148, 90), ('Middle+ · Backend', 160, 112, 81), ('Middle · Frontend', 160, 72, 64), ('Senior · Frontend', 160, 40, 50)]
-        head = '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px 58px 52px; gap: 8px; ' + MONO + ' font-size: 11.5px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span>РАЗРАБОТЧИК</span><span style="text-align: right;">В АКТЕ</span><span style="text-align: right;">ПО КОДУ</span><span style="text-align: right;">ЭФФ.</span></div>'.replace('11.5px', '12px')
+        head = '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px 58px 52px; gap: 8px; ' + MONO + ' font-size: 11.5px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">РАЗРАБОТЧИК</span><span style="text-align: right;">В АКТЕ</span><span style="text-align: right;">ПО КОДУ</span><span style="text-align: right;">ЭФФ.</span></div>'.replace('11.5px', '12px')
         rows = ''
         for nm, a, c, rc in devs:
             ef = int(round(c / a * 100)); col = GREEN if ef >= 85 else (AMBER if ef >= 60 else RED_T)

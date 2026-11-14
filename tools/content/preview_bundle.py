@@ -32,6 +32,7 @@ def main(out):
                 depth = r.count('/')
                 t = open(src).read()
                 t = re.sub(r'(href|src)="(/(?!/)[^"]*)"', lambda m: '%s="%s"' % (m.group(1), rel(m.group(2), depth)), t)
+                t = re.sub(r'url\((/(?!/)[^)]*)\)', lambda m: 'url(%s)' % rel(m.group(1), depth), t)  # шрифты во встроенных стилях
                 open(dst, 'w').write(t)
             elif f.endswith('.css'):
                 t = open(src).read()
