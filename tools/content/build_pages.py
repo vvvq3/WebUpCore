@@ -2855,19 +2855,28 @@ def mentor_blk(kind):
 Q32 = '3,2 → <span style="color: ' + GREEN + ';">8,0</span>'
 
 def mentor_queue():
-    items = [('7', 'критических логических ошибок и уязвимостей', RED_T),
-             ('17%', 'эффективности — время сильно выше объективной сложности', RED_T),
-             ('23%', 'промптов в духе «всё переделай»', RED_T),
-             ('45%', 'результирующего кода — остальное переписано', AMBER),
-             ('2', 'класса архитектурного ядра затронуто', AMBER),
-             ('3', 'нетипичных технологии или паттерна', AMBER),
-             ('+129%', 'перерасход токенов на 1 час к среднему в компании', AMBER),
-             ('7 → 2,4', 'резкое падение качества кода', RED_T),
-             ('52%', 'выявленных дефектов попадают в main', RED_T)]
-    rows = ''.join('<div style="display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px; line-height: 1.4;">'
-                   '<span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + '; align-self: center;"></span>'
-                   '<span style="min-width: 0;"><b style="font-size: 17px; color: ' + c + '; white-space: nowrap;">' + e(n) + '</b> ' + e(t) + '</span></div>' for n, t, c in items)
-    return '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>' + rows
+    groups = [('ЭФФЕКТИВНОСТЬ', '#63D5FF', [
+                  ('17%', 'эффективности — время сильно выше объективной сложности', RED_T),
+                  ('7 → 2,4', 'резкое падение качества кода', RED_T)]),
+              ('ИИ', '#B9AEFF', [
+                  ('23%', 'промптов в духе «всё переделай»', RED_T),
+                  ('45%', 'результирующего кода — остальное переписано', AMBER),
+                  ('+129%', 'перерасход токенов на 1 час к среднему в компании', AMBER)]),
+              ('ТЕХДОЛГ', '#7FDB7A', [
+                  ('7', 'критических логических ошибок и уязвимостей', RED_T),
+                  ('52%', 'выявленных дефектов попадают в main', RED_T),
+                  ('2', 'класса архитектурного ядра затронуто', AMBER),
+                  ('3', 'нетипичных технологии или паттерна', AMBER)])]
+    def row(n, t, c):
+        return ('<div style="display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); margin-bottom: 6px; font-size: 15px; line-height: 1.4;">'
+                '<span style="flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: ' + c + '; align-self: center;"></span>'
+                '<span style="min-width: 0;"><b style="font-size: 17px; color: ' + c + '; white-space: nowrap;">' + e(n) + '</b> ' + e(t) + '</span></div>')
+    out = '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 4px;">ТРЕБУЮТ ВНИМАНИЯ ЛИДА</div>'
+    for g, col, items in groups:
+        out += ('<div style="display: flex; align-items: center; gap: 10px; margin: 14px 0 8px;"><span style="' + MONO + ' font-size: 12px; letter-spacing: 0.06em; color: ' + col + ';">' + g + '</span>'
+                '<span style="flex: 1 1 auto; height: 1px; background: ' + col + '33;"></span><span style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.45);">' + str(len(items)) + '</span></div>'
+                + ''.join(row(*it) for it in items))
+    return out
 
 def q_summary():
     return ('<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">' + tile(Q32, 'качество кода до и после ревью') + tile('41 из 47', 'MR разобрано ИИ-ревью')
