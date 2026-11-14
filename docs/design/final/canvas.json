@@ -103,6 +103,33 @@
       "w": 1440,
       "x": 0,
       "y": 0
+    },
+    "Menu-1.dc.html": {
+      "expand": "fill",
+      "h": 1227,
+      "page": "menu",
+      "title": "Меню на телефоне · 1 — бургер и меню на весь экран",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Menu-2.dc.html": {
+      "expand": "fill",
+      "h": 1227,
+      "page": "menu",
+      "title": "Меню на телефоне · 2 — шапка и лента разделов (листается вбок)",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Menu-3.dc.html": {
+      "expand": "fill",
+      "h": 1254,
+      "page": "menu",
+      "title": "Меню на телефоне · 3 — нижняя панель «Меню» + «Подключить» и шторка",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
     }
   },
   "createdOnFiles": {
@@ -111,7 +138,7 @@
   },
   "designSystems": [],
   "launch": {
-    "page": "home",
+    "page": "menu",
     "view": "canvas"
   },
   "noteOrder": [
@@ -121,7 +148,8 @@
     "t_ai",
     "t_projects",
     "t_mentor",
-    "t_blog"
+    "t_blog",
+    "t_menu"
   ],
   "notes": {
     "t": {
@@ -186,6 +214,15 @@
       "w": 240,
       "x": 0,
       "y": -300
+    },
+    "t_menu": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "menu",
+      "text": "Меню на телефоне: 3 варианта (закрыто · открыто · при прокрутке)",
+      "w": 240,
+      "x": 0,
+      "y": -300
     }
   },
   "order": [
@@ -199,7 +236,10 @@
     "Blog-3.dc.html",
     "AI-main.dc.html",
     "Projects-main.dc.html",
-    "Mentor-main.dc.html"
+    "Mentor-main.dc.html",
+    "Menu-1.dc.html",
+    "Menu-2.dc.html",
+    "Menu-3.dc.html"
   ],
   "pages": [
     {
@@ -229,6 +269,10 @@
     {
       "id": "blog",
       "name": "Блог"
+    },
+    {
+      "id": "menu",
+      "name": "Меню на телефоне"
     }
   ],
   "title": "UpCore — дизайн и тексты сайта"

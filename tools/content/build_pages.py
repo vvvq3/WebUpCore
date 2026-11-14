@@ -3019,6 +3019,107 @@ def m_board(name, html):
     return page('UpCore Mentor — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name=name)
 
 
+# ---------- раунд 63: меню на телефоне — 3 макета (по 3 состояния) ----------
+MM_PROD = [('grade', 'Grade', 'грейд и рейтинг разработчиков'), ('ai', 'AI', 'эффективность ИИ и вайбкодинга'),
+           ('projects', 'Projects', 'бюджет проекта и подрядчики'), ('mentor', 'Mentor', 'ИИ-наставник для каждого')]
+BURGER = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/></svg>'
+CLOSE_X = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/></svg>'
+GRID_IC = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="2" fill="#FFFFFF"/><rect x="9" y="1" width="6" height="6" rx="2" fill="#FFFFFF"/><rect x="1" y="9" width="6" height="6" rx="2" fill="#FFFFFF"/><rect x="9" y="9" width="6" height="6" rx="2" fill="#63D5FF"/></svg>'
+
+def mm_btn(t, primary=True, h=40, grow=False):
+    st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF;'
+    return ('<span style="display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: %dpx; padding: 0 14px; border-radius: 12px; %s font-weight: 700; font-size: 14px; white-space: nowrap;%s">%s</span>'
+            % (h, st, ' flex: 1 1 0;' if grow else '', e(t)))
+
+def mm_logo(h=22):
+    return '<img src="%s" alt="UpCore" style="height: %dpx; width: auto; display: block;">' % (src('logo'), h)
+
+def mm_icon_btn(svg):
+    return '<span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18);">' + svg + '</span>'
+
+def mm_hero():
+    return ('<div style="padding: 28px 16px 0;"><div style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(99,213,255,0.35); ' + MONO + ' font-size: 12px; color: #63D5FF;">'
+            '<span style="width: 7px; height: 7px; border-radius: 50%; background: #53C04D;"></span>цифровой тимлид · онлайн</div>'
+            '<div style="font-size: 36px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-top: 18px;">Цифровой тимлид для <span style="color: #63D5FF;">автоматической оценки эффективности</span> вашей разработки</div>'
+            '<div style="font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.72); margin-top: 16px;">UpCore анализирует каждый MR по 50+ факторам и переводит код в реально затраченные часы.</div></div>')
+
+def mm_mid():  # кусок страницы «в середине» — для состояния при прокрутке
+    return ('<div style="padding: 24px 16px 0;"><div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПЛАТФОРМА</div>'
+            '<div style="font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-top: 10px;">Одна платформа — четыре продукта</div>'
+            + ''.join('<div style="margin-top: 12px; border-radius: 18px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 16px;"><b style="color: ' + ACC[k][1] + ';">&gt;</b> UpCore<b style="color: ' + ACC[k][1] + ';">.' + n + '</b>'
+                      '<div style="font-size: 14px; color: rgba(255,255,255,0.66); margin-top: 4px;">' + e(d) + '</div></div>' for k, n, d in MM_PROD) + '</div>')
+
+def mm_frame(cap, inner, note):
+    return ('<div style="flex: 0 0 390px; display: flex; flex-direction: column; gap: 12px;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">' + cap + '</div>'
+            '<div style="position: relative; width: 390px; height: 780px; overflow: hidden; border-radius: 40px; border: 1px solid rgba(255,255,255,0.16); background: #0D0C15; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">' + inner + '</div>'
+            '<div style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7);">' + e(note) + '</div></div>')
+
+def mm_bar(left, right, sticky_bg=False):
+    bg = 'background: rgba(13,12,21,0.82); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08);' if sticky_bg else ''
+    return '<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 64px; padding: 0 16px; ' + bg + '">' + left + '<div style="display: flex; align-items: center; gap: 8px;">' + right + '</div></div>'
+
+def mm_board(n, title, lead, frames, pros):
+    head = ('<div style="max-width: 1280px; margin: 0 auto; padding: 48px 32px 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">МЕНЮ НА ТЕЛЕФОНЕ · ВАРИАНТ ' + str(n) + '</div>'
+            '<h2 style="margin: 12px 0 0; font-size: 44px; letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">' + e(title) + '</h2>'
+            '<p style="margin: 14px 0 0; max-width: 860px; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.74);">' + e(lead) + '</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(99,213,255,0.1); color: #A8E8FF;">' + e(p) + '</span>' for p in pros) + '</div></div>')
+    return page('UpCore — меню на телефоне, вариант %d' % n, head + '<div style="max-width: 1280px; margin: 0 auto; padding: 32px 32px 64px; display: flex; gap: 48px; justify-content: space-between;">' + ''.join(frames) + '</div>', 1100, name='Menu-%d' % n)
+
+def mobile_menu(n):
+    if n == 1:  # бургер + полноэкранное меню
+        closed = mm_bar(mm_logo(), mm_btn('Подключить') + mm_icon_btn(BURGER)) + mm_hero()
+        items = ''.join('<div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08);"><div><div style="font-size: 20px; font-weight: 700;"><b style="color: ' + ACC[k][1] + ';">&gt;</b> UpCore<span style="color: ' + ACC[k][1] + ';">.' + nm + '</span></div>'
+                        '<div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px;">' + e(d) + '</div></div><span style="color: rgba(255,255,255,0.4); font-size: 18px;">→</span></div>' for k, nm, d in MM_PROD)
+        plain = ''.join('<div style="padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 18px; font-weight: 600;">' + t + '</div>' for t in ['Платформа', 'Блог', 'Контакты'])
+        opened = (mm_bar(mm_logo(), mm_icon_btn(CLOSE_X)) + '<div style="padding: 4px 16px 0;">' + items + plain + '</div>'
+                  '<div style="position: absolute; left: 16px; right: 16px; bottom: 20px; display: flex; flex-direction: column; gap: 10px;"><div style="display: flex; gap: 10px;">' + mm_btn('Провести демо', False, 48, True) + mm_btn('Подключить', True, 48, True) + '</div>'
+                  '<div style="display: flex; justify-content: space-between; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.6);"><span><b style="color: #FFFFFF;">RU</b> / EN</span><span>+7 (985) 848-35-55</span></div></div>')
+        scrolled = mm_bar(mm_logo(20), mm_btn('Подключить', True, 36) + mm_icon_btn(BURGER), True) + mm_mid()
+        return mm_board(1, 'Бургер и меню на весь экран', 'Шапка в одну строку: логотип, «Подключить» и кнопка меню. По нажатию открывается меню на весь экран: четыре продукта с подписями в своих цветах, ниже «Платформа», «Блог», «Контакты», внизу — «Провести демо», «Подключить», RU / EN и телефон.',
+                        [mm_frame('ЗАКРЫТО', closed, 'Шапка 64 px вместо ~380 px сейчас — первый экран сразу начинается с заголовка.'),
+                         mm_frame('ОТКРЫТО', opened, 'Продукты крупно, с описанием — понятно, куда идти. Кнопки внизу, под большим пальцем.'),
+                         mm_frame('ПРИ ПРОКРУТКЕ', scrolled, 'Шапка прилипает к верху, полупрозрачная: меню и «Подключить» всегда под рукой.')],
+                        ['самый привычный', 'шапка в 1 строку', 'продукты с описаниями'])
+    if n == 2:  # шапка + лента разделов
+        def chips(active, offset=0):
+            names = ['Платформа', 'Grade', 'AI', 'Projects', 'Mentor', 'Блог', 'Контакты']
+            cs = ''.join('<span style="flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; font-size: 14px; ' + ('background: #FFFFFF; color: #0D0C15; font-weight: 700;' if nm == active else 'background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.8);') + '">' + nm + '</span>' for nm in names)
+            return ('<div style="position: relative; overflow: hidden; padding: 0 0 12px;"><div style="display: flex; gap: 8px; padding: 0 16px; transform: translateX(-' + str(offset) + 'px);">' + cs + '</div>'
+                    '<div style="position: absolute; right: 0; top: 0; bottom: 12px; width: 48px; background: linear-gradient(90deg, rgba(13,12,21,0), #0D0C15);"></div></div>')
+        bottom = ('<div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; padding: 12px 16px 20px; background: rgba(13,12,21,0.9); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.08);">'
+                  + mm_btn('Провести демо', False, 46, True) + mm_btn('Подключить', True, 46, True) + '</div>')
+        top = mm_bar(mm_logo(), '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.7);">RU / EN</span>' + mm_btn('Подключить'))
+        closed = top + chips('Платформа') + mm_hero()
+        swiped = top + chips('Mentor', 190) + mm_hero()
+        scrolled = ('<div style="background: rgba(13,12,21,0.86); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08);">' + mm_bar(mm_logo(20), mm_btn('Подключить', True, 36)) + chips('Grade') + '</div>' + mm_mid() + bottom)
+        return mm_board(2, 'Шапка и лента разделов', 'Без кнопки меню: под логотипом — лента разделов, которая листается пальцем вбок (как вкладки в приложениях). Все разделы видны сразу, текущий подсвечен. При прокрутке страницы лента прилипает к верху, а снизу появляется панель «Провести демо» / «Подключить».',
+                        [mm_frame('НАЧАЛО СТРАНИЦЫ', closed, 'Две строки: логотип с «Подключить» и лента разделов. Высота ~112 px.'),
+                         mm_frame('ЛЕНТА ПРОЛИСТАНА', swiped, 'Лента листается вбок: Mentor, Блог, Контакты. Затухание справа подсказывает, что есть ещё.'),
+                         mm_frame('ПРИ ПРОКРУТКЕ', scrolled, 'Лента прилипает к верху, снизу — панель с двумя главными кнопками.')],
+                        ['разделы видны без нажатия', '1 касание до продукта', 'кнопки всегда на экране'])
+    # n == 3: нижняя панель + шторка
+    bar = ('<div style="position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 10px; padding: 12px 16px 20px; background: rgba(13,12,21,0.9); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.08);">'
+           '<span style="display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box; min-height: 46px; padding: 0 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.28); font-weight: 700; font-size: 14px;">' + GRID_IC + 'Меню</span>' + mm_btn('Подключить', True, 46, True) + '</div>')
+    closed = mm_bar(mm_logo(), '<span style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.7);">RU / EN</span>' + mm_btn('Провести демо', False)) + mm_hero() + bar
+    cards = ''.join('<div style="border-radius: 16px; background: #1A1925; border: 1px solid ' + ACC[k][0] + '55; padding: 14px;"><div style="font-size: 17px; font-weight: 800;"><span style="color: ' + ACC[k][1] + ';">&gt;</span> ' + nm + '</div>'
+                    '<div style="font-size: 12px; line-height: 1.4; color: rgba(255,255,255,0.62); margin-top: 4px;">' + e(d) + '</div></div>' for k, nm, d in MM_PROD)
+    sheet = ('<div style="position: absolute; inset: 0; background: rgba(0,0,0,0.55);"></div>'
+             '<div style="position: absolute; left: 0; right: 0; bottom: 0; border-radius: 28px 28px 0 0; background: #15141F; border-top: 1px solid rgba(255,255,255,0.12); padding: 10px 16px 20px;">'
+             '<div style="width: 40px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.25); margin: 0 auto 14px;"></div>'
+             '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 10px;">ПРОДУКТЫ</div>'
+             '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">' + cards + '</div>'
+             '<div style="display: flex; gap: 8px; margin-top: 14px;">' + ''.join('<span style="flex: 1 1 0; text-align: center; padding: 11px 0; border-radius: 12px; background: rgba(255,255,255,0.07); font-size: 14px;">' + t + '</span>' for t in ['Платформа', 'Блог', 'Контакты']) + '</div>'
+             '<div style="display: flex; gap: 10px; margin-top: 14px;">' + mm_btn('Провести демо', False, 46, True) + mm_btn('Подключить', True, 46, True) + '</div>'
+             '<div style="display: flex; justify-content: space-between; margin-top: 12px; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.6);"><span><b style="color: #FFFFFF;">RU</b> / EN</span><span>@IvanGel_Dex</span></div></div>')
+    opened = mm_bar(mm_logo(), mm_btn('Провести демо', False)) + mm_hero() + sheet
+    scrolled = mm_mid() + bar
+    return mm_board(3, 'Нижняя панель и шторка', 'Меню переезжает вниз, под большой палец: внизу экрана всегда висит панель «Меню» + «Подключить». «Меню» поднимает шторку: продукты плиткой 2×2 в своих цветах, «Платформа», «Блог», «Контакты», кнопки и RU / EN. Сверху — только логотип и «Провести демо», при прокрутке шапка уходит, и для текста остаётся весь экран.',
+                    [mm_frame('ЗАКРЫТО', closed, 'Сверху — логотип, RU / EN и «Провести демо», снизу — панель «Меню» и «Подключить».'),
+                     mm_frame('ОТКРЫТО', opened, 'Шторка снизу: всё меню на одном экране, ничего не нужно листать. Закрывается свайпом вниз.'),
+                     mm_frame('ПРИ ПРОКРУТКЕ', scrolled, 'Шапка скрывается, остаётся только нижняя панель — максимум места для контента.')],
+                    ['удобно одной рукой', 'максимум места под текст', 'как в мобильных приложениях'])
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -3039,6 +3140,8 @@ def build(out, mode):
             files['%s-%s' % (n, v)] = product(k, v)
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
     # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
+    for n in (1, 2, 3):
+        files['Menu-%d' % n] = mobile_menu(n)  # раунд 63: меню на телефоне
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
