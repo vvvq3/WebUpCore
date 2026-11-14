@@ -64,6 +64,8 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 .uc-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
+.uc-tg{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px 24px;align-items:center}.uc-tg-ic{grid-row:1/span 2}.uc-tg-h{align-self:end}.uc-tg-p{grid-column:2;align-self:start}.uc-tg-b{grid-column:3;grid-row:1/span 2}
+@media (max-width:720px){.uc-tg{grid-template-columns:56px minmax(0,1fr);gap:16px 16px}.uc-tg-ic{grid-row:auto;width:56px!important;height:56px!important;border-radius:18px!important}.uc-tg-h{align-self:center}.uc-tg-p,.uc-tg-b{grid-column:1/-1;grid-row:auto}.uc-tg-b .uc-btn,.uc-tg-b a{width:100%;justify-content:center}}
 .uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
 @media (max-width:720px){.uc-nav,.uc-hide-m{display:none!important}.uc-burger{display:inline-flex!important}.uc-hlogo{height:22px!important}.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
 .uc-rl{}
@@ -2363,12 +2365,13 @@ BLOG_MORE = [  # остальные посты канала с самого на
 ]
 
 def tg_banner_v2():
+    """Баннер канала в блоге. Раунд 71: на телефоне логотип Telegram — слева от заголовка, текст — во всю ширину (классы uc-tg*)."""
     gel = '<a href="https://t.me/IvanGel_Dex" style="color: #63D5FF; font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(99,213,255,0.5);">Иван Гель</a>'
-    return ('<div style="border-radius: 32px; background: linear-gradient(135deg, rgba(99,213,255,0.16), #12111C 60%); border: 1px solid rgba(99,213,255,0.4); padding: clamp(24px, 3.4vw, 44px); display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; justify-content: space-between;">'
-            '<div style="display: flex; gap: 20px; align-items: center; flex: 1 1 420px; min-width: 0;"><div style="flex: 0 0 auto; width: 72px; height: 72px; border-radius: 22px; background: #63D5FF; display: flex; align-items: center; justify-content: center;">' + tg_icon(36, '#0D0C15') + '</div>'
-            '<div style="min-width: 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">TELEGRAM · @UPCORE_AI</div><div style="font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; line-height: 1.15; margin-top: 4px;">ИИ-тимлид UpCore</div>'
-            '<p style="margin: 8px 0 0; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.78); max-width: 640px;">Канал об эффективности разработки. Ведёт основатель Dex ' + gel + ': как работает цифровой тимлид, как измерять ИИ в разработке и переводить код в деньги. Дневник продукта и разборы реальных кейсов.</p></div></div>'
-            + btn('Подписаться на канал', TG_URL) + '</div>')
+    return ('<div class="uc-tg" style="border-radius: 32px; background: linear-gradient(135deg, rgba(99,213,255,0.16), #12111C 60%); border: 1px solid rgba(99,213,255,0.4); padding: clamp(24px, 3.4vw, 44px);">'
+            '<div class="uc-tg-ic" style="width: 72px; height: 72px; border-radius: 22px; background: #63D5FF; display: flex; align-items: center; justify-content: center;">' + tg_icon(36, '#0D0C15') + '</div>'
+            '<div class="uc-tg-h" style="min-width: 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF;">TELEGRAM · @UPCORE_AI</div><div style="font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; line-height: 1.15; margin-top: 4px;">ИИ-тимлид UpCore</div></div>'
+            '<p class="uc-tg-p" style="margin: 0; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.78); max-width: 640px;">Канал об эффективности разработки. Ведёт основатель Dex ' + gel + ': как работает цифровой тимлид, как измерять ИИ в разработке и переводить код в деньги. Дневник продукта и разборы реальных кейсов.</p>'
+            '<div class="uc-tg-b">' + btn('Подписаться на канал', TG_URL) + '</div></div>')
 
 def pagination(cur, total=3):
     def cell(label, active=False, muted=False):

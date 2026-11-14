@@ -65,6 +65,22 @@ function initGoals() {
   });
 }
 
+/* ---------------- Прокрутка при переходе между страницами ----------------
+   Новая страница всегда открывается сверху (если в адресе нет #якоря): браузер и окна предпросмотра
+   иначе могут сохранить прокрутку прошлой страницы. Кнопка «Назад» по-прежнему возвращает на прежнее место. */
+function initScrollReset() {
+  const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+  const back = nav?.type === 'back_forward';
+  if (!back && !location.hash) {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const top = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    top();
+    window.addEventListener('pageshow', (ev) => { if (!ev.persisted) top(); });
+  } else if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'auto';
+  }
+}
+
 /* ---------------- Шапка ---------------- */
 function initHeader() {
   const onScroll = () => root.classList.toggle('uc-scrolled', window.scrollY > 40);
@@ -302,6 +318,7 @@ function initMotion() {
   [...leaves, ...bars, ...odos].forEach((el) => io.observe(el));
 }
 
+initScrollReset();
 initHeader();
 initMenu();
 initSlider();
