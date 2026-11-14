@@ -2336,6 +2336,152 @@ def blog_page2(pg):
             cta('Посмотрите на свою команду глазами цифрового тимлида', 'Подключите репозиторий — первые результаты за 1 день.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore — блог, страница %d' % pg, '\n'.join(body), 3000, name='Blog-%d' % pg)
 
+# ---------------------------------------------------------------- раунд 38: UpCore AI — 3 новых макета по материалу владельца (раздел 23)
+AI_RANGES = [('Senior + ИИ', 100, 300, '+100…300%', GREEN), ('Middle + ИИ', -20, 50, '−20…+50%', AMBER), ('Junior + ИИ', -50, 0, '−50…0%', RED_T)]
+
+def ai_range_rows(note=True):
+    lo, hi = -50, 300
+    pos = lambda v: (v - lo) / (hi - lo) * 100
+    out = ''
+    for nm, a, b, lab, c in AI_RANGES:
+        out += ('<div style="padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.07);"><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px;"><b style="font-size: 16px;">' + e(nm) + '</b><b style="color: ' + c + '; font-size: 18px; white-space: nowrap;">' + lab + '</b></div>'
+                '<div style="position: relative; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.05);">'
+                '<div style="position: absolute; top: -4px; bottom: -4px; left: %.1f%%; width: 2px; background: rgba(255,255,255,0.45);"></div>' % pos(0) +
+                '<div style="position: absolute; top: 0; bottom: 0; left: %.1f%%; width: %.1f%%; border-radius: 7px; background: %s;"></div></div></div>' % (pos(a), pos(b) - pos(a), c))
+    scale = ('<div style="position: relative; height: 18px; margin-top: 6px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);">'
+             + ''.join('<span style="position: absolute; left: %.1f%%; transform: translateX(-50%%);">%s</span>' % (pos(v), t) for v, t in [(-50, '−50%'), (0, '0'), (100, '+100%'), (200, '+200%'), (300, '+300%')]) + '</div>')
+    tail = ('<div style="margin-top: 14px; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7);">Прирост эффективности с ИИ относительно ручной работы. Разрыв между людьми огромный — его важно измерять и контролировать.</div>' if note else '')
+    return out + scale + tail
+
+def xlink(key, text):
+    line, txt = ACC[key]; mod = {'grade': 'Grade', 'ai': 'AI', 'projects': 'Projects', 'mentor': 'Mentor'}[key]
+    return ('<a href="#' + key + '-page" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 14px; border: 1px solid ' + line + '66; background: ' + line + '14; color: #FFFFFF; text-decoration: none; font-size: 15px;">'
+            '<b style="color: ' + line + ';">&gt;</b><span>UpCore<b style="color: ' + txt + ';">.' + mod + '</b></span><span style="color: rgba(255,255,255,0.7);">— ' + e(text) + '</span></a>')
+
+def box(inner, key='ai', strong=False, flex=None):
+    line, _ = ACC[key]
+    return ('<div style="' + ('flex: ' + flex + '; ' if flex else '') + 'min-width: 0; border-radius: 28px; background: ' + ('#12111C' if strong else '#1A1925') + '; border: 1px solid ' + (line + '59' if strong else 'rgba(255,255,255,0.08)') + '; padding: clamp(22px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px;">' + inner + '</div>')
+
+def lbl(t, col='#B9AEFF'):
+    return '<div style="' + MONO + ' font-size: 12px; color: ' + col + '; letter-spacing: 0.04em;">' + e(t) + '</div>'
+
+def ttl(t, size='clamp(22px, 2vw, 28px)'):
+    return '<div style="font-size: ' + size + '; font-weight: 800; line-height: 1.2;">' + e(t) + '</div>'
+
+def para(t, size=16):
+    return '<p style="margin: 0; font-size: %dpx; line-height: 1.6; color: rgba(255,255,255,0.8);">%s</p>' % (size, e(t))
+
+def ai_gap_block():
+    cols = [('РАНЬШЕ', '30%', RED_T, 'Проблемой был разработчик, который работает на 30% от нормы.'),
+            ('СЕЙЧАС', '100%', AMBER, 'Проблема — работать «как раньше». С ИИ 100% — это уже отставание.'),
+            ('НОРМА С ИИ', '300%', GREEN, 'С ИИ эффективность может и должна быть 300% — наша цель 300–400%.')]
+    c3 = ''.join(box(lbl(a, c) + '<div style="font-size: clamp(48px, 5vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: ' + c + ';">' + b + '</div>' + para(d, 15)) for a, b, c, d in cols)
+    note = ('<div style="margin-top: 16px; border-radius: 20px; border: 1px solid rgba(155,140,255,0.35); background: rgba(155,140,255,0.08); padding: 18px 24px; font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.88);">'
+            'Senior с ИИ даёт <b style="color: ' + GREEN + ';">+100…300%</b>, Middle — <b style="color: ' + AMBER + ';">−20…+50%</b>, Junior — <b style="color: ' + RED_T + ';">−50…0%</b>. Без измерений этот разрыв не виден: в Jira у всех задачи закрыты.</div>')
+    return section(sec_head('ПРОБЛЕМА', 'С ИИ эффективность изменилась до неузнаваемости', 'Один и тот же инструмент даёт сеньору +300%, а джуну — минус. Разрыв между людьми стал огромным, и его важно измерять и контролировать.', 'ai')
+                   + '<div class="g3">' + c3 + '</div>' + note, 'gap')
+
+def task_bar(title, manual, spent, pct, col, note):
+    w_m, w_s = manual / 8 * 100, spent / 8 * 100
+    return ('<div style="display: flex; flex-direction: column; gap: 8px; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
+            '<div style="display: flex; justify-content: space-between; gap: 12px;"><b style="font-size: 16px;">' + e(title) + '</b><b style="font-size: 22px; color: ' + col + ';">' + pct + '</b></div>'
+            '<div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 48px; gap: 10px; align-items: center; font-size: 13px; color: rgba(255,255,255,0.7);"><span>вручную</span><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.06);"><div style="width: %.0f%%; height: 100%%; border-radius: 5px; background: rgba(255,255,255,0.45);"></div></div><span style="text-align: right;">%s ч</span></div>' % (w_m, str(manual).replace('.', ',')) +
+            '<div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 48px; gap: 10px; align-items: center; font-size: 13px; color: rgba(255,255,255,0.7);"><span>с ИИ</span><div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.06);"><div style="width: %.0f%%; height: 100%%; border-radius: 5px; background: %s;"></div></div><span style="text-align: right;">%s ч</span></div>' % (w_s, col, str(spent).replace('.', ',')) +
+            '<div style="font-size: 13px; color: rgba(255,255,255,0.6);">' + e(note) + '</div></div>')
+
+def ai_measure_block(with_cheat=True):
+    left = box(lbl('КАК МЫ ИЗМЕРЯЕМ') + ttl('Модель знает, сколько часов задача заняла бы вручную') +
+               para('И сравнивает это с реальным временем решения с ИИ — по каждому MR. Поэтому видна не «скорость печати», а реальная эффективность.') +
+               task_bar('Задача 1', 8, 2, '400%', GREEN, 'вручную 8 часов — с ИИ решена за 2') + task_bar('Задача 2', 2, 8, '25%', RED_T, 'вручную 2 часа — с ИИ целый день: баги, галлюцинации, переделки') +
+               '<div style="border-radius: 16px; background: rgba(155,140,255,0.1); border: 1px solid rgba(155,140,255,0.3); padding: 14px 16px; font-size: 15px; line-height: 1.5;">Эффективность с ИИ скачет от задачи к задаче и от человека к человеку. Поэтому точное измерение стало ещё критичнее.</div>', strong=True, flex='1.2 1 440px')
+    parts = [left]
+    if with_cheat:
+        day = ''.join('<div style="flex: 1 1 0; height: 28px; border-radius: 6px; background: ' + ('#9B8CFF' if i == 0 else 'rgba(255,255,255,0.06)') + ';"></div>' for i in range(8))
+        right = box(lbl('НАКРУТКИ И УДАЛЁНКА') + ttl('Старая дневная норма — за час. А дальше?') +
+                    '<div><div style="display: flex; gap: 4px;">' + day + '</div><div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px;"><span>1 час работы с ИИ</span><span>7 часов — «работаю»</span></div></div>' +
+                    para('С ИИ дневную норму задач можно закрыть за час и отдыхать — на удалёнке это всегда было сложно проконтролировать.') +
+                    para('UpCore точно измеряет, сколько времени ушло на задачи, — без трекеров, скриншотов и отчётов. Только по коду.'), flex='1 1 360px')
+        parts.append(right)
+    return section(sec_head('ИЗМЕРЕНИЕ', 'Ручные часы против часов с ИИ — по каждой задаче', 'Именно так видно, где ИИ дал ×4, а где съел день, — и кто на самом деле работает.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + ''.join(parts) + '</div>', 'measure')
+
+def ai_tokens_block():
+    eff = ('<div class="g2" style="gap: 10px;">' + tile('<span style="color: ' + GREEN + ';">−35%</span>', 'потраченных токенов') + tile('<span style="color: ' + GREEN + ';">−20%</span>', 'переделок кода') + '</div>')
+    norms = '<div style="display: flex; flex-direction: column; gap: 12px;">' + hbar('Токенов на 1 задачу', 'норма UpCore', 62, '#B9AEFF') + hbar('Токенов на 1 час работы', 'норма UpCore', 48, '#B9AEFF') + '</div>'
+    return box(lbl('ТОКЕНЫ') + ttl('Перестаньте сжигать токены') + para('UpCore вычислил среднюю норму токенов на 1 час работы и на 1 задачу. Видно, кто тратит в разы больше нормы — и где это не даёт результата.', 15) + norms + eff, strong=True)
+
+def ai_prompt_block():
+    bad = [('11:00', 'Один промпт: задача просто скопирована из Jira'), ('11:00–12:00', 'ИИ работает час'), ('14:00', 'После обеда: «всё не так, переделай»'), ('14:00–16:00', 'ИИ работает ещё 2 часа и упирается в дневной лимит'), ('16:00', 'Человек уходит домой')]
+    good = ['Постоянно насыщает задачу контекстом проекта', 'Запускает несколько агентов параллельно', 'Следит за токенами и лимитами', 'Не допускает высокого черна: частых переделок, удаления и переписывания кода']
+    tl = ''.join('<div style="display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="' + MONO + ' font-size: 13px; color: ' + RED_T + ';">' + a + '</span><span>' + e(b) + '</span></div>' for a, b in bad)
+    gd = ''.join('<div style="display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 15px;"><span style="color: ' + GREEN + '; font-weight: 800;">✓</span><span>' + e(x) + '</span></div>' for x in good)
+    a = box(lbl('НЕЭФФЕКТИВНЫЙ ВАЙБКОДЕР', RED_T) + ttl('Один промпт и дневной лимит') + '<div>' + tl + '</div>', flex='1 1 380px')
+    b = box(lbl('ЭФФЕКТИВНЫЙ РАЗРАБОТЧИК', GREEN) + ttl('Контекст, параллельные агенты, контроль') + '<div>' + gd + '</div>', flex='1 1 380px')
+    intro = box(lbl('ПРОМПТ-КОЛЛЕКТОР · ОПЦИОНАЛЬНО') + ttl('Промпты — новый язык программирования. Им нужно ревью', 'clamp(24px, 2.4vw, 34px)') +
+                para('Промпт-коллектор включается по желанию. UpCore анализирует код и промпты специалиста, находит паттерны и антипаттерны, даёт рекомендации и автоматически насыщает проект новыми спецификациями и скилами.') +
+                '<div>' + xlink('mentor', 'рекомендации и рост каждого') + '</div>', strong=True)
+    return section(sec_head('ПРОМПТ-РЕВЬЮ', 'Как работают с ИИ сильные и слабые — видно по промптам', 'Тот же разрыв, что в эффективности, начинается в том, как человек ставит задачу ИИ.', 'ai')
+                   + intro + '<div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;">' + a + b + '</div>', 'prompts')
+
+def ai_growth_block(with_tokens=True):
+    g = box(lbl('ЧТО ДАЁТ РОСТ · ВНУТРЕННИЕ ДАННЫЕ DEX') + ttl('Два скачка эффективности, которые мы нашли у себя') +
+            '<div class="g2" style="gap: 10px;">' + tile('<span style="color: ' + GREEN + ';">+32%</span>', 'в среднем — когда разработчик начинает использовать скилы') + tile('<span style="color: ' + GREEN + ';">+24%</span>', 'ещё в среднем — когда решает задачу с предварительным планом') + '</div>' +
+            para('Системный анализ роста эффективности нашей разработки. UpCore находит такие паттерны и подсказывает их каждому.', 15) + '<div>' + xlink('mentor', 'план роста для каждого') + '</div>', flex='1.2 1 440px')
+    parts = [g] + ([ai_tokens_block().replace('min-width: 0;', 'flex: 1 1 360px; min-width: 0;', 1)] if with_tokens else [])
+    return section(sec_head('РОСТ ЭФФЕКТИВНОСТИ', 'Не только измеряем, но и разгоняем', 'Из паттернов сильных разработчиков — рекомендации для всей команды.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + ''.join(parts) + '</div>', 'growth')
+
+def ai_detect_block():
+    vol = ('<div style="display: flex; flex-direction: column; gap: 12px;">' + hbar('100 строк кода', 'определить сложно', 25, 'rgba(255,255,255,0.4)') + hbar('Объём кода за месяц — эффективность', 'высокая точность', 80, '#B9AEFF') + hbar('Объём за 3 месяца — грейд', 'ещё точнее', 96, GREEN) + '</div>')
+    a = box(lbl('АВТООПРЕДЕЛЕНИЕ ИИ-КОДА') + '<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;"><span style="font-size: clamp(56px, 6vw, 88px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #B9AEFF;">92%+</span><span style="font-size: 17px; color: rgba(255,255,255,0.8);">точность определения ИИ-кода — без промпт-коллектора</span></div>' +
+            para('Наши формулы и модели для ручного и ИИ-кода различаются. Поэтому важно знать, как именно работает специалист, — чтобы точно вычислять его эффективность и грейд.') + vol, strong=True, flex='1.3 1 460px')
+    b = box(lbl('КОГДА ЕСТЬ ТОЛЬКО КОД') + ttl('Аудит проекта и подрядчика') + para('Автоопределение работает и тогда, когда проект целиком делает подрядчик и у вас есть только репозиторий: видно, сколько кода написано с ИИ и какова реальная эффективность и бюджет.', 15) +
+            '<div style="display: flex; flex-direction: column; gap: 8px;">' + xlink('projects', 'эффективность и бюджет проекта') + xlink('grade', 'уровень людей с учётом ИИ') + '</div>', flex='1 1 360px')
+    return section(sec_head('АВТОДЕТЕКТ', 'Отличаем ИИ-код от ручного — по самому коду', 'На 100 строках это сложно. Но мы работаем с объёмом кода человека за месяц, а для грейда — за 3 месяца.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + a + b + '</div>', 'detect')
+
+def ai_result_block():
+    def mbar(lbl_, val, w, col, sub):
+        return ('<div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; gap: 12px;"><span style="font-size: 15px;">' + e(lbl_) + '</span><b style="font-size: 20px; color: ' + col + ';">' + val + '</b></div>'
+                '<div style="height: 14px; border-radius: 7px; background: rgba(255,255,255,0.06);"><div style="width: %.0f%%; height: 100%%; border-radius: 7px; background: %s;"></div></div><div style="font-size: 13px; color: rgba(255,255,255,0.55);">%s</div></div>' % (w, col, e(sub)))
+    a = box(lbl('РЕЗУЛЬТАТ') + ttl('Реальный рост каждого специалиста — в часах ценности') +
+            mbar('Прошлый месяц', '140 ч', 140 / 480 * 100, AMBER, 'при 160 рабочих часах — 88%') + mbar('Этот месяц', '200 ч', 200 / 480 * 100, GREEN, 'при тех же 160 часах — 125%') + mbar('Цель с ИИ', '480–640 ч', 100, '#B9AEFF', '300–400% относительно ручной работы'), strong=True, flex='1.3 1 460px')
+    b = box(lbl('ЧТО ПОКАЗЫВАЕТ UPCORE') + '<ul style="margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.84);">'
+            + ''.join('<li style="margin-bottom: 8px;">' + e(x) + '</li>' for x in ['Сколько задач решено вручную, а сколько — через ИИ', 'Реальная эффективность в часах, процентах и деньгах', 'Динамика каждого специалиста месяц к месяцу', 'Нормы токенов и переделок — кто выходит за них']) + '</ul>'
+            + '<div>' + xlink('grade', 'грейд и рейтинг с учётом ИИ') + '</div>', flex='1 1 340px')
+    return section(sec_head('ИТОГ', 'Наша цель — 300–400% к ручной работе', 'UpCore показывает, сколько дал ИИ каждому, — и ведёт команду к этой цели.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + a + b + '</div>', 'result')
+
+def ai_deep2():
+    items = [('ФАКТОР · АВТОДЕТЕКТ', 'ИИ-код — с точностью 92%+', hbar('Точность без промпт-коллектора', '92%+', 92, '#B9AEFF', 'на объёме кода за месяц'), 'Разные модели для ручного и ИИ-кода: знаем, как работает специалист, и точно считаем эффективность и грейд.'),
+             ('ФАКТОР · ПРОМПТ-КОЛЛЕКТОР', 'Промпт-ревью — опционально', '<div class="g3" style="gap: 8px;">' + tile('сессии', 'и их длительность') + tile('ходы', 'и контекст') + tile('токены', 'вход и выход') + '</div>', 'Промпты — новый язык программирования. Видно, где не хватило контекста и где ИИ увёл в сторону.'),
+             ('ФАКТОР · ТОКЕНЫ', 'Нормы на час и на задачу', '<div class="g2" style="gap: 8px;">' + tile('<span style="color: ' + GREEN + ';">−35%</span>', 'потраченных токенов') + tile('<span style="color: ' + GREEN + ';">−20%</span>', 'переделок') + '</div>', 'Средняя норма токенов на час работы и на задачу показывает, где ИИ окупается, а где сжигает бюджет.'),
+             ('ФАКТОР · РЕЗУЛЬТИРУЮЩИЙ КОД', 'Сколько ИИ-кода дошло до релиза', '<div style="display: flex; height: 18px; border-radius: 9px; overflow: hidden; gap: 3px;"><div style="flex: 50 1 0; background: #9B8CFF;"></div><div style="flex: 50 1 0; background: rgba(232,101,101,0.5);"></div></div>', 'ИИ пишет быстро, но если половину назавтра переписывают — эффекта нет. Считаем только то, что осталось в продукте.')]
+    return deep_block('ai', 'Разбираем подробно, как мы считаем ИИ', 'Та же мерка, что и для человека, плюс данные о самой работе с ИИ.', items)
+
+AI_FAQ2 = [('Можно без промпт-коллектора?', 'Да. Коллектор подключается по желанию. По одному коду UpCore определяет ИИ-код с точностью выше 92% — на объёме за месяц, а для грейда — за 3 месяца.'),
+           ('Это не слежка за промптами?', 'Промпты разбираются для ревью и обучения: где теряется контекст и как получать результат быстрее. Доступ — по ролям, в on-premise всё остаётся у вас.'),
+           ('Как вы считаете эффективность с ИИ?', 'Модель знает, сколько часов задача заняла бы вручную, и сравнивает это с реальным временем решения с ИИ — по каждому MR, без трекеров и отчётов.'),
+           ('Нужно ждать, пока накопится статистика?', 'Нет. Полгода истории уже лежит в вашем Git — UpCore проанализирует её за час и сразу покажет картину «до» и «после» ИИ.')]
+AI_STATS2 = [('300%', 'норма эффективности с ИИ — а не 100%'), ('92%+', 'точность автоопределения ИИ-кода'), ('−35%', 'потраченных токенов'), ('1 день', 'до первых результатов')]
+
+def ai_page2(n):
+    h1 = 'Реальная эффективность внедрения ИИ в вашу разработку'
+    sub = 'Авто-детект ИИ-кода и промпт-коллектор показывают, сколько часов ИИ на самом деле экономит каждому разработчику, где он плодит переделки и окупается ли каждый рубль на лицензии и токены.'
+    vis = panel('ai', 'ai / разрыв эффективности', 'с ИИ', ai_range_rows())
+    if n == 1:   # основа — вариант 3: проблема → измерение → факторы → пример демо → итог
+        blocks = [ai_gap_block(), ai_measure_block(), ai_deep2(), ai_example(), ai_result_block()]
+    elif n == 2:  # акцент на промпты и рост: проблема → промпт-ревью → рост и токены → автодетект → итог
+        blocks = [ai_gap_block(), ai_prompt_block(), ai_growth_block(), ai_detect_block(), ai_result_block()]
+    else:         # акцент на измерение и контроль: измерение и накрутки → автодетект → итог → промпт-ревью → рост
+        blocks = [ai_measure_block(), ai_detect_block(), ai_result_block(), ai_prompt_block(), ai_growth_block()]
+    body = [header('ai'), mod_hero('ai', h1, sub, vis, AI_STATS2)] + blocks + [
+        roles('ДЛЯ КОГО', 'Одни данные об ИИ для CTO, финансов, тимлида и разработчика', AI_ROLES, 'ai'),
+        faq(AI_FAQ2, acc_key='ai'), saas_variant(2),
+        cta('Посчитайте реальный эффект ИИ в своей команде', 'Подключите репозиторий — сравним время «с ИИ» и «вручную» по истории вашего кода.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore AI — макет %d' % n, '\n'.join(body), 7000, name='AI-%d' % n)
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2354,9 +2500,11 @@ def build(out, mode):
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
-    for k, nm in (('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
+    for k, nm in (('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
         for n in (1, 2, 3):
             files['%s-%d' % (nm, n)] = module_page(k, n)
+    for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
+        files['AI-%d' % n] = ai_page2(n)
     for n in (1, 2, 3):  # раунд 37: страницы 1–3 блога (основа — вариант 3 раунда 36)
         files['Blog-%d' % n] = blog_page2(n)
     ext = '.dc.html' if mode == 'dc' else '.html'
