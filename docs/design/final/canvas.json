@@ -121,6 +121,36 @@
       "w": 1440,
       "x": 1520,
       "y": 0
+    },
+    "Anim-1.dc.html": {
+      "expand": "fill",
+      "h": 1209,
+      "is_interactive": true,
+      "page": "design",
+      "title": "Анимации · 1 — «Спокойная точность»: проявление, счёт цифр, графики, наведение",
+      "w": 1440,
+      "x": 0,
+      "y": 4600
+    },
+    "Anim-2.dc.html": {
+      "expand": "fill",
+      "h": 1251,
+      "is_interactive": true,
+      "page": "design",
+      "title": "Анимации · 2 — «Цифровой тимлид за работой»: сканер, табло, разбор кода, подсветка за курсором",
+      "w": 1440,
+      "x": 1520,
+      "y": 4600
+    },
+    "Anim-3.dc.html": {
+      "expand": "fill",
+      "h": 1230,
+      "is_interactive": true,
+      "page": "design",
+      "title": "Анимации · 3 — «Кино»: заголовки по словам, история при прокрутке, параллакс, объём",
+      "w": 1440,
+      "x": 3040,
+      "y": 4600
     }
   },
   "createdOnFiles": {
@@ -129,7 +159,7 @@
   },
   "designSystems": [],
   "launch": {
-    "page": "home",
+    "page": "design",
     "view": "canvas"
   },
   "noteOrder": [
@@ -141,7 +171,8 @@
     "t_mentor",
     "t_blog",
     "t_menu",
-    "t_menu_d"
+    "t_menu_d",
+    "t_anim"
   ],
   "notes": {
     "t": {
@@ -224,6 +255,15 @@
       "w": 240,
       "x": 1520,
       "y": -300
+    },
+    "t_anim": {
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "design",
+      "text": "Анимации: 3 варианта стиля (каждая демонстрация крутится сама)",
+      "w": 240,
+      "x": 0,
+      "y": 4300
     }
   },
   "order": [
@@ -239,7 +279,10 @@
     "Projects-main.dc.html",
     "Mentor-main.dc.html",
     "Menu-1.dc.html",
-    "Menu-D3.dc.html"
+    "Menu-D3.dc.html",
+    "Anim-1.dc.html",
+    "Anim-2.dc.html",
+    "Anim-3.dc.html"
   ],
   "pages": [
     {
@@ -248,7 +291,7 @@
     },
     {
       "id": "home",
-      "name": "Главная — тексты"
+      "name": "Главная страница"
     },
     {
       "id": "grade",

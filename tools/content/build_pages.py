@@ -3230,6 +3230,144 @@ def desktop_menu(n):
                     ['одна платформа — 4 продукта', 'самый заметный акцент', 'меню в одну строку'])
 
 
+# ---------- раунд 66: анимации — 3 варианта стиля (каждая демонстрация крутится сама, видна и на телефоне) ----------
+EASE = 'cubic-bezier(.2,.7,.2,1)'
+CURSOR = '<svg width="18" height="22" viewBox="0 0 18 22" aria-hidden="true"><path d="M1 1l15 9-7 1.5L6 20z" fill="#FFFFFF" stroke="#0D0C15" stroke-width="1.2"/></svg>'
+
+def an_card(num, title, where, demo, spec):
+    return ('<article style="min-width: 0; border-radius: 24px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 20px; display: flex; flex-direction: column; gap: 12px;">'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; align-items: baseline;"><b style="font-size: 18px;">' + e(title) + '</b><span style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.45);">' + num + '</span></div>'
+            '<div style="position: relative; height: 230px; border-radius: 18px; background: #0F0E18; border: 1px solid rgba(255,255,255,0.06); overflow: hidden;">' + demo + '</div>'
+            '<div style="font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.72);">' + e(where) + '</div>'
+            '<div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.45);">' + e(spec) + '</div></article>')
+
+def an_board(n, name, idea, chips, css, cards, extra=''):
+    head = ('<div style="padding: 48px 48px 0;"><div style="' + MONO + ' font-size: 13px; color: #63D5FF; letter-spacing: 0.04em;">АНИМАЦИИ · ВАРИАНТ ' + str(n) + '</div>'
+            '<h2 style="margin: 12px 0 0; font-size: 48px; letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">' + e(name) + '</h2>'
+            '<p style="margin: 14px 0 0; max-width: 980px; font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.74);">' + e(idea) + '</p>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;">' + ''.join('<span style="font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(99,213,255,0.1); color: #A8E8FF;">' + e(c) + '</span>' for c in chips) + '</div></div>')
+    body = '<style>' + css + '</style>' + head + '<div style="padding: 32px 48px 64px;"><div class="g3">' + ''.join(cards) + '</div>' + extra + '</div>'
+    return page('UpCore — анимации, вариант %d' % n, body, 1500, name='Anim-%d' % n)
+
+def an_mini_cards(cls, n=3, colors=('#63D5FF', '#B9AEFF', '#7FDB7A')):
+    return ('<div style="position: absolute; inset: 20px; display: grid; grid-template-columns: repeat(%d, 1fr); gap: 10px; align-items: end;">' % n
+            + ''.join('<div class="' + cls + '" style="animation-delay: ' + str(i * 0.12) + 's; height: ' + str(150 - i * 0) + 'px; border-radius: 14px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 12px;">'
+                      '<div style="width: 40%; height: 8px; border-radius: 4px; background: ' + c + ';"></div><div style="margin-top: 12px; height: 22px; width: 70%; border-radius: 6px; background: rgba(255,255,255,0.85);"></div>'
+                      '<div style="margin-top: 10px; height: 6px; width: 90%; border-radius: 3px; background: rgba(255,255,255,0.15);"></div><div style="margin-top: 6px; height: 6px; width: 60%; border-radius: 3px; background: rgba(255,255,255,0.15);"></div></div>'
+                      for i, c in enumerate(colors)) + '</div>')
+
+def an_bars(cls, vals=((92, '#7FDB7A'), (70, '#F2C14E'), (45, '#F08A8A'), (25, '#F08A8A'))):
+    return ('<div style="position: absolute; inset: 24px; display: flex; flex-direction: column; justify-content: center; gap: 14px;">'
+            + ''.join('<div><div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 5px;"><span>Разработчик ' + str(i + 1) + '</span><span>' + str(v) + '%</span></div>'
+                      '<div style="height: 10px; border-radius: 5px; background: rgba(255,255,255,0.06); overflow: hidden;"><div class="' + cls + '" style="animation-delay: ' + str(i * 0.1) + 's; width: ' + str(v) + '%; height: 100%; border-radius: 5px; background: ' + c + ';"></div></div></div>'
+                      for i, (v, c) in enumerate(vals)) + '</div>')
+
+def an_header_mock(cls_head, cls_body):
+    return ('<div class="' + cls_body + '" style="position: absolute; left: 16px; right: 16px; top: 90px;">'
+            + ''.join('<div style="height: 46px; border-radius: 10px; background: #1A1925; margin-bottom: 8px;"></div>' for _ in range(4)) + '</div>'
+            '<div class="' + cls_head + '" style="position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid transparent;">'
+            '<img src="' + src('logo') + '" alt="" style="height: 16px;"><span style="display: inline-flex; gap: 4px; padding: 3px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.14);">'
+            + ''.join('<span style="width: 8px; height: 8px; margin: 4px; border-radius: 50%; background: ' + ACC[k][1] + ';"></span>' for k in ('grade', 'ai', 'projects', 'mentor'))
+            + '</span><span style="padding: 6px 10px; border-radius: 8px; background: #63D5FF; color: #0D0C15; font-size: 11px; font-weight: 700;">Подключить</span></div>')
+
+def anim_board(n):
+    if n == 1:
+        css = ('@property --a-n{syntax:"<integer>";initial-value:0;inherits:false}'
+               '@keyframes aUp{0%,10%{opacity:0;transform:translateY(28px)}30%,86%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}'
+               '.a-up{animation:aUp 4.5s ' + EASE + ' infinite both}'
+               '@keyframes aCount{0%,10%{--a-n:0}42%,92%{--a-n:96}100%{--a-n:96}}'
+               '.a-num{animation:aCount 4.5s cubic-bezier(.16,1,.3,1) infinite;counter-reset:n var(--a-n)}.a-num::before{content:counter(n)}'
+               '@keyframes aCount2{0%,10%{--a-n:0}42%,92%{--a-n:1500}100%{--a-n:1500}}.a-num2{animation:aCount2 4.5s cubic-bezier(.16,1,.3,1) infinite;counter-reset:n var(--a-n)}.a-num2::before{content:counter(n)}'
+               '@keyframes aBar{0%,10%{transform:scaleX(0);opacity:1}40%,90%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:.2}}.a-bar{transform-origin:left;animation:aBar 4.5s ' + EASE + ' infinite both}'
+               '@keyframes aLine{0%,10%{stroke-dashoffset:520}55%,92%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}.a-line{stroke-dasharray:520;animation:aLine 4.5s ' + EASE + ' infinite}'
+               '@keyframes aHover{0%,25%{transform:none;border-color:rgba(255,255,255,.08);box-shadow:none}40%,78%{transform:translateY(-6px);border-color:rgba(83,192,77,.7);box-shadow:0 18px 40px rgba(83,192,77,.18)}92%,100%{transform:none;border-color:rgba(255,255,255,.08);box-shadow:none}}'
+               '.a-card{animation:aHover 4.5s ' + EASE + ' infinite}'
+               '@keyframes aCur{0%{transform:translate(220px,190px)}30%,80%{transform:translate(150px,110px)}100%{transform:translate(220px,190px)}}.a-cur{animation:aCur 4.5s ' + EASE + ' infinite}'
+               '@keyframes aBtn{0%,30%{background:#63D5FF;box-shadow:none}45%,80%{background:#8FE2FF;box-shadow:0 10px 30px rgba(99,213,255,.35)}95%,100%{background:#63D5FF;box-shadow:none}}.a-btn{animation:aBtn 4.5s ease infinite}'
+               '@keyframes aArr{0%,30%{transform:none}45%,80%{transform:translateX(6px)}95%,100%{transform:none}}.a-arr{display:inline-block;animation:aArr 4.5s ' + EASE + ' infinite}'
+               '@keyframes aHead{0%,25%{height:64px;background:rgba(13,12,21,0);border-color:transparent}45%,85%{height:48px;background:rgba(13,12,21,.82);border-color:rgba(255,255,255,.1)}100%{height:64px;background:rgba(13,12,21,0)}}.a-head{animation:aHead 4.5s ' + EASE + ' infinite;backdrop-filter:blur(10px)}'
+               '@keyframes aBody{0%,25%{transform:none}45%,85%{transform:translateY(-70px)}100%{transform:none}}.a-body{animation:aBody 4.5s ' + EASE + ' infinite}')
+        cards = [
+            an_card('01', 'Появление блоков при прокрутке', 'Заголовки, карточки и панели мягко поднимаются на 24 px и проявляются, по очереди с шагом 80 мс. Один раз — при первом показе блока.', an_mini_cards('a-up'), '600 мс · ease-out · сдвиг 24 px'),
+            an_card('02', 'Счёт ключевых цифр', 'Цифры 96%, 1 500+, 50+, 12,1 млн ₽ досчитываются от нуля, когда попадают в экран. Шрифт моноширинный по ширине — цифры не прыгают.', '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 40px;"><div><div style="font-size: 64px; font-weight: 800; color: #63D5FF; font-variant-numeric: tabular-nums;"><span class="a-num"></span>%</div><div style="font-size: 13px; color: rgba(255,255,255,0.6);">точность</div></div><div><div style="font-size: 64px; font-weight: 800; font-variant-numeric: tabular-nums;"><span class="a-num2"></span>+</div><div style="font-size: 13px; color: rgba(255,255,255,0.6);">разработчиков</div></div></div>', '1,2 с · ease-out · только при первом показе'),
+            an_card('03', 'Шкалы и графики', 'Полосы эффективности, техдолг, рейтинг растут слева направо; линии динамики прорисовываются. Данные «оживают», но не отвлекают.', an_bars('a-bar'), '800 мс · шаг 100 мс · ease-out'),
+            an_card('04', 'Карточки при наведении', 'Карточка продукта или фактора приподнимается на 6 px, рамка загорается цветом продукта, появляется мягкая тень того же цвета.', '<div class="a-card" style="position: absolute; left: 40px; right: 40px; top: 40px; bottom: 40px; border-radius: 18px; background: #1A1925; border: 1px solid rgba(255,255,255,.08); padding: 20px;"><div style="font-size: 18px; font-weight: 700;"><b style="color: #7FDB7A;">&gt;</b> UpCore<b style="color: #7FDB7A;">.Mentor</b></div><div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px;">ИИ-наставник для каждого разработчика</div><div style="margin-top: 22px; font-size: 32px; font-weight: 800; color: #7FDB7A;">80%</div></div><div class="a-cur" style="position: absolute; left: 0; top: 0;">' + CURSOR + '</div>', '250 мс · ease-out · −6 px + цвет продукта'),
+            an_card('05', 'Кнопки при наведении', 'Кнопка чуть светлеет и получает свечение, стрелка «→» отъезжает на 6 px — понятный отклик без «прыжков».', '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"><span class="a-btn" style="display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 16px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px;">Подключить UpCore <span class="a-arr">→</span></span></div>', '200 мс · ease-out'),
+            an_card('06', 'Шапка при прокрутке', 'При прокрутке шапка становится ниже, получает полупрозрачный фон с размытием и тонкую линию снизу. Меню и «Подключить» всегда под рукой.', an_header_mock('a-head', 'a-body'), '300 мс · фон с размытием 12 px'),
+        ]
+        return an_board(1, 'Спокойная точность', 'Минимум движения: блоки мягко проявляются, цифры досчитываются, графики растут, карточки и кнопки отвечают на наведение. Так делают Stripe и Linear — дорого за счёт аккуратности, а не эффектов. Безопасно для любой аудитории и самый быстрый сайт.',
+                        ['6 типов анимаций на весь сайт', '200–800 мс', 'ничего не крутится постоянно', 'учитывает «уменьшить движение» в системе'], css, cards)
+    if n == 2:
+        css = ('@keyframes bWipe{0%,8%{clip-path:inset(0 100% 0 0);opacity:1}35%,88%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 0);opacity:0}}.b-wipe{animation:bWipe 4.5s ' + EASE + ' infinite}'
+               '@keyframes bScanX{0%,8%{left:0;opacity:1}35%{left:100%;opacity:1}36%,100%{left:100%;opacity:0}}.b-scanx{animation:bScanX 4.5s ' + EASE + ' infinite}'
+               '@keyframes bOdo9{0%,10%{transform:translateY(0)}45%,92%{transform:translateY(-9em)}100%{transform:translateY(-9em)}}.b-o9{animation:bOdo9 4.5s cubic-bezier(.16,1,.3,1) infinite}'
+               '@keyframes bOdo6{0%,14%{transform:translateY(0)}50%,92%{transform:translateY(-6em)}100%{transform:translateY(-6em)}}.b-o6{animation:bOdo6 4.5s cubic-bezier(.16,1,.3,1) infinite}'
+               '@keyframes bScanY{0%{top:-30px}70%{top:100%}100%{top:100%}}.b-scany{animation:bScanY 4.5s linear infinite}'
+               '@keyframes bMark{0%,25%{opacity:0;transform:scale(.4)}32%,90%{opacity:1;transform:none}100%{opacity:0}}.b-mark{animation:bMark 4.5s ' + EASE + ' infinite both}'
+               '@keyframes bSpot{0%{transform:translate(30px,40px)}35%{transform:translate(220px,30px)}70%{transform:translate(140px,140px)}100%{transform:translate(30px,40px)}}.b-spot{animation:bSpot 6s ease-in-out infinite}'
+               '@keyframes bShine{0%,35%{transform:translateX(-120%)}65%,100%{transform:translateX(220%)}}.b-shine{animation:bShine 3s ease-in-out infinite}'
+               '@keyframes bChev{0%,35%{transform:translateX(-4px);opacity:.5}55%,85%{transform:translateX(4px);opacity:1}100%{transform:translateX(-4px);opacity:.5}}.b-chev{display:inline-block;animation:bChev 3s ' + EASE + ' infinite}'
+               '@keyframes bStar{0%,8%{transform:scale(.15);opacity:0}45%,90%{transform:none;opacity:1}100%{transform:none;opacity:0}}.b-star{transform-box:fill-box;transform-origin:center;animation:bStar 4.5s cubic-bezier(.16,1,.3,1) infinite}'
+               '@keyframes bDot{0%,40%{opacity:0;r:0}55%,90%{opacity:1;r:4}100%{opacity:0}}.b-dot{animation:bDot 4.5s ease infinite}'
+               '@keyframes bBlink{0%,50%{opacity:1}51%,100%{opacity:0}}.b-blink{animation:bBlink 1s steps(1) infinite}')
+        def strip(cls):
+            return '<span style="display: inline-block; height: 1em; overflow: hidden; vertical-align: top;"><span class="' + cls + '" style="display: flex; flex-direction: column;">' + ''.join('<span style="height: 1em; line-height: 1;">%d</span>' % d for d in range(10)) + '</span></span>'
+        code = ['public async Task&lt;Grade&gt; Rate(Mr mr)', '{', '  var ast = Parse(mr.Diff);', '  foreach (var f in ast.Files)', '    hours += Model.Estimate(f);', '  return Grade.From(hours);', '}']
+        code_html = ''.join('<div style="height: 26px; line-height: 26px; padding-left: 40px; position: relative; white-space: nowrap;"><span style="position: absolute; left: 12px; color: rgba(255,255,255,0.3);">' + str(i + 1) + '</span>' + c + '</div>' for i, c in enumerate(code))
+        marks = ('<span class="b-mark" style="animation-delay: .3s; position: absolute; right: 14px; top: 66px; font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(240,138,138,.18); color: #F08A8A;">дефект · средний</span>'
+                 '<span class="b-mark" style="animation-delay: 1.1s; position: absolute; right: 14px; top: 118px; font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(127,219,122,.18); color: #7FDB7A;">+1,4 ч · ядро</span>')
+        import math
+        pts = ' '.join('%.1f,%.1f' % (130 + r * 80 * math.sin(2 * math.pi * i / 10), 115 - r * 80 * math.cos(2 * math.pi * i / 10)) for i, r in enumerate([1, .68, .75, .77, .31, .52, .64, .95, .91, .51]))
+        ring = ' '.join('%.1f,%.1f' % (130 + 80 * math.sin(2 * math.pi * i / 10), 115 - 80 * math.cos(2 * math.pi * i / 10)) for i in range(10))
+        cards = [
+            an_card('01', 'Появление «сканером»', 'Блок проявляется слева направо, по краю проходит тонкая голубая линия — как будто цифровой тимлид «прочитал» блок. Только для главных блоков: первый экран, ключевые цифры.', '<div class="b-wipe" style="position: absolute; inset: 0;">' + an_mini_cards('', 3) + '</div><div class="b-scanx" style="position: absolute; top: 0; bottom: 0; width: 2px; background: #63D5FF; box-shadow: 0 0 16px 4px rgba(99,213,255,.6);"></div>', '900 мс · линия + маска'),
+            an_card('02', 'Цифры-счётчик', 'Цифры прокручиваются по разрядам, как механический счётчик или табло. Узнаваемый «инженерный» приём для 96%, 50+, 1 500+.', '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"><div style="font-size: 88px; font-weight: 800; color: #63D5FF; line-height: 1; font-variant-numeric: tabular-nums;">' + strip('b-o9') + strip('b-o6') + '%</div></div>', '1,4 с · по разрядам'),
+            an_card('03', 'Разбор кода', 'Для первого экрана и блока методики: полоса анализа проходит по коду MR, на строках появляются метки — дефект, часы, ядро. Показывает суть продукта без слов.', '<div style="position: absolute; inset: 16px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.75); padding-top: 12px;">' + code_html + '<span class="b-blink" style="position: absolute; left: 40px; bottom: 6px; color: #63D5FF;">▍</span></div><div class="b-scany" style="position: absolute; left: 0; right: 0; height: 30px; background: linear-gradient(180deg, rgba(99,213,255,0), rgba(99,213,255,.18), rgba(99,213,255,0)); border-bottom: 1px solid rgba(99,213,255,.6);"></div>' + marks, '4,5 с · цикл · только в одном месте'),
+            an_card('04', 'Подсветка за курсором', 'На карточках продуктов и факторов за курсором движется мягкое пятно света, рамка подсвечивается в этом месте. Современный приём (Vercel, Linear) — ощущение «живого» интерфейса.', '<div style="position: absolute; left: 30px; right: 30px; top: 30px; bottom: 30px; border-radius: 18px; background: #1A1925; border: 1px solid rgba(99,213,255,.25); overflow: hidden;"><div class="b-spot" style="position: absolute; left: -80px; top: -80px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(99,213,255,.22), rgba(99,213,255,0) 65%);"></div><div style="position: relative; padding: 20px;"><div style="font-size: 18px; font-weight: 700;"><b style="color: #63D5FF;">&gt;</b> UpCore<b style="color: #63D5FF;">.Grade</b></div><div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 6px;">грейд и рейтинг разработчиков</div><div style="margin-top: 22px; font-size: 32px; font-weight: 800; color: #63D5FF;">96%</div></div></div>', 'пятно 240 px · следует за курсором'),
+            an_card('05', 'Кнопка с шевроном', 'При наведении по кнопке пробегает блик, шеврон «›» из логотипа сдвигается вперёд. Фирменный мотив UP › CORE в каждом действии.', '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"><span style="position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 16px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px;">Подключить UpCore <b class="b-chev" style="font-size: 22px;">›</b><span class="b-shine" style="position: absolute; top: 0; bottom: 0; left: 0; width: 40%; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0));"></span></span></div>', '600 мс · блик + шеврон'),
+            an_card('06', 'Звезда грейда', 'Звезда факторов «вырастает» из центра, точки оценок загораются по очереди. Так же — рейтинг и тех-карта на страницах продуктов.', '<svg viewBox="0 0 260 230" style="position: absolute; inset: 0; width: 100%; height: 100%;"><polygon points="' + ring + '" fill="none" stroke="rgba(255,255,255,0.12)"/><polygon class="b-star" points="' + pts + '" fill="rgba(127,219,122,0.18)" stroke="#7FDB7A" stroke-width="2"/>'
+                    + ''.join('<circle class="b-dot" style="animation-delay: ' + str(i * 0.06) + 's;" cx="' + p.split(',')[0] + '" cy="' + p.split(',')[1] + '" r="4" fill="#7FDB7A"/>' for i, p in enumerate(pts.split())) + '</svg>', '1,2 с · из центра · точки по очереди'),
+        ]
+        return an_board(2, 'Цифровой тимлид за работой', 'Анимации рассказывают, что делает продукт: «сканер» проходит по блокам и коду, цифры крутятся как на табло, шеврон из логотипа ведёт к действию. Узнаваемый стиль UpCore — понравится разработчикам, при этом сдержанный для C-level.',
+                        ['фирменный стиль: код, сканер, шеврон', 'анимация кода — только в 1–2 местах', 'остальное — как в варианте 1', 'учитывает «уменьшить движение»'], css, cards)
+    # n == 3: кинематографичный
+    css = ('@keyframes cBlur{0%,8%{opacity:0;filter:blur(14px);transform:scale(.94)}38%,88%{opacity:1;filter:blur(0);transform:none}100%{opacity:0}}.c-blur{animation:cBlur 4.5s ' + EASE + ' infinite both}'
+           '@keyframes cWord{0%,8%{transform:translateY(110%);opacity:1}30%,88%{transform:none;opacity:1}100%{transform:none;opacity:0}}.c-word{display:inline-block;animation:cWord 4.5s cubic-bezier(.16,1,.3,1) infinite both}'
+           '@keyframes cS1{0%,30%{opacity:1;transform:none}36%,94%{opacity:0;transform:translateY(-16px)}100%{opacity:1;transform:none}}'
+           '@keyframes cS2{0%,30%{opacity:0;transform:translateY(16px)}36%,63%{opacity:1;transform:none}69%,100%{opacity:0;transform:translateY(-16px)}}'
+           '@keyframes cS3{0%,63%{opacity:0;transform:translateY(16px)}69%,94%{opacity:1;transform:none}100%{opacity:0}}'
+           '.c-s1{animation:cS1 6s ' + EASE + ' infinite}.c-s2{animation:cS2 6s ' + EASE + ' infinite}.c-s3{animation:cS3 6s ' + EASE + ' infinite}'
+           '@keyframes cProg{0%{transform:scaleY(0)}94%{transform:scaleY(1)}100%{transform:scaleY(1)}}.c-prog{transform-origin:top;animation:cProg 6s linear infinite}'
+           '@keyframes cPar1{0%,10%{transform:translateY(0)}50%,60%{transform:translateY(-30px)}100%{transform:translateY(0)}}.c-par1{animation:cPar1 5s ease-in-out infinite}'
+           '@keyframes cPar2{0%,10%{transform:translateY(0)}50%,60%{transform:translateY(-110px)}100%{transform:translateY(0)}}.c-par2{animation:cPar2 5s ease-in-out infinite}'
+           '@keyframes cThumb{0%,10%{transform:translateY(0)}50%,60%{transform:translateY(90px)}100%{transform:translateY(0)}}.c-thumb{animation:cThumb 5s ease-in-out infinite}'
+           '@property --c-ang{syntax:"<angle>";initial-value:0deg;inherits:false}'
+           '@keyframes cAng{to{--c-ang:360deg}}.c-ring{animation:cAng 4s linear infinite;background:conic-gradient(from var(--c-ang),#63D5FF,#B9AEFF,#F2C14E,#7FDB7A,#63D5FF)}'
+           '@keyframes cTilt{0%,100%{transform:perspective(700px) rotateX(0) rotateY(0)}30%{transform:perspective(700px) rotateX(6deg) rotateY(-8deg)}65%{transform:perspective(700px) rotateX(-5deg) rotateY(7deg)}}.c-tilt{animation:cTilt 5s ease-in-out infinite}'
+           '@keyframes cMag{0%,25%{transform:none;box-shadow:0 0 0 rgba(99,213,255,0)}45%,75%{transform:translate(10px,-6px);box-shadow:0 16px 40px rgba(99,213,255,.45)}92%,100%{transform:none;box-shadow:0 0 0 rgba(99,213,255,0)}}.c-mag{animation:cMag 4s ' + EASE + ' infinite}'
+           '@keyframes cCur2{0%{transform:translate(300px,190px)}35%,75%{transform:translate(230px,98px)}100%{transform:translate(300px,190px)}}.c-cur{animation:cCur2 4s ' + EASE + ' infinite}'
+           '@keyframes cPill{0%,20%{left:4px;width:72px;background:#63D5FF}25%,45%{left:80px;width:44px;background:#B9AEFF}50%,70%{left:128px;width:86px;background:#F2C14E}75%,95%{left:218px;width:80px;background:#7FDB7A}100%{left:4px;width:72px;background:#63D5FF}}.c-pill{animation:cPill 6s ' + EASE + ' infinite}')
+    words = 'Цифровой тимлид для вашей разработки'.split()
+    head_words = ''.join('<span style="display: inline-block; overflow: hidden; vertical-align: bottom; margin-right: 10px;"><span class="c-word" style="animation-delay: ' + str(i * 0.09) + 's;">' + w + '</span></span>' for i, w in enumerate(words))
+    story = ('<div style="position: absolute; left: 20px; top: 20px; bottom: 20px; width: 4px; border-radius: 2px; background: rgba(255,255,255,0.08);"><div class="c-prog" style="width: 100%; height: 100%; border-radius: 2px; background: #F2C14E;"></div></div>'
+             + ''.join('<div class="c-s%d" style="position: absolute; left: 44px; right: 20px; top: 40px;"><div style="' % (i + 1) + MONO + ' font-size: 12px; color: #F2C14E;">ШАГ ' + str(i + 1) + ' ИЗ 3</div><div style="font-size: 44px; font-weight: 800; margin-top: 10px; color: ' + c + ';">' + v + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 6px;">' + t + '</div></div>'
+                       for i, (v, t, c) in enumerate([('1 500 ч', 'в акте подрядчика', '#FFFFFF'), ('860 ч', 'объективно по коду', '#F2C14E'), ('−640 ч', 'к оплате по факту кода · −43%', '#F08A8A')])))
+    chips = [('Grade', 72), ('AI', 44), ('Projects', 86), ('Mentor', 80)]
+    cap = ('<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"><div style="position: relative; display: flex; gap: 4px; padding: 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); font-size: 14px;">'
+           '<span class="c-pill" style="position: absolute; top: 4px; bottom: 4px; border-radius: 10px;"></span>'
+           + ''.join('<span style="position: relative; width: ' + str(w) + 'px; text-align: center; padding: 9px 0; color: #FFFFFF; mix-blend-mode: difference;">' + nm + '</span>' for nm, w in chips) + '</div></div>')
+    cards = [
+        an_card('01', 'Заголовки по словам', 'Главные заголовки появляются по словам снизу вверх, блоки — из лёгкого размытия в резкость. Подача как в презентациях Apple.', '<div class="c-blur" style="position: absolute; left: 24px; right: 24px; bottom: 26px; height: 60px; border-radius: 12px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08);"></div><div style="position: absolute; left: 24px; right: 24px; top: 28px; font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;">' + head_words + '</div>', '900 мс · слово каждые 90 мс · размытие 14 px'),
+        an_card('02', 'История при прокрутке', 'Ключевой пример закрепляется на экране, а при прокрутке меняются шаги: 1 500 ч в акте → 860 ч по коду → −640 ч. Слева — полоса прогресса. Для «аудита акта», «до/после», ИИ 8 ч → 2 ч.', story, 'закрепление блока · 3 шага · по прокрутке'),
+        an_card('03', 'Глубина и параллакс', 'Фоновый шеврон и карточки движутся с разной скоростью при прокрутке — у страницы появляется глубина.', '<svg class="c-par1" viewBox="0 0 375 645" style="position: absolute; right: -40px; top: 10px; width: 180px; opacity: .25;"><path fill="#63D5FF" d="M340 411C322 437 298 465 268 496L166 599C149 616 136 628 126 636C116 644 106 646 95 641C84 637 70 626 51 608L10 567L250 322L0 80L44 35C61 18 76 7 87 2C97-2 107 0 117 8C127 16 140 28 158 45L272 157C294 180 314 201 332 219C348 239 360 258 367 278C374 298 375 322 370 348C365 375 359 385 340 411Z"/></svg><div class="c-par2" style="position: absolute; left: 24px; width: 190px; top: 30px;">' + ''.join('<div style="height: 70px; border-radius: 14px; background: #1A1925; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px;"></div>' for _ in range(4)) + '</div><div style="position: absolute; right: 8px; top: 16px; bottom: 16px; width: 4px; border-radius: 2px; background: rgba(255,255,255,0.08);"><div class="c-thumb" style="width: 4px; height: 50px; border-radius: 2px; background: rgba(255,255,255,0.4);"></div></div>', 'фон 0,3× · карточки 1× скорости'),
+        an_card('04', 'Объёмная карточка', 'Карточка продукта слегка наклоняется вслед за курсором, по рамке бежит градиент в цветах четырёх продуктов. Для блока «Платформа» и карточек продуктов.', '<div class="c-tilt" style="position: absolute; left: 40px; right: 40px; top: 30px; bottom: 30px; border-radius: 20px; padding: 1.5px;"><div class="c-ring" style="position: absolute; inset: 0; border-radius: 20px; opacity: .9;"></div><div style="position: relative; height: 100%; box-sizing: border-box; border-radius: 19px; background: #15141F; padding: 20px;"><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);">ПЛАТФОРМА</div><div style="font-size: 22px; font-weight: 800; margin-top: 8px;">Одна платформа — четыре продукта</div><div style="display: flex; gap: 6px; margin-top: 16px;">' + ''.join('<span style="width: 10px; height: 10px; border-radius: 50%; background: ' + ACC[k][1] + ';"></span>' for k in ('grade', 'ai', 'projects', 'mentor')) + '</div></div></div>', 'наклон до 8° · рамка — 4 с на круг'),
+        an_card('05', 'Магнитная кнопка', 'Главная кнопка «притягивается» к курсору на несколько пикселей и мягко светится. Работает только на компьютере.', '<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;"><span class="c-mag" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 16px; background: #63D5FF; color: #0D0C15; font-weight: 700; font-size: 17px;">Провести демо</span></div><div class="c-cur" style="position: absolute; left: 0; top: 0;">' + CURSOR + '</div>', 'смещение до 10 px · 300 мс'),
+        an_card('06', 'Перетекание по продуктам', 'В капсуле меню и в блоке «Платформа» подсветка перетекает от продукта к продукту, меняя цвет: Grade → AI → Projects → Mentor.', cap, '500 мс · цвет и положение'),
+    ]
+    return an_board(3, 'Кино', 'Как в презентациях Apple: заголовки собираются по словам, ключевые истории разворачиваются при прокрутке, у страницы появляется глубина, карточки объёмные. Самый эффектный и «дорогой» вариант, но тяжелее в вёрстке и требует чувства меры.',
+                    ['максимум вау-эффекта', 'история при прокрутке — 2–3 места', 'на телефоне — упрощённо', 'учитывает «уменьшить движение»'], css, cards)
+
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -3250,6 +3388,8 @@ def build(out, mode):
             files['%s-%s' % (n, v)] = product(k, v)
     files['Mentor-main'] = mentor_main2()  # раунд 50: основной макет Mentor; варианты блоков отдельно
     # раунд 58: Mentor собран — ИИ-наставник → наставник на примере (вар. 2) → грейд в цветах Mentor; доски вариантов сняты
+    for n in (1, 2, 3):
+        files['Anim-%d' % n] = anim_board(n)  # раунд 66: анимации — 3 варианта стиля
     files['Menu-1'] = mobile_menu(1)  # раунд 64: на телефоне выбран вариант 1 (бургер + меню на весь экран); 2 и 3 сняты
     files['Menu-D3'] = desktop_menu(3)  # раунд 65: на компьютере выбран вариант 3 «капсула продуктов» (применён в header()); D1, D2 сняты
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
