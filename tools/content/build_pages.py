@@ -2684,6 +2684,88 @@ def proj_audit2(n):
 def pj_board(name, html):
     return page('UpCore Projects — блок', '<div style="padding-top: 48px;">' + html + '</div>', 900, name=name)
 
+# ---------------------------------------------------------------- раунд 44: Projects — ПроектX: 4 варианта блока «цифры проекта» + сборка основного макета
+PX_TEAM = [('Senior', 1, GREEN), ('Middle+', 2, AMBER), ('Junior+', 1, '#63D5FF')]
+
+def px_head(sub='ПРИМЕР ОТЧЁТА ПРОЕКТА · UPCORE PROJECTS'):
+    return demo_head('projects', 'ПроектX', sub, [
+        ('Сложность', '8 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">/ 10</span>', 'размер сильно больше среднего'), ('Длительность', '1 г. 7 мес', 'легаси 0%'), ('Команда', '4 человека', '1 Senior · 2 Middle+ · 1 Junior+')])
+
+def px_kpi(label, big, text, col='#FFFFFF'):
+    return ('<div style="min-width: 0; border-radius: 20px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 20px;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + e(label) + '</div>'
+            '<div style="font-size: clamp(32px, 3.2vw, 46px); font-weight: 800; letter-spacing: -0.03em; margin: 6px 0; color: ' + col + '; white-space: nowrap;">' + big + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.45;">' + e(text) + '</div></div>')
+
+K_EFF = lambda: px_kpi('ЭФФЕКТИВНОСТЬ', '74%', 'часы результата по коду против рабочих часов команды', AMBER)
+K_AI = lambda: px_kpi('MR ЧЕРЕЗ ИИ', '16%', 'их эффективность — 120%', '#B9AEFF')
+K_TD = lambda: px_kpi('ТЕХДОЛГ', '35%', 'тяжести найденных дефектов ушло в main', AMBER)
+K_MT = lambda: px_kpi('МЭТЧ КОМАНДЫ', '78%', 'соответствие команды технологиям проекта')
+K_BUD = lambda: px_kpi('БЮДЖЕТ ПО КОДУ', '12,1 млн ₽', 'создано ценности с учётом переделок и качества', GREEN)
+
+def px_team(compact=False):
+    chips = ''.join('<div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"><b style="font-size: 22px; color: ' + c + ';">' + str(n) + '×</b><span style="font-size: 16px; font-weight: 700;">' + g + '</span></div>' for g, n, c in PX_TEAM)
+    return ('<div style="display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;">' + chips + '</div>'
+            + ('' if compact else '<div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.5;">Эффективность, грейд и вклад каждого — детально в модуле Grade.</div>') + '<div>' + xlink('grade', 'эффективность каждого в команде') + '</div></div>')
+
+def px_budget(size='clamp(48px, 5vw, 72px)'):
+    return ('<div><div style="font-size: ' + size + '; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: ' + GREEN + '; white-space: nowrap;">12,1 млн ₽</div>'
+            '<div style="font-size: 16px; color: rgba(255,255,255,0.8); margin-top: 8px; line-height: 1.5;">общий бюджет проекта — столько ценности создано по коду с учётом всех переделок и качества</div></div>')
+
+def px_ai():
+    return ('<div style="display: flex; flex-direction: column; gap: 10px;">' + hbar('Доля MR, написанных через ИИ', '16%', 16, '#B9AEFF') + hbar('Эффективность MR с ИИ', '120%', 100, GREEN) + hbar('Эффективность проекта в целом', '74%', 74, AMBER) +
+            '<div>' + xlink('ai', 'подробно об эффективности ИИ') + '</div></div>')
+
+def px_techmap_panel():
+    return pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются вакансией или подбором специалиста.', techmap_rows() +
+                    '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div>')
+
+def px_td_panel(n=7):
+    return pj_panel('ТЕХДОЛГ', 'Где копится риск', 'Доля тяжести дефектов, ушедших в main, — по категориям качества ISO/IEC 25010.', techdebt_bars(n))
+
+def proj_px(n):
+    lead = 'Пример отчёта UpCore по проекту. Все цифры считаются по коду и раскрываются до MR и строчек в «Глазе».'
+    if n == 1:  # прежний вариант 3 с новыми данными
+        strip = '<div class="g4">' + K_EFF() + K_AI() + K_TD() + K_MT() + '</div>'
+        bt = ('<div style="display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; border-radius: 22px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 22px;">'
+              '<div style="flex: 1.2 1 360px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + '; margin-bottom: 10px;">БЮДЖЕТ ПРОЕКТА</div>' + px_budget() + '</div>'
+              '<div style="flex: 1 1 320px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + '; margin-bottom: 10px;">КОМАНДА ПРОЕКТА</div>' + px_team() + '</div></div>')
+        body = strip + bt + '<div class="g2">' + px_td_panel() + px_techmap_panel() + '</div>'
+        return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Четыре цифры, по которым видно здоровье проекта', lead, px_head(), body)
+    if n == 2:  # деньги и люди крупно, затем риски
+        left = ('<div style="flex: 1.3 1 440px; min-width: 0; border-radius: 22px; background: #1A1925; border: 1px solid rgba(83,192,77,0.3); padding: 24px; display: flex; flex-direction: column; gap: 18px;">'
+                '<div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">ДЕНЬГИ</div>' + px_budget('clamp(56px, 6vw, 88px)') + '<div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">' + px_ai() + '</div></div>')
+        right = ('<div style="flex: 1 1 340px; min-width: 0; border-radius: 22px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 14px;">'
+                 '<div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">ЛЮДИ</div><div style="font-size: 22px; font-weight: 800;">4 человека делают проект</div>' + px_team() +
+                 '<div class="g2" style="gap: 8px;">' + tile('<span style="color: ' + AMBER + ';">74%</span>', 'эффективность команды') + tile('78%', 'мэтч с тех-картой') + '</div></div>')
+        body = '<div style="display: flex; flex-wrap: wrap; gap: 16px;">' + left + right + '</div><div class="g2">' + px_td_panel(5) + px_techmap_panel() + '</div>'
+        return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Сколько стоит проект и кто его делает', lead, px_head(), body)
+    if n == 3:  # 4 квадранта: деньги, люди, ИИ, риски
+        q = lambda lab, ttl_, inner: ('<div style="min-width: 0; border-radius: 22px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 24px; display: flex; flex-direction: column; gap: 14px;">'
+                                      '<div style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + lab + '</div><div style="font-size: 20px; font-weight: 800;">' + e(ttl_) + '</div>' + inner + '</div>')
+        body = ('<div class="g2">'
+                + q('01 · ДЕНЬГИ', 'Бюджет и эффективность', px_budget() + hbar('Эффективность проекта', '74%', 74, AMBER))
+                + q('02 · ЛЮДИ', 'Команда проекта', px_team() + hbar('Мэтч команды с тех-картой', '78%', 78, GREEN))
+                + q('03 · ИИ', 'Как команда работает с ИИ', '<div class="g2" style="gap: 8px;">' + tile('<span style="color: #B9AEFF;">16%</span>', 'MR написано через ИИ') + tile('<span style="color: ' + GREEN + ';">120%</span>', 'эффективность MR с ИИ') + '</div><div>' + xlink('ai', 'подробно об эффективности ИИ') + '</div>')
+                + q('04 · РИСКИ', 'Техдолг по ISO 25010', '<div style="font-size: 15px; color: rgba(255,255,255,0.75);"><b style="color: #FFFFFF;">35%</b> тяжести найденных дефектов ушло в main</div>' + techdebt_bars(4)) + '</div>')
+        return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Проект под рентгеном: деньги, люди, ИИ и риски', lead, px_head(), body)
+    # n == 4: бюджет-первым — крупная сумма и KPI-лента, затем команда и тех-карта
+    top = ('<div style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; border-radius: 22px; background: linear-gradient(135deg, rgba(83,192,77,0.12), #1A1925 60%); border: 1px solid rgba(83,192,77,0.35); padding: clamp(22px, 3vw, 36px);">'
+           '<div style="flex: 1.2 1 380px; min-width: 0;"><div style="' + MONO + ' font-size: 12px; color: ' + PJ + '; margin-bottom: 10px;">ОБЩИЙ БЮДЖЕТ ПРОЕКТА ПО КОДУ</div>' + px_budget('clamp(60px, 7vw, 104px)') + '</div>'
+           '<div style="flex: 1 1 320px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">'
+           + tile('<span style="color: ' + AMBER + ';">74%</span>', 'эффективность проекта') + tile('<span style="color: #B9AEFF;">16%</span> · <span style="color: ' + GREEN + ';">120%</span>', 'MR через ИИ · их эффективность')
+           + tile('<span style="color: ' + AMBER + ';">35%</span>', 'тяжести дефектов ушло в main') + tile('78%', 'мэтч команды') + '</div></div>')
+    team = pj_panel('КОМАНДА', '4 человека: 1 Senior, 2 Middle+, 1 Junior+', 'Кто сколько ценности создал и на каком уровне работает — подробно в модуле Grade.', px_team(compact=True))
+    body = top + '<div style="display: flex; flex-wrap: wrap; gap: 16px;"><div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 16px;">' + team + px_td_panel(4) + '</div><div style="flex: 1.2 1 420px; min-width: 0; display: flex;">' + px_techmap_panel().replace('min-width: 0;', 'min-width: 0; flex: 1;', 1) + '</div></div>'
+    return example_shell('projects', 'ПРОЕКТ НА ПРИМЕРЕ', 'Во что превратился бюджет проекта', lead, px_head(), body)
+
+def proj_main2():
+    h1 = 'Бюджет проекта и контроль подрядчиков — в часах и рублях'
+    sub = 'Эффективность команды, техдолг по категориям качества, тех-карта и мэтч команды, прогноз сроков — всё по коду, а не по статусам в Jira.'
+    body = [header('projects'), mod_hero('projects', h1, sub, panel('projects', 'projects / аудит акта', 'пример', act_vs_code()), PROJ_STATS2),
+            proj_audit2(1), proj_px(1), scenarios(),
+            roles('ДЛЯ КОГО', 'Прозрачность, выгодная заказчику и команде', PROJ_ROLES, 'projects'), faq(PROJ_FAQ, acc_key='projects'), saas_variant(2),
+            cta('Проверьте, сколько на самом деле стоит ваш проект', 'Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore Projects — основной макет', '\n'.join(body), 6000, name='Projects-main')
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2705,13 +2787,9 @@ def build(out, mode):
     for k, nm in (('projects', 'Projects'), ('mentor', 'Mentor')):  # раунд 36: по 3 полных макета
         for n in (1, 2, 3):
             files['%s-%d' % (nm, n)] = module_page(k, n)
-    files['Projects-main'] = proj_main()  # раунд 42: основной макет Projects + отличающиеся блоки отдельно
-    files['Projects-blk-audit'] = proj_blk('audit')
-    files['Projects-blk-scen'] = proj_blk('scen')
-    for n in (1, 2, 3):  # раунд 43: объединённый блок «проект на примере + факторы»
-        files['Projects-merge-%d' % n] = pj_board('Projects-merge-%d' % n, proj_merged(n))
-    for n in (1, 2):  # раунд 43: новый блок «аудит акта» с более сильной левой частью
-        files['Projects-audit-%d' % n] = pj_board('Projects-audit-%d' % n, proj_audit2(n))
+    files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
+    for n in (1, 2, 3, 4):  # раунд 44: варианты блока «цифры проекта» для ПроектX
+        files['Projects-px-%d' % n] = pj_board('Projects-px-%d' % n, proj_px(n))
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
         files['AI-%d' % n] = ai_page2(n)
     files['AI-main'] = ai_page_final()  # раунд 40: одна страница AI вместо разбора на блоки (AIbase/AImap/AIblk сняты)
