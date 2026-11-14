@@ -146,8 +146,9 @@ def header(active=None):
     return ('<header style="max-width: 1280px; margin: 0 auto; padding: 24px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between;">\n'
             '<a href="#top" aria-label="UpCore — на главную" style="display: flex; align-items: center;"><img src="%s" alt="UpCore" style="height: 28px; width: auto; display: block;"></a>\n'
             '<nav aria-label="Основное меню" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 15px;">%s</nav>\n'
-            '<div style="display: flex; align-items: center; gap: 12px;"><a href="#lang" style="color: rgba(255,255,255,0.78); text-decoration: none; %s font-size: 13px; padding: 10px 8px;">RU / EN</a>'
-            '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px;">Регистрация</a></div>\n'
+            '<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"><a href="#lang" style="color: rgba(255,255,255,0.78); text-decoration: none; %s font-size: 13px; padding: 10px 8px;">RU / EN</a>'
+            '<span style="display: flex; gap: 10px;"><a href="' + DEMO.replace('%', '%%') + '" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
+            '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a></span></div>\n'
             '</header>') % (src('logo'), ''.join(links), MONO)
 
 CHEVRON = '<svg aria-hidden="true" viewBox="0 0 375 645" style="position: absolute; right: -120px; top: -40px; width: 560px; height: auto; opacity: 0.14; filter: blur(2px);"><path fill="#63D5FF" d="M340.243 410.873C322.404 436.777 298.363 465.078 268.118 495.774L166.429 598.984C149.417 616.251 135.926 628.481 125.958 635.674C116.005 643.826 105.711 645.5 95.078 640.695C84.4595 636.849 69.8902 625.803 51.3702 607.556L9.90889 566.705L249.7 322.254L0.000749597 79.9674L43.9849 35.3256C61.4698 17.5791 75.6986 6.54952 86.6712 2.23669C96.6839 -2.07669 106.793 -0.151217 116.998 8.01309C126.716 15.6972 140.347 28.1827 157.893 45.4695L271.54 157.442C294.446 180.011 314.443 200.659 331.531 219.385C348.146 238.591 359.968 258.274 366.999 278.434C373.542 298.114 374.78 322.343 370.134 347.567C365.05 375.17 358.57 385.448 340.243 410.873Z"></path></svg>'
@@ -161,6 +162,7 @@ def btn(text, href, primary=True, dark=False):
 
 REG = 'https://demo.up-core.ru/'
 MAIL = 'mailto:office@dex-it.ru'
+DEMO = 'mailto:office@dex-it.ru?subject=%D0%94%D0%B5%D0%BC%D0%BE%20UpCore'  # раунд 61: «Провести демо» — заявка на почту (тема «Демо UpCore»)
 
 def stats(items, note=None):
     cells = []
@@ -1103,7 +1105,7 @@ def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex
                 + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + contact('ПОЧТА', secondary[0], secondary[1]) + '</div>')
     inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: %s; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
-             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
+             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn('Провести демо', DEMO, False, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
     return section(inner, 'contacts', pb=72)
 
 def footer():
