@@ -65,13 +65,21 @@ def assets():
     shutil.copy(os.path.join(REPO, 'docs/brand/logo.svg'), os.path.join(img, 'logo.svg'))
     shutil.copy(os.path.join(REPO, 'docs/brand/favicon.svg'), os.path.join(SITE, 'public', 'favicon.svg'))
     from PIL import Image
+    # Слайды главной (раунд 72): все скриншоты приводятся к одной пропорции 16:10 (как окно слайдера) — показываются целиком,
+    # без обрезки и без скачков высоты. Широкие — вписываются по ширине с полями цвета фона интерфейса, высокие («Глаз») — верх экрана.
+    W, H = 1600, 1000
     for key, (_, f) in bp.IMG.items():
         dst = os.path.join(img, 'screens', f.replace('.jpg', '.webp'))
-        if not os.path.exists(dst):
-            im = Image.open(os.path.join(REPO, 'docs/reference/demo/slides', f)).convert('RGB')
-            if im.width > 1600:
-                im = im.resize((1600, round(im.height * 1600 / im.width)), Image.LANCZOS)
-            im.save(dst, 'WEBP', quality=82, method=6)
+        im = Image.open(os.path.join(REPO, 'docs/reference/demo/slides', f)).convert('RGB')
+        if im.width / im.height >= W / H:
+            im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
+            bg = im.getpixel((im.width - 4, im.height - 4))
+            canvas = Image.new('RGB', (W, H), bg)
+            canvas.paste(im, (0, (H - im.height) // 2))
+        else:
+            im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
+            canvas = im.crop((0, 0, W, H))
+        canvas.save(dst, 'WEBP', quality=90, method=6)
 
 def main():
     hp = os.path.join(os.path.dirname(__file__), 'heights.json')

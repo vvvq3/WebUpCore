@@ -13,6 +13,9 @@
   --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --ease-out-soft: cubic-bezier(.2, .7, .2, 1);
 }
+[hidden] { display: none !important; }
+/* декоративная графика (шеврон и иконки) не перехватывает нажатия */
+main svg[aria-hidden='true'] { pointer-events: none; }
 html { background: #0D0C15; color: #fff; scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body { margin: 0; background: #0D0C15; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
@@ -61,6 +64,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .uc-odo__col > span { height: 1.1em; line-height: 1.1; }
 
 /* ---------- Слайдер скриншотов на главной ---------- */
+/* подпись — ровно две строки при любой длине текста, чтобы высота блока не менялась при смене слайда */
+.uc-slide-cap { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; line-height: 1.45; height: 2.9em; align-self: center; }
+[data-slider] img[data-slide] { object-fit: contain !important; background: #F4F5F8; }
+/* фильтр блога */
+.uc-filter { font: 500 14px 'Onest Variable', sans-serif; min-height: 40px; padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .14); background: transparent; color: #fff; cursor: pointer; transition: background-color .2s, border-color .2s; }
+.uc-filter:hover { border-color: rgba(99, 213, 255, .6); }
+.uc-filter[aria-pressed='true'] { border-color: #63D5FF; background: rgba(99, 213, 255, .12); }
 .uc-chip { border: 1px solid rgba(255, 255, 255, .14); background: transparent; color: rgba(255, 255, 255, .78); }
 .uc-chip[aria-selected='true'] { border-color: #63D5FF; background: rgba(99, 213, 255, .12); color: #fff; }
 .uc-chip .uc-prog { display: none; }

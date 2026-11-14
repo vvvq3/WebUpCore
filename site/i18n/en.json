@@ -711,5 +711,7 @@
  "Можно оценить проект при покупке компании?": "Can a project be assessed when acquiring a company?",
  "Да. Разовый аудит покажет, сколько стоил код, сколько в нём техдолга и насколько команда соответствует технологиям.": "Yes. A one-off audit shows what the code cost, how much tech debt it carries and how well the team fits the stack.",
  "Проверьте, сколько на самом деле стоит ваш проект": "Find out what your project really costs",
- "Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.": "Order an audit — an objective project budget from code: six months of history in one hour."
+ "Закажите аудит — объективный бюджет проекта по коду: полгода истории за 1 час.": "Order an audit — an objective project budget from code: six months of history in one hour.",
+ "Темы блога": "Blog topics",
+ "Постов на эту тему пока нет.": "No posts on this topic yet."
 }

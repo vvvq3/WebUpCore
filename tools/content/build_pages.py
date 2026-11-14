@@ -255,11 +255,11 @@ def slider_web():
     meta = ' '.join('data-k%d="%s" data-t%d="%s" data-c%d="%s"' % (n, e(k), n, e(t), n, e(c)) for n, (k, t, c, i) in enumerate(SLIDES))
     return ('<div data-slider ' + meta + ' style="flex: 1.15 1 520px; min-width: 0; position: relative;">'
             '<div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.3); box-shadow: 0 0 0 1px rgba(99,213,255,0.06), 0 40px 120px rgba(99,213,255,0.12); overflow: hidden;">'
-            '<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span>upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="color: #63D5FF;"><span data-slide-num>01</span> / 08</span></div>'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="flex: 0 0 auto; color: #63D5FF;"><span data-slide-num>01</span> / 08</span></div>'
             '<div style="position: relative; aspect-ratio: 16 / 10; background: #FFFFFF; overflow: hidden;">' + imgs +
             '<div class="uc-scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 2px; background: #63D5FF; box-shadow: 0 0 18px 4px rgba(99,213,255,0.6);"></div></div>'
             '<div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">'
-            '<div style="font-size: 17px; font-weight: 700; min-width: 0;" aria-live="polite"><span data-slide-title>' + e(t0) + '</span> <span style="font-weight: 400; color: rgba(255,255,255,0.72); font-family: \'Onest\', sans-serif; font-size: 15px;">— <span data-slide-caption>' + e(c0) + '</span></span></div>'
+            '<div class="uc-slide-cap" style="font-size: 17px; font-weight: 700; min-width: 0;" aria-live="polite"><span data-slide-title>' + e(t0) + '</span> <span style="font-weight: 400; color: rgba(255,255,255,0.72); font-family: \'Onest\', sans-serif; font-size: 15px;">— <span data-slide-caption>' + e(c0) + '</span></span></div>'
             '<button type="button" data-slide-play aria-label="Остановить автопрокрутку" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">'
             '<svg data-icon-pause width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/></svg>'
             '<svg data-icon-play width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style="display: none;"><path d="M3 1.5v11l9-5.5z" fill="#FFFFFF"/></svg></button></div>'
@@ -2304,7 +2304,7 @@ def tg_banner(compact=False):
 def post_card(p, big=False):
     pid, date, views, tag, title, ex = p
     col = TAGC.get(tag, '#63D5FF')
-    return ('<article style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: ' + ('clamp(26px, 3.4vw, 44px)' if big else 'clamp(22px, 2.6vw, 30px)') + '; display: flex; flex-direction: column; gap: 14px;">'
+    return ('<article' + (' data-cat="' + e(tag) + '"' if MODE == 'web' else '') + ' style="min-width: 0; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: ' + ('clamp(26px, 3.4vw, 44px)' if big else 'clamp(22px, 2.6vw, 30px)') + '; display: flex; flex-direction: column; gap: 14px;">'
             '<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55);"><span style="color: ' + col + ';">' + e(tag).upper() + '</span><span>' + e(date) + ' · ' + str(views) + ' просмотров</span></div>'
             '<div style="font-size: ' + ('clamp(26px, 2.8vw, 40px)' if big else '22px') + '; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em;">' + e(title) + '</div>'
             '<p style="margin: 0; color: rgba(255,255,255,0.76); font-size: ' + ('17px' if big else '15px') + '; line-height: 1.6;">' + e(ex) + '</p>'
@@ -2387,6 +2387,10 @@ def pagination(cur, total=3):
 
 def blog_page2(pg):
     chips = '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + ''.join('<span style="font-size: 14px; padding: 8px 14px; border-radius: 12px; border: 1px solid ' + ('#63D5FF' if i == 0 else 'rgba(255,255,255,0.14)') + '; background: ' + ('rgba(99,213,255,0.12)' if i == 0 else 'transparent') + '; color: #FFFFFF;">' + e(x) + '</span>' for i, x in enumerate(['Все', 'Методика', 'ИИ', 'Деньги', 'Менторство', 'Интервью'])) + '</div>'
+    if MODE == 'web':  # раунд 72: рабочий фильтр по темам — site/src/scripts/site.ts ([data-blog-filter])
+        chips = ('<div data-blog-filter role="group" aria-label="Темы блога" style="display: flex; flex-wrap: wrap; gap: 8px;">' + ''.join(
+            '<button type="button" class="uc-filter" data-filter="%s" aria-pressed="%s">%s</button>' % ('all' if i == 0 else e(x), 'true' if i == 0 else 'false', e(x))
+            for i, x in enumerate(['Все', 'Методика', 'ИИ', 'Деньги', 'Менторство', 'Интервью'])) + '</div>')
     right = '<div style="flex: 0 1 auto; position: relative;">' + btn('Подписаться в Telegram', TG_URL) + '</div>'
     if pg == 1:
         sub = 'Самые популярные посты канала «ИИ-тимлид UpCore»: как работает цифровой тимлид и что он находит в коде.'
@@ -2398,7 +2402,11 @@ def blog_page2(pg):
         sub = 'Все посты канала «ИИ-тимлид UpCore» — с самого начала: ИИ в разработке, экономика и обучение команды.'
         posts = '<div class="g2">' + ''.join(post_card(p) for p in BLOG_MORE[7:]) + '</div>'
     top = blog_hero('Об эффективности разработки — без воды', sub, right)
-    body = [header('blog'), top, section('<div style="margin-bottom: 20px;">' + chips + '</div>' + posts + pagination(pg), 'posts', pb=56), section(tg_banner_v2(), pb=72),
+    paged = posts + pagination(pg)
+    if MODE == 'web':
+        paged = ('<div data-blog-paged>' + paged + '</div><div data-blog-all hidden><div class="g2">' + ''.join(post_card(p) for p in BLOG + BLOG_MORE) + '</div>'
+                 '<p data-blog-empty hidden style="margin: 24px 0 0; color: rgba(255,255,255,0.6);">Постов на эту тему пока нет.</p></div>')
+    body = [header('blog'), top, section('<div style="margin-bottom: 20px;">' + chips + '</div>' + paged, 'posts', pb=56), section(tg_banner_v2(), pb=72),
             cta('Посмотрите на свою команду глазами цифрового тимлида', 'Подключите репозиторий — первые результаты за 1 день.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore — блог, страница %d' % pg, '\n'.join(body), 3000, name='Blog-%d' % pg)
 

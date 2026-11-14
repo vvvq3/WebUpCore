@@ -245,6 +245,33 @@ function initSlider() {
   });
 }
 
+/* ---------------- Фильтр блога по темам ---------------- */
+function initBlogFilter() {
+  const bar = document.querySelector<HTMLElement>('[data-blog-filter]');
+  if (!bar) return;
+  const paged = document.querySelector<HTMLElement>('[data-blog-paged]');
+  const all = document.querySelector<HTMLElement>('[data-blog-all]');
+  const empty = all?.querySelector<HTMLElement>('[data-blog-empty]');
+  if (!paged || !all) return;
+  const apply = (f: string) => {
+    bar.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
+    const on = f !== 'all';
+    paged.hidden = on;
+    all.hidden = !on;
+    let n = 0;
+    all.querySelectorAll<HTMLElement>('article[data-cat]').forEach((a) => {
+      const show = a.dataset.cat === f;
+      a.hidden = !show;
+      if (show) { n += 1; a.classList.add('uc-on'); }
+    });
+    if (empty) empty.hidden = n > 0 || !on;
+  };
+  bar.addEventListener('click', (ev) => {
+    const b = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+    if (b) apply(b.dataset.filter || 'all');
+  });
+}
+
 /* ---------------- Разметка для анимаций ---------------- */
 function tagElements() {
   const main = document.getElementById('main');
@@ -283,7 +310,7 @@ function initMotion() {
   root.classList.add('uc-js');
   // кандидаты на появление: заголовки секций, карточки, элементы сеток; оставляем самые «мелкие» (без вложенных кандидатов)
   const sel = 'section > *, article, .g2 > *, .g3 > *, .g4 > *, .g4m2 > *, .uc-row > *';
-  const cands = new Set<HTMLElement>([...main.querySelectorAll<HTMLElement>(sel)].filter((el) => !el.closest('header') && !el.closest('[data-slider]')));
+  const cands = new Set<HTMLElement>([...main.querySelectorAll<HTMLElement>(sel)].filter((el) => !el.closest('header') && !el.closest('[data-slider]') && el.getAttribute('aria-hidden') !== 'true' && !el.closest('[data-blog-all]')));
   const leaves = [...cands].filter((el) => ![...cands].some((o) => o !== el && el.contains(o)));
   leaves.forEach((el) => {
     const sibs = [...(el.parentElement?.children || [])].filter((s) => leaves.includes(s as HTMLElement));
@@ -323,6 +350,7 @@ initHeader();
 initMenu();
 initSlider();
 initLeadForm();
+initBlogFilter();
 initCookie();
 initGoals();
 tagElements();
