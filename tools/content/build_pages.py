@@ -2690,7 +2690,7 @@ def pj_board(name, html):
 PX_TEAM = [('Senior', 1, GREEN), ('Middle+', 2, AMBER), ('Junior+', 1, '#63D5FF')]
 
 def px_head(sub='ПРИМЕР ОТЧЁТА ПРОЕКТА · UPCORE PROJECTS'):
-    return demo_head('projects', 'ПроектX', sub, [
+    return demo_head('projects', 'Проект Х', sub, [
         ('Сложность', '8 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">/ 10</span>', 'размер сильно больше среднего'), ('Длительность', '1 г. 7 мес', 'легаси 0%'), ('Команда', '4 человека', '1 Senior · 2 Middle+ · 1 Junior+')])
 
 def px_kpi(label, big, text, col='#FFFFFF'):
@@ -2717,7 +2717,7 @@ def px_ai():
             '<div>' + xlink('ai', 'подробно об эффективности ИИ') + '</div></div>')
 
 def px_techmap_panel():
-    return pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются вакансией или подбором специалиста.', techmap_rows() +
+    return pj_panel('ТЕХ-КАРТА', 'Кого не хватает команде', 'Технологии проекта, их сложность и мэтч команды. Пробелы закрываются ротацией по рекомендации UpCore или новой вакансией.', techmap_rows() +
                     '<div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Сформировать вакансию</span><span style="font-size: 13px; padding: 8px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); color: #F7D88A;">Подобрать специалиста</span></div>')
 
 def px_td_panel(n=7):
