@@ -132,8 +132,12 @@ def page(title, body, height, slider=False, name=None):
     head = HELMET.replace('<helmet>', '').replace('</helmet>', '')
     return '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>%s</title>%s</head><body>%s</body></html>' % (H.escape(title), head, root)
 
+CUR_KEY = None  # модуль текущей страницы (задаёт header) — цвет блока контактов внизу
+
 def header(active=None):
-    items = [('Платформа', None), ('Grade', 'grade'), ('AI', 'ai'), ('Projects', 'projects'), ('Mentor', 'mentor'), ('Блог', 'blog')]
+    global CUR_KEY
+    CUR_KEY = active
+    items = [('Платформа', None), ('Grade', 'grade'), ('AI', 'ai'), ('Projects', 'projects'), ('Mentor', 'mentor'), ('Блог', 'blog'), ('Контакты', 'contacts')]
     links = []
     for name, key in items:
         on = (key == active) or (active is None and key is None)
@@ -1088,11 +1092,19 @@ def saas_variant(n):
     right = ('<div class="g2" style="flex: 1 1 460px; min-width: 0;">' + ''.join(card('<div>' + ico(k, size=28) + '</div><div style="font-size: 19px; font-weight: 700; line-height: 1.25;">' + e(t) + '</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">' + e(p) + '</p>', pad='24px', gap=10) for k, t, p in g) + '</div>')
     return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + left + right + '</div>', 'saas')
 
+TEL = ('+7 (985) 848-35-55', 'tel:+79858483555')
+TG = ('@IvanGel_Dex', 'https://t.me/IvanGel_Dex')
+
 def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex-it.ru', MAIL)):
-    inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: #63D5FF; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
+    bg = ACC.get(CUR_KEY, ACC[None])[1]  # раунд 59: блок контактов в цвете продукта
+    contact = lambda cap, t, h: ('<a href="' + h + '" style="display: inline-flex; flex-direction: column; min-width: 0; color: #0D0C15; text-decoration: none;">'
+                                 '<span style="' + MONO + ' font-size: 12px; color: rgba(13,12,21,0.6);">' + cap + '</span><b style="font-size: 18px; white-space: nowrap;">' + e(t) + '</b></a>')
+    contacts = ('<div style="display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(13,12,21,0.18);">'
+                + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + '</div>')
+    inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: %s; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
-             '<div style="display: flex; flex-wrap: wrap; gap: 12px;">%s%s</div></div>') % (e(h2), e(sub), btn(primary[0], primary[1], True, True), btn(secondary[0], secondary[1], False, True))
-    return section(inner, pb=72)
+             '<div style="min-width: 0;"><div style="display: flex; flex-wrap: wrap; gap: 12px;">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn(secondary[0], secondary[1], False, True), contacts)
+    return section(inner, 'contacts', pb=72)
 
 def footer():
     return ('<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7);">'
@@ -2886,7 +2898,7 @@ EX_LEAD = 'Профиль из демо UpCore: ИИ-ревью нашло де�
 
 def m_head():
     return demo_head('mentor', 'Лукьянов Александр · Backend, C#', 'ДЕМО UPCORE · ВКЛАДКА «КАЧЕСТВО» · АНАЛИЗ КОД-РЕВЬЮ', [
-        ('Качество кода', Q32, 'до и после ревью'), ('MR разобрано', '41 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 47</span>', '38 с дефектами'), ('На исправления', '30,9 ч', '7% времени UpCore')])
+        ('Качество кода', Q32, 'до и после ревью'), ('MR разобрано', '47 <span style="font-size: 16px; color: rgba(255,255,255,0.5);">из 47</span>', '38 с дефектами'), ('На исправления', '30,9 ч', '7% времени UpCore')])
 
 def m_note(t='Из системных ошибок Mentor собирает персональный план: что исправить в коде, как ставить задачи и писать промпты, какие технологии прокачать для следующего грейда.'):
     return '<div style="border-radius: 18px; background: rgba(83,192,77,0.08); border: 1px solid rgba(83,192,77,0.3); padding: 16px 20px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.86);">' + e(t) + '</div>'
