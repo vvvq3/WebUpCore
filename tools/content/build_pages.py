@@ -2826,6 +2826,30 @@ def mentor_page2(n):
         cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
     return page('UpCore Mentor — макет %d' % n, '\n'.join(body), 6000, name='Mentor-%d' % n)
 
+# ---------------------------------------------------------------- раунд 49: Mentor — основной макет (общие блоки) + отличающиеся блоки отдельно
+MENTOR_STATS3 = [('80%', 'экономия времени тимлида'), ('+30%', 'эффективности разработчиков'), ('100%', 'ревью кода — каждый MR'), ('50+', 'факторов роста')]
+
+def mentor_main():
+    h1, sub = 'ИИ-наставник для каждого разработчика', 'Mentor разбирает каждый MR, постановки задач и промпты, находит, где проседает эффективность, и собирает персональный план роста. Сеньоры возвращаются к архитектуре.'
+    vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', review_queue())
+    body = [header('mentor'), mod_hero('mentor', h1, sub, vis, MENTOR_STATS3), mentor_example(), mentor_from_grade(), mentor_ai(),
+            roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq(MENTOR_FAQ, acc_key='mentor'), saas_variant(2),
+            cta('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — первые рекомендации по истории MR вашей команды за 1 день.', ('Подключить UpCore', REG)), footer()]
+    return page('UpCore Mentor — основной макет', '\n'.join(body), 6000, name='Mentor-main')
+
+def mentor_blk(kind):
+    d = {'review': ('ФАКТОР · ИИ-РЕВЬЮ КОДА', 'Ревью каждого MR, а не 5–10%', quality_summary() + defects_bars(),
+                    'ИИ-агент разбирает каждый MR: дефекты по тяжести и категориям ISO 25010, что ушло в main и сколько времени заняли исправления.'),
+         'ipr': ('ФАКТОР · ПЛАН РОСТА', 'ИПР по тех-метчу — точечно', ipr_card(),
+                 'Накладываем цифровое резюме разработчика на тех-карту проекта и вычисляем Топ-3 технологии, которые дадут максимальный рост прямо сейчас.'),
+         'queue': ('ФАКТОР · ПРИОРИТИЗАЦИЯ РЕВЬЮ', 'Лиду — только критичное', review_queue(),
+                   'Система подсвечивает MR, которым нужен человек. Остальное ревьюит цифровой тимлид — лид тратит 15 минут вместо часов.')}[kind]
+    a, b, viz, t = d
+    inner = ('<div style="display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: flex-start; border-radius: 28px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: clamp(22px, 3vw, 36px);">'
+             '<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px;"><div style="' + MONO + ' font-size: 12px; color: ' + MG + ';">' + e(a) + '</div><div style="font-size: clamp(24px, 2.4vw, 32px); font-weight: 800; line-height: 1.15;">' + e(b) + '</div>'
+             '<p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 16px; line-height: 1.6;">' + e(t) + '</p></div><div style="flex: 1.2 1 380px; min-width: 0;">' + viz + '</div></div>')
+    return page('UpCore Mentor — блок', '<div style="padding-top: 48px;">' + section(inner, 'blk') + '</div>', 900, name='Mentor-blk-' + kind)
+
 def build(out, mode):
     global MODE
     MODE = mode
@@ -2844,8 +2868,9 @@ def build(out, mode):
     for k, n in (('grade', 'Grade'), ('ai', 'AI'), ('projects', 'Projects'), ('mentor', 'Mentor')):
         for v in 'ABC':
             files['%s-%s' % (n, v)] = product(k, v)
-    for n in (1, 2, 3):  # раунд 46: Mentor — 3 новых макета (module_page('mentor') раунда 36 заменён)
-        files['Mentor-%d' % n] = mentor_page2(n)
+    files['Mentor-main'] = mentor_main()  # раунд 49: основной макет Mentor + отличающиеся блоки отдельно (Mentor-1..3 сняты)
+    for k in ('review', 'ipr', 'queue'):
+        files['Mentor-blk-' + k] = mentor_blk(k)
     files['Projects-main'] = proj_main2()  # раунд 44: основной макет — шапка, аудит акта (вар. 1), «цифры проекта» (ПроектX), сценарии, общие блоки
     # раунд 45: на холсте только Projects-main (варианты Projects-px-1..4 сняты; код proj_px(n) оставлен)
     for n in (1, 2, 3):  # раунд 38: AI — 3 новых макета по материалу владельца (старые AI-1..3 заменены)
