@@ -25,7 +25,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
 .uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
-@media (max-width:720px){.uc-btns{grid-auto-flow:row}}
+@media (max-width:720px){.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
@@ -97,7 +97,7 @@ html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7);"><img src="/_blob/8c539bd29559b45927b81ec6072a2f13" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (930) 066-46-20 · office@dex-it.ru · @upcore_ai</span></div></footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":6934}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":6932}}'>
 class Component extends DCLogic {
   constructor(props) { super(props); this.state = { idx: 0, playing: true }; }
   slidesData() {

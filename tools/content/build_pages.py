@@ -63,7 +63,7 @@ a{color:#63D5FF}a:hover{color:#A8E8FF}
 html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .uc-ml{display:none}
 .uc-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px;max-width:100%}.uc-btns>a{justify-content:center;text-align:center}
-@media (max-width:720px){.uc-btns{grid-auto-flow:row}}
+@media (max-width:720px){.uc-btns{grid-auto-flow:row}.uc-tm{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important;row-gap:2px!important}.uc-tm>:first-child{grid-column:1/-1;font-weight:600}}
 .uc-rl{}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .uc-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
@@ -2089,8 +2089,8 @@ def techdebt_bars(n=7):
     return '<div style="display: flex; flex-direction: column; gap: 10px;">' + ''.join(hbar(a, str(b) + ' · ' + str(c) + '%', max(3, int(b / 273 * 100)), AMBER if i < 3 else 'rgba(242,193,78,0.5)') for i, (a, b, c) in enumerate(TECHDEBT[:n])) + '</div>'
 
 def techmap_rows():
-    head = '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span>ТЕХНОЛОГИЯ</span><span>СЛОЖН.</span><span>В КОДЕ</span><span style="text-align: right;">МЭТЧ</span></div>'
-    return head + ''.join('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; align-items: baseline; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;">'
+    head = '<div class="uc-tm" style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5); padding-bottom: 6px;"><span>ТЕХНОЛОГИЯ</span><span>СЛОЖН.</span><span>В КОДЕ</span><span style="text-align: right;">МЭТЧ</span></div>'
+    return head + ''.join('<div class="uc-tm" style="display: grid; grid-template-columns: minmax(0, 1fr) 44px 64px 52px; gap: 8px; align-items: baseline; padding: 9px 0; border-top: 1px solid rgba(255,255,255,0.07); font-size: 14px;">'
                           '<span style="min-width: 0;">' + e(a) + '</span><span>' + str(b) + '</span><span style="white-space: nowrap;">' + e(c) + '</span><b style="text-align: right; color: ' + (GREEN if d >= 75 else (AMBER if d >= 30 else RED_T)) + ';">' + str(d) + '%</b></div>' for a, b, c, d in TECHMAP)
 
 def act_vs_code(act=160, code=40):
@@ -2630,7 +2630,7 @@ def pj_head():
 
 def pj_panel(num, title, expl, viz):
     return ('<div style="min-width: 0; border-radius: 22px; background: #1A1925; border: 1px solid rgba(255,255,255,0.08); padding: 22px; display: flex; flex-direction: column; gap: 12px;">'
-            '<div style="display: flex; gap: 10px; align-items: baseline;"><span style="' + MONO + ' font-size: 12px; color: ' + PJ + ';">' + num + '</span><b style="font-size: 19px;">' + e(title) + '</b></div>'
+            '<div style="display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline;"><span style="' + MONO + ' font-size: 12px; color: ' + PJ + '; white-space: nowrap;">' + num + '</span><b style="font-size: 19px;">' + e(title) + '</b></div>'
             '<div style="font-size: 14px; color: rgba(255,255,255,0.66); line-height: 1.5;">' + e(expl) + '</div>' + viz + '</div>')
 
 PJ_EFF = ('<div style="display: flex; flex-direction: column; gap: 10px;">' + hbar('Эффективность за месяц', '90% · 1,3 из 1,4 тыс. ч', 90, GREEN) + hbar('За 3 месяца', '88% · 2,9 из 3,3 тыс. ч', 88, GREEN) + hbar('MR с ИИ', '2% · 6 из 273', 4, '#B9AEFF') + '</div>')
