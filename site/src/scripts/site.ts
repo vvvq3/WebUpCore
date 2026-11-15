@@ -208,32 +208,35 @@ function initLeadForm() {
 
 /* ---------------- Слайдер скриншотов (главная) ---------------- */
 function initSlider() {
+  // Раунд 76: экраны быстро сменяют друг друга — голубая полоса идёт сверху вниз, выше неё уже новый экран, ниже ещё старый.
+  // Без кнопок и подписи; пауза при наведении мыши, когда слайдер вне экрана и когда вкладка скрыта.
   document.querySelectorAll<HTMLElement>('[data-slider]').forEach((box) => {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
-    const btns = [...box.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')];
-    const play = box.querySelector<HTMLButtonElement>('[data-slide-play]')!;
-    // Смена слайда «сканером» (раунд 74): голубая полоса идёт сверху вниз, выше неё уже новый экран, ниже — ещё старый.
     const scan = box.querySelector<HTMLElement>('.uc-scan');
+    const keyEl = box.querySelector('[data-slide-key]');
+    const numEl = box.querySelector('[data-slide-num]');
     if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
-    const WIPE = 1600;
+    const WIPE = 850; // проход полосы, мс
+    const STEP = 1900; // смена экрана, мс
     const n = imgs.length;
+    if (n < 2) return;
     let idx = 0;
     let timer = 0;
     let running: Animation[] = [];
     let cleanup: (() => void) | null = null;
-    imgs.forEach((im, k) => { im.classList.remove('uc-in'); im.style.zIndex = k === 0 ? '1' : '0'; });
+    imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
     const finishWipe = () => { running.forEach((a) => a.finish()); running = []; cleanup?.(); cleanup = null; };
-    const set = (i: number, animate = true) => {
+    const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
+    const set = (i: number) => {
       const prev = idx;
       idx = (i + n) % n;
       finishWipe();
-      imgs.forEach((im, k) => { if (Math.abs(k - idx) <= 1 || (idx === n - 1 && k === 0)) im.loading = 'eager'; });
+      preload();
       const next = imgs[idx];
       const old = imgs[prev];
-      if (!animate || reduced || prev === idx || !next.animate) {
-        imgs.forEach((im, k) => { im.style.visibility = k === idx ? 'visible' : 'hidden'; im.style.zIndex = k === idx ? '1' : '0'; im.style.clipPath = ''; });
+      if (reduced || !next.animate) {
+        imgs.forEach((im, k) => { im.style.visibility = k === idx ? 'visible' : 'hidden'; im.style.zIndex = k === idx ? '1' : '0'; });
       } else {
-        imgs.forEach((im, k) => { if (k !== idx && k !== prev) im.style.visibility = 'hidden'; });
         old.style.visibility = 'visible'; old.style.zIndex = '1';
         next.style.visibility = 'visible'; next.style.zIndex = '2';
         const ease = 'cubic-bezier(.45,.05,.35,1)';
@@ -242,28 +245,22 @@ function initSlider() {
         cleanup = () => { old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1'; next.getAnimations().forEach((a) => a.cancel()); next.style.clipPath = ''; };
         running[0].onfinish = () => { if (cleanup) { cleanup(); cleanup = null; } running = []; };
       }
-      btns.forEach((b, k) => b.setAttribute('aria-selected', String(k === idx)));
-      box.querySelector('[data-slide-key]')!.textContent = box.dataset['k' + idx] || '';
-      box.querySelector('[data-slide-title]')!.textContent = box.dataset['t' + idx] || '';
-      box.querySelector('[data-slide-caption]')!.textContent = box.dataset['c' + idx] || '';
-      box.querySelector('[data-slide-num]')!.textContent = '0' + (idx + 1);
-      // перезапуск полосы прогресса на активной кнопке
-      const prog = btns[idx]?.querySelector<HTMLElement>('.uc-prog');
-      if (prog) { prog.style.animation = 'none'; void prog.offsetWidth; prog.style.animation = ''; }
+      if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
+      if (numEl) numEl.textContent = String(idx + 1).padStart(2, '0');
     };
-    const labels = lang === 'ru' ? ['Остановить автопрокрутку', 'Включить автопрокрутку'] : ['Pause autoplay', 'Resume autoplay'];
-    const start = () => { stop(); box.setAttribute('data-playing', ''); timer = window.setInterval(() => set(idx + 1), 4750); upd(); };
-    const stop = () => { window.clearInterval(timer); timer = 0; box.removeAttribute('data-playing'); upd(); };
-    const upd = () => {
-      const on = Boolean(timer);
-      play.setAttribute('aria-label', on ? labels[0] : labels[1]);
-      play.querySelector<SVGElement>('[data-icon-pause]')!.style.display = on ? '' : 'none';
-      play.querySelector<SVGElement>('[data-icon-play]')!.style.display = on ? 'none' : '';
-    };
-    btns.forEach((b, k) => b.addEventListener('click', () => { set(k); if (timer) start(); }));
-    play.addEventListener('click', () => (timer ? stop() : start()));
-    set(0, false);
-    if (reduced) stop(); else start();
+    let hover = false;
+    let visible = true;
+    const tick = () => { if (!timer) timer = window.setInterval(() => set(idx + 1), STEP); };
+    const halt = () => { window.clearInterval(timer); timer = 0; };
+    const sync = () => (!reduced && visible && !hover && !document.hidden ? tick() : halt());
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      box.addEventListener('mouseenter', () => { hover = true; sync(); });
+      box.addEventListener('mouseleave', () => { hover = false; sync(); });
+    }
+    document.addEventListener('visibilitychange', sync);
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }).observe(box);
+    preload();
+    sync();
   });
 }
 

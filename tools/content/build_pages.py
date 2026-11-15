@@ -249,24 +249,19 @@ def slider_console():
 </div>"""
 
 def slider_web():
-    """Слайдер скриншотов для сайта: все слайды в разметке, переключение — site/src/scripts/site.ts ([data-slider])."""
-    imgs = ''.join('<img src="%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="1000" data-slide="%d" class="%s" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top center; display: block;%s">'
-                   % (src(i), e(t), e(c), 'eager' if n == 0 else 'lazy', n, 'uc-in' if n == 0 else '', '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, i) in enumerate(SLIDES))
-    chips = ''.join('<button type="button" role="tab" aria-selected="%s" data-slide-btn="%d" class="uc-chip" style="position: relative; overflow: hidden; flex: 0 0 auto; white-space: nowrap; min-height: 44px; padding: 0 12px; border-radius: 10px; font: 600 13px Onest, sans-serif; cursor: pointer;">%s<span class="uc-prog" aria-hidden="true" style="position: absolute; left: 0; bottom: 0; height: 2px; width: 100%%; background: #63D5FF;"></span></button>'
-                    % ('true' if n == 0 else 'false', n, e(k)) for n, (k, t, c, i) in enumerate(SLIDES))
-    k0, t0, c0, _ = SLIDES[0]
-    meta = ' '.join('data-k%d="%s" data-t%d="%s" data-c%d="%s"' % (n, e(k), n, e(t), n, e(c)) for n, (k, t, c, i) in enumerate(SLIDES))
+    """Слайдер скриншотов для сайта (раунд 76): только окно со скриншотами — без подписи, кнопок и паузы внизу.
+    Экраны быстро сменяют друг друга голубой полосой-сканером; переключение — site/src/scripts/site.ts ([data-slider])."""
+    n_all = len(SLIDES)
+    imgs = ''.join('<img src="%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="1000" data-slide="%d" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top center; display: block;%s">'
+                   % (src(i), e(t), e(c), 'eager' if n == 0 else 'lazy', n, '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, i) in enumerate(SLIDES))
+    k0 = SLIDES[0][0]
+    meta = ' '.join('data-k%d="%s"' % (n, e(k)) for n, (k, t, c, i) in enumerate(SLIDES))
     return ('<div data-slider ' + meta + ' style="flex: 1.15 1 520px; min-width: 0; position: relative;">'
             '<div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.3); box-shadow: 0 0 0 1px rgba(99,213,255,0.06), 0 40px 120px rgba(99,213,255,0.12); overflow: hidden;">'
-            '<div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="flex: 0 0 auto; color: #63D5FF;"><span data-slide-num>01</span> / 08</span></div>'
+            '<div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="flex: 0 0 auto; color: #63D5FF;"><span data-slide-num>01</span> / %02d</span></div>' % n_all +
             '<div style="position: relative; aspect-ratio: 16 / 10; background: #FFFFFF; overflow: hidden;">' + imgs +
             '<div class="uc-scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 2px; background: #63D5FF; box-shadow: 0 0 18px 4px rgba(99,213,255,0.6);"></div></div>'
-            '<div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">'
-            '<div class="uc-slide-cap" style="font-size: 17px; font-weight: 700; min-width: 0;" aria-live="polite"><span data-slide-title>' + e(t0) + '</span> <span style="font-weight: 400; color: rgba(255,255,255,0.72); font-family: \'Onest\', sans-serif; font-size: 15px;">— <span data-slide-caption>' + e(c0) + '</span></span></div>'
-            '<button type="button" data-slide-play aria-label="Остановить автопрокрутку" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">'
-            '<svg data-icon-pause width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="#FFFFFF"/></svg>'
-            '<svg data-icon-play width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style="display: none;"><path d="M3 1.5v11l9-5.5z" fill="#FFFFFF"/></svg></button></div>'
-            '<div class="uc-chips" role="tablist" aria-label="Экраны продукта">' + chips + '</div></div></div></div>')
+            '</div></div>')
 
 def static_slider_preview():
     """Для превью: консоль с первым слайдом без шаблонов."""

@@ -23,8 +23,9 @@ const BASE = process.env.BASE || 'http://localhost:4321';
   await p.waitForLoadState('load'); await p.waitForTimeout(300); out.push(['переход из меню — страница сверху', (await p.evaluate(() => scrollY)) === 0]); await p.close();
   // слайдер
   for (const w of [390, 1440]) {
-    p = await page(w); await p.goto(BASE + '/', { waitUntil: 'networkidle' }); const hs = new Set();
-    for (let i = 0; i < 8; i++) { await p.click(`[data-slide-btn="${i}"]`); await p.waitForTimeout(100); hs.add(await p.evaluate(() => Math.round(document.querySelector('[data-slider]').getBoundingClientRect().height))); }
+    p = await page(w); await p.goto(BASE + '/', { waitUntil: 'networkidle' }); const hs = new Set(); await p.evaluate(() => document.querySelector('[data-slider]').scrollIntoView({ block: 'center' }));
+    for (let i = 0; i < 6; i++) { await p.waitForTimeout(1000); hs.add(await p.evaluate(() => Math.round(document.querySelector('[data-slider]').getBoundingClientRect().height))); }
+    const nums = new Set(); for (let i = 0; i < 4; i++) { nums.add(await p.evaluate(() => document.querySelector('[data-slide-num]').textContent)); await p.waitForTimeout(1000); } out.push([`слайдер ${w}px: экраны сменяются сами`, nums.size >= 2]);
     out.push([`слайдер ${w}px: высота постоянна`, hs.size === 1]); await p.close();
   }
   // анимация #core
