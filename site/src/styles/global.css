@@ -190,6 +190,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .uc-cookie__btns { display: flex; gap: 8px; }
 .uc-cookie .uc-mbtn { min-height: 44px; font-size: 14px; }
 
-/* ---------- Главная v2 (раунд 82): длинные подписи кнопок первого экрана — в одну строку ---------- */
-.uc-btns--hero2 > a { white-space: nowrap; padding: 0 20px !important; font-size: 16px !important; }
-@media (min-width: 1140px) and (max-width: 1299px) { .uc-btns--hero2 { grid-auto-flow: row; } }
+/* ---------- Главная v2 (раунды 82–83) ---------- */
+/* длинные подписи кнопок первого экрана — в одну строку (размер 17 px, как на остальных страницах) */
+.uc-btns--hero2 > a { white-space: nowrap; padding: 0 18px !important; }
+@media (min-width: 1140px) and (max-width: 1339px) { .uc-btns--hero2 { grid-auto-flow: row; } }
+/* слайдер справа поднят: его низ — на линии под кнопками (над цифрами) */
+@media (min-width: 1140px) {
+  .uc-hero2 { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 56px !important; row-gap: 28px !important; align-items: start !important; }
+  .uc-hero2-l { display: contents !important; }
+  .uc-hero2-l > * { grid-column: 1; }
+  .uc-hero2 > [data-slider] { grid-column: 2; grid-row: 1 / 4; align-self: end; margin-bottom: -28px; }
+}
+/* 4 карточки под «Как работает модель»: описания начинаются на одной высоте */
+@media (min-width: 1101px) { .uc-core4__t { min-height: 2.5em; } }
+/* карточки «Подключение за минуты»: заголовки одной высоты — описания на одной линии */
+@media (min-width: 1101px) { .uc-saas-t { min-height: 2.5em; } }

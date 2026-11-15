@@ -1815,10 +1815,10 @@ PLATFORM_V2 = [  # (ключ, модуль, номер, роли, заголов
      [('Авто-детект ИИ-кода в MR', 'и доля правок после генерации'), ('Аналитика промптов:', 'кто экономит часы, а кто ломает архитектуру'), ('Окупаемость лицензий', 'в пересчёте на сэкономленный ФОТ')],
      'Окупаются ли ИИ-ассистенты?', 'Подробнее об AI →'),
     ('projects', 'Projects', '03', 'CEO · PMO · CFO', 'Бюджет проектов и аудит подрядчиков', 'Акты аутстаффа и подряда завышаются в среднем на 30–45% к коду.',
-     [('Сверка актов с кодом:', 'реальные человеко-часы против списанных в Jira'), ('Ранний радар срыва сроков', 'при зелёных статусах в трекере'), ('Разовый аудит репозитория', 'перед приёмкой работ без внедрения')],
+     [('Сверка актов с кодом:', 'реальные человеко-часы против списанных в Jira'), ('Ранний радар срыва сроков', 'при зелёных статусах в трекере'), ('Оценка реального бюджета проекта', 'по всей кодовой базе')],
      'Сколько реально стоит проект?', 'Подробнее о Projects →'),
-    ('mentor', 'Mentor', '04', 'CTO · тимлиды · L&D', 'Автоматическое ревью и ИИ-ментор', 'Тимлид успевает глубоко проверить лишь 5–10% изменений в коде.',
-     [('Приоритизация код-ревью:', 'подсветка архитектурных и логических рисков'), ('Разбор качества ТЗ и промптов', 'по каждому разработчику'), ('Персональные планы развития', 'на базе реальных ошибок в MR')],
+    ('mentor', 'Mentor', '04', 'CTO · тимлиды · L&D', 'ИИ-наставник для каждого разработчика', 'Тимлид успевает глубоко проверить лишь 5–10% изменений в коде.',
+     [('Автоматическое ревью', 'кода, качества, техдолга и задач'), ('Системный анализ промптов', '— повышаем эффективность и качество'), ('Индивидуальный план развития', 'на базе системных ошибок')],
      'Как разгрузить тимлидов?', 'Подробнее о Mentor →'),
 ]
 
@@ -1826,23 +1826,23 @@ def platform_v2():
     cards = []
     for key, mod, num, roles, t, fact, lis, q, more in PLATFORM_V2:
         line, txt = ACC[key]
-        items = ''.join('<li style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 16px; line-height: 1.45; color: rgba(255,255,255,0.78);">'
+        items = ''.join('<li style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.78);">'
                         '<span aria-hidden="true" style="color: %s; font-weight: 800;">&gt;</span><span><b style="color: #FFFFFF; font-weight: 700;">%s</b> %s</span></li>' % (txt, e(a), e(b)) for a, b in lis)
         cards.append('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1F 0%%, #1A1925 45%%); border: 1px solid %s55; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
                      '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; %s font-size: 13px; color: rgba(255,255,255,0.62);"><span>%s</span><span>%s</span></div>'
                      '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
                      '<h3 style="margin: 0; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -0.01em; line-height: 1.2; color: #FFFFFF;">%s</h3>'
-                     '<div style="border-radius: 12px; background: %s14; border-left: 3px solid %s; padding: 10px 14px; font-size: 15px; line-height: 1.45; color: rgba(255,255,255,0.88);"><b style="color: %s;">Факт:</b> %s</div>'
+                     '<div style="border-radius: 12px; background: %s14; border-left: 3px solid %s; padding: 12px 16px; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.88);"><b style="color: %s;">Факт:</b> %s</div>'
                      '<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px;">%s</ul>'
                      '<div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 0 12px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">'
-                     '<span style="flex: 1 1 200px; min-width: 0; font-size: 15px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span><span style="flex: 0 0 auto;">%s</span></div></article>' % (
+                     '<span style="flex: 1 1 200px; min-width: 0; font-size: 16px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span><span style="flex: 0 0 auto;">%s</span></div></article>' % (
                          line, line, MONO, num, e(roles), line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), line, line, txt, e(fact), items, e(q), more_link(key, more)))
     head = ('ПЛАТФОРМА UPCORE', 'Одна платформа — четыре задачи C-Level', 'Один read-only коннект к Git закрывает контроль грейдов, ROI от ИИ, бюджетов и код-ревью.')
     return section(sec_head(*head) + '<div class="g2">%s</div>' % ''.join(cards), 'products')
 
 CORE_V2_CARDS = [
-    ('50+ параметров анализа', 'Когнитивная и архитектурная сложность, churn, работа с legacy и плотность дефектов.'),
-    ('Фильтрация 100% шума', 'Автогенерация, копипаст, форматирование и переименования дают 0 часов.'),
+    ('50+ параметров анализа', 'Логическая и архитектурная сложность, churn, технологии, работа с legacy, качество кода и уровень багов.'),
+    ('Фильтрация 100% шума', 'Автогенерация, копипаст, бойлерплейт, форматирование, переименования и т. д.'),
     ('Детерминированная математика', 'Никаких галлюцинаций LLM: один и тот же код всегда получает одинаковую оценку.'),
     ('Экологично для команды', 'Без агентов на ПК, без скриншотов экрана и без ручного заполнения таймшитов.'),
 ]
@@ -1860,16 +1860,16 @@ def core_v2():
         'Детерминированная модель (калибровка на 300 000+ MR) оценивает трудоёмкость изменений так же, как Senior-ревьюер, — за 1 секунду и без слежки за сотрудниками.')
     rep('−140 тыс. ₽ в месяц</b> <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span>',
         '−140 тыс. ₽ / мес</b> <span style="color: rgba(255,255,255,0.72);">— скрытые потери бюджета на одном разработчике (техдолг, переделки и простой)</span>')
-    cards = ''.join('<div style="min-width: 0; border-radius: 20px; border: 1px solid %s; background: %s; padding: 20px;"><div style="%s font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">%s</div>'
-                    '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (
-                        'rgba(99,213,255,0.35)' if i < 2 else 'rgba(255,255,255,0.1)', 'rgba(99,213,255,0.05)' if i < 2 else 'transparent', MONO, e(a), e(b)) for i, (a, b) in enumerate(CORE_V2_CARDS))
+    cards = ''.join('<div class="uc-core4" style="min-width: 0; border-radius: 20px; border: 1px solid rgba(99,213,255,0.3); background: rgba(99,213,255,0.04); padding: 22px; display: flex; flex-direction: column; gap: 8px;">'
+                    '<div class="uc-core4__t" style="font-size: 19px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em;">%s</div>'
+                    '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (e(a), e(b)) for a, b in CORE_V2_CARDS)
     rep('</section>', '<div class="g4" style="margin-top: 16px;">%s</div></section>' % cards)
     return out
 
 def home_v2():
     h1 = 'Цифровой тимлид для [[автоматической оценки эффективности]] вашей разработки'
     sub = 'Математическая модель переводит каждый Merge Request в реальные человеко-часы и рубли — напрямую по коду из Git, без тайм-трекеров и отчётов.'
-    st = [('96%', 'совпадение с оценкой Senior-экспертов'), ('1500+', 'инженеров проанализировано в банках и ИТ'),
+    st = [('96%', 'совпадение с оценкой Senior'), ('1500+', 'разработчиков проанализировано'),
           ('+14%', 'рост выработки команды за первые 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')]
     visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
     hdr = header(None)
@@ -1883,13 +1883,17 @@ def home_v2():
     saas = saas_variant(2, left_title='Развёртывание и первый отчёт за 1 час',
                         steps_data=[('01', 'Облако или On-Premise', 'подключение к GitHub, GitLab, Bitbucket или локальному Git'),
                                     ('02', 'Только Read-Only доступ', 'без прав на изменение репозиториев'),
-                                    ('03', 'Ретро-аудит за 6 месяцев', 'готовая аналитика по всей истории коммитов через 1 час')],
+                                    ('03', 'Результат через 1 час', 'проанализируем работу за последние 6 месяцев')],
                         g_data=[('lock', 'On-Premise в закрытом контуре', 'Развёртывание внутри периметра компании без доступа в интернет. Серверные GPU не требуются.'),
-                                ('link', 'Интеграция по API и MCP', 'Выгрузка метрик в Jira, Kaiten, корпоративные BI-дашборды и внутренние порталы.'),
-                                ('shield', 'Готовность к проверке ИБ', 'Работа с метаданными и AST-деревом кода, ролевая модель доступа и полное логирование.'),
-                                ('wallet', 'Бесплатный пилот на 2–3 проектах', 'Проверьте точность модели на исторических данных вашей команды до подписания договора.')])
+                                ('link', 'Простая интеграция', 'Система легко интегрируется с уже существующими корпоративными трекерами, дашбордами, отчётами и MCP.'),
+                                ('shield', 'Готовность к проверке ИБ', 'Простая установка и документация, карта модулей для ИБ. Все доступы только на чтение, код не переносится. Ролевая модель и полное логирование.'),
+                                ('wallet', 'Оплата после пилота', 'Бесплатный пилот на 2–3 проектах. Платите, когда подтвердите точность на своих данных.')])
     top = hero('', h1, sub, [btn('Посмотреть демо-стенд', REG), btn('Заказать бесплатный пилот', MAIL, False)], st, visual)
-    top = top.replace('<div class="uc-btns">', '<div class="uc-btns uc-btns--hero2">', 1)  # длинные подписи кнопок — в одну строку (site/src/styles/global.css)
+    top = top.replace('<div class="uc-btns">', '<div class="uc-btns uc-btns--hero2">', 1)
+    top = top.replace('<section id="top" style=', '<section id="top" class="uc-hero2" style=', 1).replace('<div style="flex: 1 1 500px;', '<div class="uc-hero2-l" style="flex: 1 1 500px;', 1)  # длинные подписи кнопок — в одну строку (site/src/styles/global.css)
+    t19 = '<div style="font-size: 19px; font-weight: 700; line-height: 1.25;">'
+    assert saas.count(t19) == 4
+    saas = saas.replace(t19, '<div class="uc-saas-t" style="font-size: 19px; font-weight: 700; line-height: 1.25;">')  # заголовки карточек — одной высоты (global.css)
     body = [hdr, top,
             platform_v2(), core_v2(), results, saas,
             cta('Проведите бесплатный пилот на 2–3 репозиториях', 'Покажем реальную трудоёмкость проектов и окупаемость ИИ по истории вашего кода за последние 6 месяцев.',
