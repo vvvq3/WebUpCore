@@ -94,6 +94,25 @@ SLIDES = [
     ('Тех-карта', 'Тех-карта проекта', 'технологии, уровни и мэтч команды', 'techmap'),
 ]
 
+# Раунд 78: скриншоты владельца (папка UpCoreScreen) — слайдер на сайте, 14 экранов в порядке съёмки.
+# (подпись в верхней строке, описание для alt, файл в docs/reference/demo/screens/)
+SCREENS = [
+    ('Уровень', 'Уровень разработчика', 'звезда грейда по 10 факторам и динамика роста', '01-level.png'),
+    ('Эффективность', 'Эффективность специалиста', 'ценность за месяц в часах и рублях, рейтинг', '02-efficiency.png'),
+    ('Команда', 'Команда', 'эффективность, грейд и вклад каждого за месяц и за 3 месяца', '03-team.png'),
+    ('Код', 'Код', 'результирующий код, контрибуция, архитектура и уровень багов', '04-code.png'),
+    ('Качество', 'Качество', 'ИИ-ревью каждого MR и дефекты по тяжести', '05-quality.png'),
+    ('Календарь', 'Календарь работы', 'Jira, MR и коммиты по дням', '06-calendar.png'),
+    ('Динамика', 'Динамика', 'тренд производительности по неделям', '07-dynamics.png'),
+    ('Технологии', 'Технологии', 'карта технологий и мэтч с проектом', '08-tech.png'),
+    ('Рейтинг', 'Рейтинг сотрудников', 'по компании, стеку и проекту', '09-rating.png'),
+    ('Проект', 'Проект', 'эффективность проекта за месяц и за 3 месяца', '10-project.png'),
+    ('Выводы', 'Выводы и рекомендации', 'сводный отчёт по компании', '11-insights.png'),
+    ('Табель', 'Табель', 'эффективность команды по месяцам', '12-timesheet.png'),
+    ('Потери', 'Финансовые потери', 'потери в рублях и реальная ставка', '13-losses.png'),
+    ('Компания', 'Дашборд компании', 'эффективность, ИИ, проекты и грейды', '14-company.png'),
+]
+
 SLIDER_SCRIPT = """class Component extends DCLogic {
   constructor(props) { super(props); this.state = { idx: 0, playing: true }; }
   slidesData() {
@@ -251,15 +270,15 @@ def slider_console():
 def slider_web():
     """Слайдер скриншотов для сайта (раунд 76): только окно со скриншотами — без подписи, кнопок и паузы внизу.
     Экраны быстро сменяют друг друга голубой полосой-сканером; переключение — site/src/scripts/site.ts ([data-slider])."""
-    n_all = len(SLIDES)
-    imgs = ''.join('<img src="%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="1000" data-slide="%d" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top center; display: block;%s">'
-                   % (src(i), e(t), e(c), 'eager' if n == 0 else 'lazy', n, '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, i) in enumerate(SLIDES))
-    k0 = SLIDES[0][0]
-    meta = ' '.join('data-k%d="%s"' % (n, e(k)) for n, (k, t, c, i) in enumerate(SLIDES))
+    n_all = len(SCREENS)
+    imgs = ''.join('<img src="/img/screens/v2/%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="800" data-slide="%d" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top left; display: block;%s">'
+                   % (f.replace('.png', '.webp'), e(t), e(c), 'eager' if n == 0 else 'lazy', n, '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, f) in enumerate(SCREENS))
+    k0 = SCREENS[0][0]
+    meta = ' '.join('data-k%d="%s"' % (n, e(k)) for n, (k, t, c, f) in enumerate(SCREENS))
     return ('<div data-slider ' + meta + ' style="flex: 1.15 1 520px; min-width: 0; position: relative;">'
             '<div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.3); box-shadow: 0 0 0 1px rgba(99,213,255,0.06), 0 40px 120px rgba(99,213,255,0.12); overflow: hidden;">'
             '<div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: \'JetBrains Mono\', monospace; font-size: 13px; color: rgba(255,255,255,0.72);"><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">upcore://screens / <span data-slide-key>' + e(k0) + '</span></span><span style="flex: 0 0 auto; color: #63D5FF;"><span data-slide-num>01</span> / %02d</span></div>' % n_all +
-            '<div style="position: relative; aspect-ratio: 16 / 10; background: #FFFFFF; overflow: hidden;">' + imgs +
+            '<div style="position: relative; aspect-ratio: 2 / 1; background: #FFFFFF; overflow: hidden;">' + imgs +
             '<div class="uc-scan" aria-hidden="true" style="position: absolute; left: 0; right: 0; height: 2px; background: #63D5FF; box-shadow: 0 0 18px 4px rgba(99,213,255,0.6);"></div></div>'
             '</div></div>')
 

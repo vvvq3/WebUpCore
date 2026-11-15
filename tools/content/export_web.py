@@ -80,6 +80,16 @@ def assets():
             im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
             canvas = im.crop((0, 0, W, H))
         canvas.save(dst, 'WEBP', quality=90, method=6)
+    # Раунд 78: скриншоты владельца для слайдера — окно 2:1 (1600×800), привязка к левому верхнему углу:
+    # широкие дополняются белым снизу (фон интерфейса белый), высокие подрезаются снизу; по ширине ничего не теряется.
+    os.makedirs(os.path.join(img, 'screens', 'v2'), exist_ok=True)
+    W2, H2 = 1600, 800
+    for _, _, _, f in bp.SCREENS:
+        im = Image.open(os.path.join(REPO, 'docs/reference/demo/screens', f)).convert('RGB')
+        im = im.resize((W2, round(im.height * W2 / im.width)), Image.LANCZOS)
+        canvas = Image.new('RGB', (W2, H2), (255, 255, 255))
+        canvas.paste(im.crop((0, 0, W2, min(H2, im.height))), (0, 0))
+        canvas.save(os.path.join(img, 'screens', 'v2', f.replace('.png', '.webp')), 'WEBP', quality=88, method=6)
 
 def main():
     hp = os.path.join(os.path.dirname(__file__), 'heights.json')
