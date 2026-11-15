@@ -289,13 +289,15 @@ def hero(badge, h1, sub, ctas, stat_items, visual, note=None, acc_key=None, h1_s
     dot = '#53C04D'
     if len(h1.replace('[[', '').replace(']]', '')) > 60:  # длинный заголовок — мельче, чтобы уложился в ~4 строки
         h1_size = 'clamp(34px, 3.5vw, 50px)'
-    return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 48px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">\n%s\n'
-            '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 28px;">\n'
-            '<div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid %s; %s font-size: 13px; color: %s;"><span class="uc-blink" style="width: 8px; height: 8px; border-radius: 50%%; background: %s; display: inline-block;"></span><span>%s</span></div>\n'
+    # раунд 74: плашка над заголовком необязательна (на главной убрана), без неё первый экран выше на ~60 px
+    badge_html = ('<div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid %s; %s font-size: 13px; color: %s;"><span class="uc-blink" style="width: 8px; height: 8px; border-radius: 50%%; background: %s; display: inline-block;"></span><span>%s</span></div>\n'
+                  % (line + '59', MONO, txt, dot, e(badge))) if badge else ''
+    return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: ' + ('48px' if badge else '24px') + ' 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">\n%s\n'
+            '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 28px;">\n%s'
             '<h1 style="margin: 0; font-size: %s; line-height: 1.03; letter-spacing: -0.03em; font-weight: 800;">%s</h1>\n'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">%s</p>\n'
             '<div class="uc-btns">%s</div>\n%s\n</div>\n%s\n</section>') % (
-        CHEVRON, line + '59', MONO, txt, dot, e(badge), h1_size, e(h1), e(sub), ''.join(ctas), stats(stat_items, note), visual)
+        CHEVRON, badge_html, h1_size, e(h1), e(sub), ''.join(ctas), stats(stat_items, note), visual)
 
 def sec_head(label, h2, lead=None, acc_key=None):
     _, txt = ACC[acc_key]
@@ -1773,7 +1775,7 @@ def home(variant):
     }[variant]
     visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
     st, note = HERO_STATS.get(('home', variant), (hv['st'], hv['note']))
-    body = [header(None), hero('цифровой тимлид · онлайн', hv['h1'], hv['sub'], [btn('Подключить репозиторий', REG), btn('Заказать аудит', MAIL, False)], st, visual, note)]
+    body = [header(None), hero('', hv['h1'], hv['sub'], [btn('Подключить репозиторий', REG), btn('Заказать аудит', MAIL, False)], st, visual, note)]
     if variant != 'A':
         return page('UpCore — главная, первый экран ' + variant, '\n'.join(body), 1000, slider=True, name='Home-' + variant)
     body += [

@@ -29,7 +29,7 @@ const BASE = process.env.BASE || 'http://localhost:4321';
   }
   // анимация #core
   p = await page(390); await p.goto(BASE + '/', { waitUntil: 'networkidle' });
-  await p.evaluate(() => document.querySelector('#core svg').scrollIntoView({ block: 'center' })); await p.waitForTimeout(3800);
+  await p.evaluate(() => document.querySelector('#core svg').scrollIntoView({ block: 'center' })); await p.waitForTimeout(5000);
   out.push(['#core: в конце 80 из 160', (await p.evaluate(() => document.querySelector('#core svg text').textContent)) === '80']); await p.close();
   out.forEach(([n, ok]) => console.log(ok ? '✓' : '✗', n));
   console.log('ошибки JS:', errs.length ? errs.join(' | ') : 'нет');

@@ -40,7 +40,7 @@
   (функции страниц: `home`, `grade_page(3)`, `ai_page_final`, `proj_main2`, `mentor_main2()`, `blog_page2`), замер — `tools/content/measure.js`.
 - Блок «Для банков и enterprise» **не добавлять**; закрытые концепты — `docs/design/archive/`.
 - **Анимации** (утверждено, раунд 67): вариант 1 «Спокойная точность» + акценты из варианта 2 — цифры-табло, подсветка за курсором на карточках продуктов, разбор кода MR только в первом экране главной. Эталон — доска `Anim-final` на странице «Дизайн главной», спецификация — `docs/design/ANIMATIONS.md`. Страница холста «Главная — тексты» переименована в «Главная страница».
-- **Сайт свёрстан (раунды 70–73), версия v5** — `site/` (Astro + TS + Tailwind): RU + EN (по 8 страниц), меню (≤1160 px — бургер), форма заявки, cookie + Метрика (по `.env`), анимации, SEO.
+- **Сайт свёрстан (раунды 70–73), версия v5; раунд 74 — без плашки на главной, «рисующий» слайдер, медленные цифры, ховер на всех кнопках (холст №107)** — `site/` (Astro + TS + Tailwind): RU + EN (по 8 страниц), меню (≤1160 px — бургер), форма заявки, cookie + Метрика (по `.env`), анимации, SEO.
   **Полная инструкция — `docs/ARCHITECTURE.md`** (что где лежит, запуск, правка, публикация, проверки). Запуск: `cd site && npm install && npm run dev`.
   Тексты и вёрстку править в `tools/content/build_pages.py` → `python3 tools/content/export_web.py` → новые строки перевести в `site/i18n/en.json` (`translate_web.py --missing`) → `npm run build`.
   Проверки: `node tools/qa/check_layout.js`, `node tools/qa/check_interactions.js` (при `npm run preview`). Просмотр с телефона — https://claude.ai/artifact/KCes9Yf5HwqGdhVUrqm7ot (`tools/content/preview_bundle.py`).

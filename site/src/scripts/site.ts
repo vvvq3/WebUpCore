@@ -212,16 +212,36 @@ function initSlider() {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
     const btns = [...box.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')];
     const play = box.querySelector<HTMLButtonElement>('[data-slide-play]')!;
+    // Смена слайда «сканером» (раунд 74): голубая полоса идёт сверху вниз, выше неё уже новый экран, ниже — ещё старый.
+    const scan = box.querySelector<HTMLElement>('.uc-scan');
+    if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
+    const WIPE = 1600;
     const n = imgs.length;
     let idx = 0;
     let timer = 0;
-    const set = (i: number) => {
+    let running: Animation[] = [];
+    let cleanup: (() => void) | null = null;
+    imgs.forEach((im, k) => { im.classList.remove('uc-in'); im.style.zIndex = k === 0 ? '1' : '0'; });
+    const finishWipe = () => { running.forEach((a) => a.finish()); running = []; cleanup?.(); cleanup = null; };
+    const set = (i: number, animate = true) => {
+      const prev = idx;
       idx = (i + n) % n;
-      imgs.forEach((im, k) => {
-        im.style.visibility = k === idx ? 'visible' : 'hidden';
-        im.classList.toggle('uc-in', k === idx);
-        if (Math.abs(k - idx) <= 1) im.loading = 'eager';
-      });
+      finishWipe();
+      imgs.forEach((im, k) => { if (Math.abs(k - idx) <= 1 || (idx === n - 1 && k === 0)) im.loading = 'eager'; });
+      const next = imgs[idx];
+      const old = imgs[prev];
+      if (!animate || reduced || prev === idx || !next.animate) {
+        imgs.forEach((im, k) => { im.style.visibility = k === idx ? 'visible' : 'hidden'; im.style.zIndex = k === idx ? '1' : '0'; im.style.clipPath = ''; });
+      } else {
+        imgs.forEach((im, k) => { if (k !== idx && k !== prev) im.style.visibility = 'hidden'; });
+        old.style.visibility = 'visible'; old.style.zIndex = '1';
+        next.style.visibility = 'visible'; next.style.zIndex = '2';
+        const ease = 'cubic-bezier(.45,.05,.35,1)';
+        running.push(next.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: WIPE, easing: ease, fill: 'forwards' }));
+        if (scan) running.push(scan.animate([{ top: '0%', opacity: 0 }, { top: '4%', opacity: 1, offset: 0.06 }, { top: '96%', opacity: 1, offset: 0.94 }, { top: '100%', opacity: 0 }], { duration: WIPE, easing: ease, fill: 'forwards' }));
+        cleanup = () => { old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1'; next.getAnimations().forEach((a) => a.cancel()); next.style.clipPath = ''; };
+        running[0].onfinish = () => { if (cleanup) { cleanup(); cleanup = null; } running = []; };
+      }
       btns.forEach((b, k) => b.setAttribute('aria-selected', String(k === idx)));
       box.querySelector('[data-slide-key]')!.textContent = box.dataset['k' + idx] || '';
       box.querySelector('[data-slide-title]')!.textContent = box.dataset['t' + idx] || '';
@@ -232,7 +252,7 @@ function initSlider() {
       if (prog) { prog.style.animation = 'none'; void prog.offsetWidth; prog.style.animation = ''; }
     };
     const labels = lang === 'ru' ? ['Остановить автопрокрутку', 'Включить автопрокрутку'] : ['Pause autoplay', 'Resume autoplay'];
-    const start = () => { stop(); box.setAttribute('data-playing', ''); timer = window.setInterval(() => set(idx + 1), 4500); upd(); };
+    const start = () => { stop(); box.setAttribute('data-playing', ''); timer = window.setInterval(() => set(idx + 1), 5000); upd(); };
     const stop = () => { window.clearInterval(timer); timer = 0; box.removeAttribute('data-playing'); upd(); };
     const upd = () => {
       const on = Boolean(timer);
@@ -242,8 +262,8 @@ function initSlider() {
     };
     btns.forEach((b, k) => b.addEventListener('click', () => { set(k); if (timer) start(); }));
     play.addEventListener('click', () => (timer ? stop() : start()));
+    set(0, false);
     if (reduced) stop(); else start();
-    set(0);
   });
 }
 
@@ -252,7 +272,7 @@ function initCore() {
   const core = document.querySelector<HTMLElement>('#core');
   if (!core || reduced || !('IntersectionObserver' in window)) return;
   const strikes = [...core.querySelectorAll<HTMLElement>('span')].filter((s) => (s.getAttribute('style') || '').includes('line-through'));
-  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 200 + i * 220 + 'ms'); });
+  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 300 + i * 350 + 'ms'); });
   const circles = core.querySelectorAll<SVGCircleElement>('svg circle');
   const arc = circles[1];
   const full = arc ? (arc.getAttribute('stroke-dasharray') || '').split(' ').map(Number) : [];
@@ -263,7 +283,7 @@ function initCore() {
     requestAnimationFrame(() => arc.classList.add('uc-core-arc'));
   }
   const rows = [...core.querySelectorAll<HTMLElement>('svg + div > div')];
-  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1100 + i * 450 + 'ms'); });
+  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1600 + i * 650 + 'ms'); });
   const loss = [...core.querySelectorAll<HTMLElement>('b')].find((b) => /140/.test(b.textContent || ''));
   loss?.classList.add('uc-core-loss');
   const target = Number(num?.textContent || 0);
@@ -275,7 +295,7 @@ function initCore() {
     box.classList.add('uc-core-on');
     if (arc && full.length === 2) requestAnimationFrame(() => { arc.style.strokeDasharray = `${full[0]} ${full[1]}`; });
     if (num && target) {
-      const from = target * 2; const t0 = performance.now() + 1100; const dur = 1400;
+      const from = target * 2; const t0 = performance.now() + 1500; const dur = 2400;
       const tick = (t: number) => {
         const k = Math.min(1, Math.max(0, (t - t0) / dur));
         const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -284,7 +304,7 @@ function initCore() {
       };
       requestAnimationFrame(tick);
     }
-  }, { threshold: 0.35 });
+  }, { rootMargin: '0px 0px -25% 0px', threshold: 0.5 });
   io.observe(box);
 }
 
@@ -320,9 +340,13 @@ function tagElements() {
   const main = document.getElementById('main');
   if (!main) return;
   // кнопки
-  main.querySelectorAll<HTMLAnchorElement>('a[style*="min-height: 52px"], a[style*="min-height: 44px"]').forEach((a) => {
+  document.querySelectorAll<HTMLAnchorElement>('header a[style*="min-height"], main a[style*="min-height: 52px"], main a[style*="min-height: 48px"], main a[style*="min-height: 44px"]').forEach((a) => {
     a.classList.add('uc-btn');
-    if (!a.style.background && !a.style.backgroundColor) a.classList.add('uc-btn--ghost');
+    const bg = getComputedStyle(a).backgroundColor;
+    const solid = bg && !/rgba\([^)]*,\s*0(\.\d+)?\)$/.test(bg) && bg !== 'transparent';
+    if (!solid) a.classList.add('uc-btn--ghost');
+    else a.style.setProperty('--glow', bg);
+    if (a.closest('#contacts')) a.classList.add('uc-btn--on-color');
   });
   // карточки
   main.querySelectorAll<HTMLElement>('article').forEach((el) => el.classList.add('uc-card'));
@@ -379,7 +403,7 @@ function initMotion() {
   odos.forEach((el, i) => {
     const text = el.textContent || '';
     el.innerHTML = `<span class="uc-sr">${text}</span>` + [...text].map((ch, k) => (/\d/.test(ch)
-      ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 120 + k * 60}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
+      ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 200 + k * 120}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
       : `<span class="uc-odo-ch" aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
   });
   const io = new IntersectionObserver((entries) => {
@@ -391,7 +415,18 @@ function initMotion() {
       io.unobserve(el);
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-  [...leaves, ...bars, ...odos].forEach((el) => io.observe(el));
+  [...leaves, ...bars].forEach((el) => io.observe(el));
+  // цифры (раунд 74): запускаются, когда поднялись в верхние ~70% экрана, и крутятся дольше — их успевают увидеть
+  const ioNum = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const el = en.target as HTMLElement;
+      el.classList.add('uc-on');
+      el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
+      ioNum.unobserve(el);
+    });
+  }, { rootMargin: '0px 0px -30% 0px', threshold: 0.6 });
+  odos.forEach((el) => ioNum.observe(el));
 }
 
 initScrollReset();
