@@ -140,6 +140,12 @@ WebUpCore/
 
 Автодеплой через GitHub Actions подключается после выбора хостинга (шаги: `npm ci` → `npm run build` → загрузка `site/dist/`).
 
+### Показ коллегам — GitHub Pages
+Адрес: **https://vvvq3.github.io/WebUpCore/** (копия сайта для показа: относительные ссылки, `noindex`, ветка `gh-pages`).
+Обновляется сама: при каждом push в `claude/charming-tesla-nky17x` workflow `.github/workflows/pages.yml` собирает сайт
+(`npm ci && npm run build` → `python3 tools/content/preview_bundle.py --pages ghp`) и выкладывает в `gh-pages`.
+Один раз в настройках репозитория: Settings → Pages → Source «Deploy from a branch» → `gh-pages` / `(root)`.
+
 ## 7. Проверка качества
 
 При работающем `npm run preview`:

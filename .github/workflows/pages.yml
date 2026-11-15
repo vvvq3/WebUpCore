@@ -1,0 +1,40 @@
+# Показ сайта коллегам на GitHub Pages: https://vvvq3.github.io/WebUpCore/
+# При каждом push в рабочую ветку сайт собирается и выкладывается в ветку gh-pages (копия с относительными ссылками и noindex).
+name: GitHub Pages (показ)
+
+on:
+  push:
+    branches: [claude/charming-tesla-nky17x]
+    paths: ['site/**', 'tools/content/preview_bundle.py', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Сборка сайта
+        working-directory: site
+        run: npm ci && npm run build
+      - name: Копия для GitHub Pages
+        run: python3 tools/content/preview_bundle.py --pages ghp
+      - name: Публикация в ветку gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ghp
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: "Pages: ${{ github.sha }}"
