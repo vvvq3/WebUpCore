@@ -202,6 +202,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .uc-hero2 > [data-slider] { grid-column: 2; grid-row: 1 / 4; align-self: end; margin-bottom: -28px; }
 }
 /* 4 карточки под «Как работает модель»: описания начинаются на одной высоте */
-@media (min-width: 1101px) { .uc-core4__t { min-height: 2.5em; } }
+@media (min-width: 1101px) and (max-width: 1279px) { .uc-core4__t { min-height: 2.5em; } } /* с 1280 px все заголовки в одну строку */
 /* карточки «Подключение за минуты»: заголовки одной высоты — описания на одной линии */
 @media (min-width: 1101px) { .uc-saas-t { min-height: 2.5em; } }
