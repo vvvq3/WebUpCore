@@ -44,6 +44,7 @@
   **Полная инструкция — `docs/ARCHITECTURE.md`** (что где лежит, запуск, правка, публикация, проверки). Запуск: `cd site && npm install && npm run dev`.
   Тексты и вёрстку править в `tools/content/build_pages.py` → `python3 tools/content/export_web.py` → новые строки перевести в `site/i18n/en.json` (`translate_web.py --missing`) → `npm run build`.
   Проверки: `node tools/qa/check_layout.js`, `node tools/qa/check_interactions.js` (при `npm run preview`). Просмотр с телефона — https://claude.ai/artifact/KCes9Yf5HwqGdhVUrqm7ot (`tools/content/preview_bundle.py`).
+- **Главная v2 (раунд 82, на выборе у владельца):** `/` — новая по ТЗ (`home_v2()`, RU), `/old/` — прежняя (`home('A')`); откат — `RU_OVERRIDES` в `export_web.py`. Подвал, Grade, EN — без изменений.
 - **Показ коллегам — GitHub Pages: https://vvvq3.github.io/WebUpCore/** (ветка `gh-pages`, автообновление `.github/workflows/pages.yml` при push в рабочую ветку).
 - Дальше: правки по отзывам коллег, выбор хостинга в РФ и автодеплой, номер счётчика Метрики, обработчик формы; страницы «О компании» / «Безопасность» / FAQ / «Политика» — позже.
 

@@ -4,7 +4,7 @@
 const {chromium}=require('playwright');const fs=require('fs');const path=require('path');
 const DIST=require('path').resolve(__dirname,'..','..','site','dist');
 const BASE=process.env.BASE||'http://localhost:4321';
-const pages=['/','/grade/','/ai/','/projects/','/mentor/','/blog/','/blog/2/','/blog/3/'];const all=[...pages,...pages.map(p=>'/en'+p)];
+const pages=['/','/grade/','/ai/','/projects/','/mentor/','/blog/','/blog/2/','/blog/3/'];const all=[...pages,...pages.map(p=>'/en'+p),'/old/'];
 const widths=[360,390,768,1024,1200,1440,1920];
 (async()=>{const b=await chromium.launch();const issues=[];const linkSet=new Set();
 for(const pth of all){for(const w of widths){

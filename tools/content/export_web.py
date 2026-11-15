@@ -29,6 +29,10 @@ PAGES = {
     'blog-2': ('blog/2/', lambda: bp.blog_page2(2)),
     'blog-3': ('blog/3/', lambda: bp.blog_page2(3)),
 }
+# Раунд 82: русская главная — новая версия по ТЗ владельца (home_v2); прежняя — по адресу /old/ для сравнения (noindex).
+# EN-главная пока прежняя. Откатить: убрать 'home' из RU_OVERRIDES (и 'home-old' из RU_EXTRA, если сравнение не нужно).
+RU_OVERRIDES = {'home': bp.home_v2}
+RU_EXTRA = {'home-old': ('', lambda: bp.home('A'))}
 ANCHORS = {'#top': '', '#grade': 'grade/', '#ai': 'ai/', '#projects': 'projects/', '#mentor': 'mentor/', '#blog': 'blog/',
            '#grade-page': 'grade/', '#ai-page': 'ai/', '#projects-page': 'projects/', '#mentor-page': 'mentor/'}
 FONTS = [("'Bricolage Grotesque'", "'Bricolage Grotesque Variable'"), ("'Onest'", "'Onest Variable'"), ("'JetBrains Mono'", "'JetBrains Mono Variable'"),
@@ -104,9 +108,16 @@ def main():
         tr = translate_web
     for key, (route, fn) in PAGES.items():
         html = fonts(fn())
-        open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(html, 'ru', route))
+        ru = fonts(RU_OVERRIDES[key]()) if key in RU_OVERRIDES else html
+        open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(ru, 'ru', route))
         if tr:
             open(os.path.join(GEN, 'en', key + '.html'), 'w').write(localize(tr.translate_html(html), 'en', route))
+    for key, (route, fn) in RU_EXTRA.items():
+        open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(fonts(fn()), 'ru', route))
+    for key in os.listdir(os.path.join(GEN, 'ru')):  # убрать устаревшие дополнительные страницы
+        k = key[:-5]
+        if k not in PAGES and k not in RU_EXTRA:
+            os.remove(os.path.join(GEN, 'ru', key))
     open(os.path.join(SITE, 'src', 'styles', 'generated.css'), 'w').write(css())
     assets()
     print('RU:', len(PAGES), 'страниц', '· EN:', 'да' if tr else 'нет (site/i18n/en.json не найден)')

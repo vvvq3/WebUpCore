@@ -202,7 +202,7 @@ def btn(text, href, primary=True, dark=False):
         st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF;'
     form = ''
     if MODE == 'web' and href.startswith('mailto:'):  # на сайте кнопки с почтой открывают форму заявки
-        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit'}.get(text, 'demo')
+        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit', 'Заказать бесплатный пилот': 'audit'}.get(text, 'demo')
     return ('<a href="%s"%s style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, form, st, e(text)))
 
 REG = 'https://demo.up-core.ru/'
@@ -681,7 +681,7 @@ RES6_TILES = [('до +30%', 'рост эффективности разрабо�
               ('−20%', 'time-to-market: потери в процессах становятся видны'),
               ('2,5 ставки', 'тимлидов на каждые 100 разработчиков освобождается от ручной оценки')]
 
-def results_v6(n):
+def results_v6(n, head=None, banner_on=True, tiles_data=None, foot=None):
     d = RES6[n]
     line, txt = ACC[None]
     subs = [(d['month'], 'в месяц на команду из 100 разработчиков'), ('1 день', 'до первых результатов'), ('0 ₽', 'за пилот: платите после того, как подтвердите точность')]
@@ -692,7 +692,7 @@ def results_v6(n):
               '<p style="margin: 16px 0 0; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.45; color: rgba(255,255,255,0.88); max-width: 560px;">экономического эффекта в год на каждого разработчика</p></div>'
               '<div class="g3" style="flex: 1 1 420px; min-width: 0; gap: 20px;">%s</div></div>') % (line, txt, e(d['big']), sub_html)
     tiles = ''.join(card('<div style="font-size: clamp(30px, 2.7vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: %s; white-space: nowrap; font-variant-numeric: tabular-nums;">%s</div>'
-                         '<p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 15px; line-height: 1.5;">%s</p>' % ('#7FDB7A' if b.startswith(('+', 'до +')) else txt, e(b), e(l)), pad='24px', gap=10) for b, l in RES6_TILES)
+                         '<p style="margin: 0; color: rgba(255,255,255,0.86); font-size: 15px; line-height: 1.5;">%s</p>' % ('#7FDB7A' if b.startswith(('+', 'до +')) else txt, e(b), e(l)), pad='24px', gap=10) for b, l in (tiles_data or RES6_TILES))
     rowst = 'display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 17px; line-height: 1.4;'
     lines = ''.join('<div style="%s"><span style="color: rgba(255,255,255,%s);">%s</span><b style="white-space: nowrap; font-variant-numeric: tabular-nums;%s">%s</b></div>' % (
         rowst, '0.62' if (n == 4 and i == 0) else '0.84', e(a), ' font-weight: 400; color: rgba(255,255,255,0.7);' if (n == 4 and i == 0) else '', e(b)) for i, (a, b) in enumerate(d['rows']))
@@ -701,8 +701,8 @@ def results_v6(n):
     calc = ('<div style="margin-top: 16px; border-radius: 28px; background: #12111C; border: 1px solid rgba(255,255,255,0.1); padding: clamp(24px, 3vw, 40px); display: flex; flex-wrap: wrap; gap: 32px;">'
             '<div style="flex: 1 1 280px; min-width: 0;"><div style="%s font-size: 13px; color: %s; margin-bottom: 10px;">РАСЧЁТ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">%s</div>'
             '<p style="margin: 14px 0 0; color: rgba(255,255,255,0.62); font-size: 14px; line-height: 1.5;">%s</p></div>'
-            '<div style="flex: 1.4 1 420px; min-width: 0;">%s%s</div></div>') % (MONO, txt, e(d['title']), e(d['foot']), lines, tot)
-    out = sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], 'Платформа окупается в десятки раз: эффект виден уже в первый месяц.') + banner + '<div class="g3">%s</div>' % tiles + calc
+            '<div style="flex: 1.4 1 420px; min-width: 0;">%s%s</div></div>') % (MONO, txt, e(d['title']), e(foot or d['foot']), lines, tot)
+    out = (sec_head(*head) if head else sec_head('РЕЗУЛЬТАТЫ ДЛЯ БИЗНЕСА', RESULTS['home']['h2'], 'Платформа окупается в десятки раз: эффект виден уже в первый месяц.')) + (banner if banner_on else '') + '<div class="g3">%s</div>' % tiles + calc
     return section(out, 'results')
 
 def core_block():
@@ -1134,41 +1134,42 @@ SAAS6 = [
     ('wallet', 'Платите за подтверждённый результат', 'Бесплатный пилот на 2–3 ваших проектах. Оплата — только после того, как вы подтвердите точность на своих данных.'),
 ]
 
-def saas_variant(n):
+def saas_variant(n, steps_data=None, left_title='Нужен только код — без отчётов, анкет и тайм-трекеров', g_data=None):
     if n == 1:  # 6 карточек 3×2 с иконками
         cards = ''.join(card('<div style="display: flex; align-items: center; gap: 14px;">' + ico(k) + '<div style="font-size: 20px; font-weight: 700; line-height: 1.25; color: #FFFFFF;">' + e(t) + '</div></div>'
                              '<p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 16px; line-height: 1.55;">' + e(p) + '</p>') for k, t, p in SAAS6)
         return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div class="g3">' + cards + '</div>', 'saas')
     # n == 2: слева — путь подключения за 3 шага, справа — 4 гарантии
-    steps = [('01', 'Вход через GitHub или GitLab', 'или установка on-premise в вашем контуре'), ('02', 'Подключаете репозиторий', 'read-only доступ, нужен только код'), ('03', 'Сразу смотрите результат', 'проанализируем последние полгода работы за 1 час')]
+    steps = steps_data or [('01', 'Вход через GitHub или GitLab', 'или установка on-premise в вашем контуре'), ('02', 'Подключаете репозиторий', 'read-only доступ, нужен только код'), ('03', 'Сразу смотрите результат', 'проанализируем последние полгода работы за 1 час')]
     st = ''.join('<div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.08);">'
                  '<div style="width: 44px; height: 44px; border-radius: 14px; background: ' + ('#63D5FF' if i == 2 else 'rgba(99,213,255,0.12)') + '; color: ' + ('#0D0C15' if i == 2 else '#63D5FF') + '; display: flex; align-items: center; justify-content: center; ' + MONO + ' font-size: 14px; font-weight: 600;">' + a + '</div>'
                  '<div style="min-width: 0;"><div style="font-size: 19px; font-weight: 700; line-height: 1.3;">' + e(b) + '</div><div style="font-size: 15px; color: rgba(255,255,255,0.66); margin-top: 2px;">' + e(c) + '</div></div></div>' for i, (a, b, c) in enumerate(steps))
     stacks = ''.join('<span style="font-size: 13px; padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.82);">' + x + '</span>' for x in ['C#', 'Java', 'Go', 'Python', 'Kotlin', 'PHP', 'JS/TS', 'C++', '1С'])
     integ = ''.join('<span style="font-size: 13px; padding: 6px 10px; border-radius: 10px; background: rgba(99,213,255,0.1); border: 1px solid rgba(99,213,255,0.3); color: #FFFFFF;">' + x + '</span>' for x in ['GitLab', 'GitHub', 'Jira', 'трекеры и дашборды', 'MCP'])
     left = ('<div style="flex: 1.1 1 440px; min-width: 0; border-radius: 32px; background: #12111C; border: 1px solid rgba(99,213,255,0.35); padding: clamp(24px, 3.4vw, 40px); display: flex; flex-direction: column; gap: 18px;">'
-            '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПОДКЛЮЧЕНИЕ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">Нужен только код — без отчётов, анкет и тайм-трекеров</div>'
+            '<div style="' + MONO + ' font-size: 12px; color: #63D5FF;">ПОДКЛЮЧЕНИЕ</div><div style="font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; line-height: 1.15;">' + e(left_title) + '</div>'
             '<div>' + st + '</div>'
             '<div><div style="' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 8px;">ЛЮБОЙ СТЕК</div><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + stacks + '</div></div></div>')
     g = [('lock', 'On-premise без интернета', 'Полностью в вашем контуре безопасности. Read-only доступ к Git, GPU не нужны.'),
          ('link', 'Простая интеграция', 'Система легко интегрируется с уже существующими корпоративными трекерами, дашбордами, отчётами и MCP.'),
          ('shield', 'Без «токсичного контроля»', 'Это обычное код-ревью, только автоматическое: около секунды на MR. Накрутки и шум отсекаются.'),
          ('wallet', 'Оплата после пилота', 'Бесплатный пилот на 2–3 проектах. Платите, когда подтвердите точность на своих данных.')]
+    g = g_data or g
     right = ('<div class="g2" style="flex: 1 1 460px; min-width: 0;">' + ''.join(card('<div>' + ico(k, size=28) + '</div><div style="font-size: 19px; font-weight: 700; line-height: 1.25;">' + e(t) + '</div><p style="margin: 0; color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.55;">' + e(p) + '</p>', pad='24px', gap=10) for k, t, p in g) + '</div>')
     return section(sec_head('SAAS И БЕЗОПАСНОСТЬ', 'Подключение за минуты. Код остаётся у вас.') + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + left + right + '</div>', 'saas')
 
 TEL = ('+7 (985) 848-35-55', 'tel:+79858483555')
 TG = ('@IvanGel_Dex', 'https://t.me/IvanGel_Dex')
 
-def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex-it.ru', MAIL)):
+def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex-it.ru', MAIL), second=('Провести демо', None), caps=('ТЕЛЕФОН', 'TELEGRAM', 'ПОЧТА')):
     bg = ACC.get(CUR_KEY, ACC[None])[1]  # раунд 59: блок контактов в цвете продукта
     contact = lambda cap, t, h: ('<a href="' + h + '" style="display: inline-flex; flex-direction: column; min-width: 0; color: #0D0C15; text-decoration: none;">'
                                  '<span style="' + MONO + ' font-size: 12px; color: rgba(13,12,21,0.6);">' + cap + '</span><b style="font-size: 18px; white-space: nowrap;">' + e(t) + '</b></a>')
     contacts = ('<div style="display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(13,12,21,0.18);">'
-                + contact('ТЕЛЕФОН', TEL[0], TEL[1]) + contact('TELEGRAM', TG[0], TG[1]) + contact('ПОЧТА', secondary[0], secondary[1]) + '</div>')
+                + contact(caps[0], TEL[0], TEL[1]) + contact(caps[1], TG[0], TG[1]) + contact(caps[2], secondary[0], secondary[1]) + '</div>')
     inner = ('<div style="position: relative; overflow: hidden; border-radius: 40px; background: %s; color: #0D0C15; padding: clamp(32px, 5vw, 72px); display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">'
              '<div style="flex: 1 1 520px; min-width: 0;"><h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 52px); letter-spacing: -0.03em; line-height: 1.05; font-weight: 800;">%s</h2><p style="margin: 16px 0 0; font-size: 18px; line-height: 1.5; color: rgba(13,12,21,0.8);">%s</p></div>'
-             '<div style="min-width: 0;"><div class="uc-btns">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn('Провести демо', DEMO, False, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
+             '<div style="min-width: 0;"><div class="uc-btns">%s%s</div>%s</div></div>') % (bg, e(h2), e(sub), btn(primary[0], primary[1], True, True), btn(second[0], second[1] or DEMO, False, True), contacts)  # раунд 60: почта — в строке контактов, не кнопкой
     return section(inner, 'contacts', pb=72)
 
 def footer():
@@ -1802,6 +1803,100 @@ def home(variant):
         cta('Узнайте реальную эффективность команды уже сегодня', 'Подключите репозиторий или закажите аудит — первые результаты по истории вашего кода, без ожидания.', ('Подключить UpCore', REG)),
         footer()]
     return page('UpCore — главная A', '\n'.join(body), 5600, slider=True, name='Home-A')
+
+# ---------------------------------------------------------------- раунд 82: главная v2 по ТЗ владельца «БЫЛО → СТАЛО» (PDF)
+# 8 секций → 5 экранов: #top → #products (факт + 3 буллита) → #core (+ 4 карточки из #trust) → #results → #saas → #contacts.
+# Старая главная — home('A'), на сайте по адресу /old/ (для сравнения). EN-главная пока старая.
+PLATFORM_V2 = [  # (ключ, модуль, номер, роли, заголовок, факт, [(жирное начало, продолжение)], вопрос, ссылка)
+    ('grade', 'Grade', '01', 'CTO · HRD · тимлиды', 'Объективная оценка и грейды', 'До 20% ФОТ уходит на инженеров, дающих лишь 4% результата.',
+     [('Фактический грейд Junior–Senior', 'по сложности и чистоте кода'), ('Рейтинг продуктивности', 'без субъективности тимлидов'), ('Прозрачный испытательный срок', 'и база для пересмотра зарплат')],
+     'Кто реально тянет свой грейд?', 'Подробнее о Grade →'),
+    ('ai', 'AI', '02', 'CTO · CFO', 'Реальный ROI от ИИ и вайбкодинга', '82% компаний не знают, ускоряет ли ИИ команду или плодит техдолг.',
+     [('Авто-детект ИИ-кода в MR', 'и доля правок после генерации'), ('Аналитика промптов:', 'кто экономит часы, а кто ломает архитектуру'), ('Окупаемость лицензий', 'в пересчёте на сэкономленный ФОТ')],
+     'Окупаются ли ИИ-ассистенты?', 'Подробнее об AI →'),
+    ('projects', 'Projects', '03', 'CEO · PMO · CFO', 'Бюджет проектов и аудит подрядчиков', 'Акты аутстаффа и подряда завышаются в среднем на 30–45% к коду.',
+     [('Сверка актов с кодом:', 'реальные человеко-часы против списанных в Jira'), ('Ранний радар срыва сроков', 'при зелёных статусах в трекере'), ('Разовый аудит репозитория', 'перед приёмкой работ без внедрения')],
+     'Сколько реально стоит проект?', 'Подробнее о Projects →'),
+    ('mentor', 'Mentor', '04', 'CTO · тимлиды · L&D', 'Автоматическое ревью и ИИ-ментор', 'Тимлид успевает глубоко проверить лишь 5–10% изменений в коде.',
+     [('Приоритизация код-ревью:', 'подсветка архитектурных и логических рисков'), ('Разбор качества ТЗ и промптов', 'по каждому разработчику'), ('Персональные планы развития', 'на базе реальных ошибок в MR')],
+     'Как разгрузить тимлидов?', 'Подробнее о Mentor →'),
+]
+
+def platform_v2():
+    cards = []
+    for key, mod, num, roles, t, fact, lis, q, more in PLATFORM_V2:
+        line, txt = ACC[key]
+        items = ''.join('<li style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 16px; line-height: 1.45; color: rgba(255,255,255,0.78);">'
+                        '<span aria-hidden="true" style="color: %s; font-weight: 800;">&gt;</span><span><b style="color: #FFFFFF; font-weight: 700;">%s</b> %s</span></li>' % (txt, e(a), e(b)) for a, b in lis)
+        cards.append('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1F 0%%, #1A1925 45%%); border: 1px solid %s55; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
+                     '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; %s font-size: 13px; color: rgba(255,255,255,0.62);"><span>%s</span><span>%s</span></div>'
+                     '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
+                     '<h3 style="margin: 0; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -0.01em; line-height: 1.2; color: #FFFFFF;">%s</h3>'
+                     '<div style="border-radius: 12px; background: %s14; border-left: 3px solid %s; padding: 10px 14px; font-size: 15px; line-height: 1.45; color: rgba(255,255,255,0.88);"><b style="color: %s;">Факт:</b> %s</div>'
+                     '<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px;">%s</ul>'
+                     '<div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 0 12px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">'
+                     '<span style="flex: 1 1 200px; min-width: 0; font-size: 15px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span><span style="flex: 0 0 auto;">%s</span></div></article>' % (
+                         line, line, MONO, num, e(roles), line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), line, line, txt, e(fact), items, e(q), more_link(key, more)))
+    head = ('ПЛАТФОРМА UPCORE', 'Одна платформа — четыре задачи C-Level', 'Один read-only коннект к Git закрывает контроль грейдов, ROI от ИИ, бюджетов и код-ревью.')
+    return section(sec_head(*head) + '<div class="g2">%s</div>' % ''.join(cards), 'products')
+
+CORE_V2_CARDS = [
+    ('50+ параметров анализа', 'Когнитивная и архитектурная сложность, churn, работа с legacy и плотность дефектов.'),
+    ('Фильтрация 100% шума', 'Автогенерация, копипаст, форматирование и переименования дают 0 часов.'),
+    ('Детерминированная математика', 'Никаких галлюцинаций LLM: один и тот же код всегда получает одинаковую оценку.'),
+    ('Экологично для команды', 'Без агентов на ПК, без скриншотов экрана и без ручного заполнения таймшитов.'),
+]
+
+def core_v2():
+    out = core_v3(9)
+    def rep(a, b):
+        nonlocal out
+        assert out.count(a) == 1, a
+        out = out.replace(a, b)
+    rep('>УНИКАЛЬНАЯ МЕХАНИКА UPCORE<', '>КАК РАБОТАЕТ МАТЕМАТИЧЕСКАЯ МОДЕЛЬ<')
+    rep('UpCore не считает строчки кода, а вычисляет его <span style="color: #63D5FF;">реальную ценность</span>',
+        'Считаем <span style="color: #63D5FF;">инженерную ценность кода</span>, а не строки и часы за экраном')
+    rep('В основе — запатентованная математическая модель. Она разбирает каждый Merge Request по 50+ факторам и переводит написанный код в фактические человеко‑часы.',
+        'Детерминированная модель (калибровка на 300 000+ MR) оценивает трудоёмкость изменений так же, как Senior-ревьюер, — за 1 секунду и без слежки за сотрудниками.')
+    rep('−140 тыс. ₽ в месяц</b> <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span>',
+        '−140 тыс. ₽ / мес</b> <span style="color: rgba(255,255,255,0.72);">— скрытые потери бюджета на одном разработчике (техдолг, переделки и простой)</span>')
+    cards = ''.join('<div style="min-width: 0; border-radius: 20px; border: 1px solid %s; background: %s; padding: 20px;"><div style="%s font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px;">%s</div>'
+                    '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (
+                        'rgba(99,213,255,0.35)' if i < 2 else 'rgba(255,255,255,0.1)', 'rgba(99,213,255,0.05)' if i < 2 else 'transparent', MONO, e(a), e(b)) for i, (a, b) in enumerate(CORE_V2_CARDS))
+    rep('</section>', '<div class="g4" style="margin-top: 16px;">%s</div></section>' % cards)
+    return out
+
+def home_v2():
+    h1 = 'Цифровой тимлид для [[автоматической оценки эффективности]] вашей разработки'
+    sub = 'Математическая модель переводит каждый Merge Request в реальные человеко-часы и рубли — напрямую по коду из Git, без тайм-трекеров и отчётов.'
+    st = [('96%', 'совпадение с оценкой Senior-экспертов'), ('1500+', 'инженеров проанализировано в банках и ИТ'),
+          ('+14%', 'рост выработки команды за первые 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')]
+    visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
+    hdr = header(None)
+    assert hdr.count('>Подключить</a>') == 1
+    hdr = hdr.replace('>Подключить</a>', '>Открыть демо</a>')  # шапка: «Провести демо» (форма) + «Открыть демо» (демо-стенд)
+    results = results_v6(2, head=('ЭКОНОМИЧЕСКИЙ ЭФФЕКТ', 'Окупаемость платформы на команде из 100 инженеров'), banner_on=False,
+                         tiles_data=[('до +30%', 'рост фактической выработки за счёт прозрачности'), ('−20%', 'сокращение Time-to-Market за счёт устранения узких мест'),
+                                     ('2,5 ставки', 'тимлидов на 100 инженеров освобождается от рутинного ревью')],
+                         foot='База консервативного расчёта: 100 разработчиков при минимальной базовой ставке 250 тыс. ₽/мес (ФОТ 25 млн ₽/мес) и ставке тимлида 400 тыс. ₽/мес. '
+                              'При корпоративном ФОТ 400–600 тыс. ₽/мес на инженера экономический эффект увеличивается в 1,6–2,4 раза.')
+    saas = saas_variant(2, left_title='Развёртывание и первый отчёт за 1 час',
+                        steps_data=[('01', 'Облако или On-Premise', 'подключение к GitHub, GitLab, Bitbucket или локальному Git'),
+                                    ('02', 'Только Read-Only доступ', 'без прав на изменение репозиториев'),
+                                    ('03', 'Ретро-аудит за 6 месяцев', 'готовая аналитика по всей истории коммитов через 1 час')],
+                        g_data=[('lock', 'On-Premise в закрытом контуре', 'Развёртывание внутри периметра компании без доступа в интернет. Серверные GPU не требуются.'),
+                                ('link', 'Интеграция по API и MCP', 'Выгрузка метрик в Jira, Kaiten, корпоративные BI-дашборды и внутренние порталы.'),
+                                ('shield', 'Готовность к проверке ИБ', 'Работа с метаданными и AST-деревом кода, ролевая модель доступа и полное логирование.'),
+                                ('wallet', 'Бесплатный пилот на 2–3 проектах', 'Проверьте точность модели на исторических данных вашей команды до подписания договора.')])
+    top = hero('', h1, sub, [btn('Посмотреть демо-стенд', REG), btn('Заказать бесплатный пилот', MAIL, False)], st, visual)
+    top = top.replace('<div class="uc-btns">', '<div class="uc-btns uc-btns--hero2">', 1)  # длинные подписи кнопок — в одну строку (site/src/styles/global.css)
+    body = [hdr, top,
+            platform_v2(), core_v2(), results, saas,
+            cta('Проведите бесплатный пилот на 2–3 репозиториях', 'Покажем реальную трудоёмкость проектов и окупаемость ИИ по истории вашего кода за последние 6 месяцев.',
+                ('Заказать бесплатный пилот', MAIL), second=('Открыть демо-стенд', REG),
+                caps=('ПРЯМАЯ ЛИНИЯ / ПРОДАЖИ', 'TELEGRAM (ИВАН ГЕЛЬ)', 'КОРПОРАТИВНАЯ ПОЧТА')),
+            footer()]
+    return page('UpCore — главная v2', '\n'.join(body), 4600, slider=True, name='Home-v2')
 
 def product_hero(key, v):
     return PRODUCTS[key]['heroes'][v]

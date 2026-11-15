@@ -189,3 +189,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .uc-cookie p { margin: 0; flex: 1 1 280px; font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, .8); font-family: 'Onest Variable', sans-serif; }
 .uc-cookie__btns { display: flex; gap: 8px; }
 .uc-cookie .uc-mbtn { min-height: 44px; font-size: 14px; }
+
+/* ---------- Главная v2 (раунд 82): длинные подписи кнопок первого экрана — в одну строку ---------- */
+.uc-btns--hero2 > a { white-space: nowrap; padding: 0 20px !important; font-size: 16px !important; }
+@media (min-width: 1140px) and (max-width: 1299px) { .uc-btns--hero2 { grid-auto-flow: row; } }

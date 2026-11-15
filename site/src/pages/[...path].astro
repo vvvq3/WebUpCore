@@ -7,11 +7,13 @@ import type { Lang } from '../data/i18n';
 
 export function getStaticPaths() {
   const files = import.meta.glob('../generated/*/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-  const out: { params: { path: string | undefined }; props: { lang: Lang; key: PageKey; html: string } }[] = [];
+  const out: { params: { path: string | undefined }; props: { lang: Lang; key: PageKey; html: string; noindex?: boolean } }[] = [];
   for (const [file, html] of Object.entries(files)) {
     const m = file.match(/generated\/(ru|en)\/([\w-]+)\.html$/);
     if (!m) continue;
     const lang = m[1] as Lang;
+    // раунд 82: прежняя главная для сравнения — /old/, без индексации, в остальном как главная
+    if (m[2] === 'home-old' && lang === 'ru') { out.push({ params: { path: 'old' }, props: { lang, key: 'home', html, noindex: true } }); continue; }
     const key = m[2] as PageKey;
     if (!(key in ROUTES)) continue;
     const route = ROUTES[key].replace(/\/$/, '');
@@ -21,7 +23,7 @@ export function getStaticPaths() {
   return out;
 }
 
-const { lang, key, html } = Astro.props;
+const { lang, key, html, noindex = false } = Astro.props;
 const meta = SEO[lang][key];
 const site = Astro.site!.toString().replace(/\/$/, '');
 const url = `${site}${lang === 'en' ? '/en' : ''}/${ROUTES[key]}`;
@@ -55,6 +57,6 @@ if (key !== 'home') jsonLd.push({
   ],
 });
 ---
-<Base lang={lang} page={key} title={meta.title} description={meta.description} keywords={meta.keywords} route={ROUTES[key]} jsonLd={jsonLd}>
+<Base lang={lang} page={key} title={meta.title} description={meta.description} keywords={meta.keywords} route={ROUTES[key]} jsonLd={jsonLd} noindex={noindex}>
   <Fragment set:html={html} />
 </Base>
