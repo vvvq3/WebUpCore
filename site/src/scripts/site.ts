@@ -252,7 +252,7 @@ function initSlider() {
       if (prog) { prog.style.animation = 'none'; void prog.offsetWidth; prog.style.animation = ''; }
     };
     const labels = lang === 'ru' ? ['Остановить автопрокрутку', 'Включить автопрокрутку'] : ['Pause autoplay', 'Resume autoplay'];
-    const start = () => { stop(); box.setAttribute('data-playing', ''); timer = window.setInterval(() => set(idx + 1), 5000); upd(); };
+    const start = () => { stop(); box.setAttribute('data-playing', ''); timer = window.setInterval(() => set(idx + 1), 4750); upd(); };
     const stop = () => { window.clearInterval(timer); timer = 0; box.removeAttribute('data-playing'); upd(); };
     const upd = () => {
       const on = Boolean(timer);
@@ -272,7 +272,7 @@ function initCore() {
   const core = document.querySelector<HTMLElement>('#core');
   if (!core || reduced || !('IntersectionObserver' in window)) return;
   const strikes = [...core.querySelectorAll<HTMLElement>('span')].filter((s) => (s.getAttribute('style') || '').includes('line-through'));
-  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 300 + i * 350 + 'ms'); });
+  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 250 + i * 285 + 'ms'); });
   const circles = core.querySelectorAll<SVGCircleElement>('svg circle');
   const arc = circles[1];
   const full = arc ? (arc.getAttribute('stroke-dasharray') || '').split(' ').map(Number) : [];
@@ -283,7 +283,7 @@ function initCore() {
     requestAnimationFrame(() => arc.classList.add('uc-core-arc'));
   }
   const rows = [...core.querySelectorAll<HTMLElement>('svg + div > div')];
-  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1600 + i * 650 + 'ms'); });
+  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1350 + i * 550 + 'ms'); });
   const loss = [...core.querySelectorAll<HTMLElement>('b')].find((b) => /140/.test(b.textContent || ''));
   loss?.classList.add('uc-core-loss');
   const target = Number(num?.textContent || 0);
@@ -295,7 +295,7 @@ function initCore() {
     box.classList.add('uc-core-on');
     if (arc && full.length === 2) requestAnimationFrame(() => { arc.style.strokeDasharray = `${full[0]} ${full[1]}`; });
     if (num && target) {
-      const from = target * 2; const t0 = performance.now() + 1500; const dur = 2400;
+      const from = target * 2; const t0 = performance.now() + 1300; const dur = 1900;
       const tick = (t: number) => {
         const k = Math.min(1, Math.max(0, (t - t0) / dur));
         const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -304,7 +304,7 @@ function initCore() {
       };
       requestAnimationFrame(tick);
     }
-  }, { rootMargin: '0px 0px -25% 0px', threshold: 0.5 });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.42 });
   io.observe(box);
 }
 
@@ -403,7 +403,7 @@ function initMotion() {
   odos.forEach((el, i) => {
     const text = el.textContent || '';
     el.innerHTML = `<span class="uc-sr">${text}</span>` + [...text].map((ch, k) => (/\d/.test(ch)
-      ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 200 + k * 120}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
+      ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 160 + k * 90}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
       : `<span class="uc-odo-ch" aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
   });
   const io = new IntersectionObserver((entries) => {
@@ -425,7 +425,7 @@ function initMotion() {
       el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
       ioNum.unobserve(el);
     });
-  }, { rootMargin: '0px 0px -30% 0px', threshold: 0.6 });
+  }, { rootMargin: '0px 0px -15% 0px', threshold: 0.4 });
   odos.forEach((el) => ioNum.observe(el));
 }
 
