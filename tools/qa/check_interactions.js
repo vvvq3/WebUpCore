@@ -32,6 +32,21 @@ const BASE = process.env.BASE || 'http://localhost:4321';
   p = await page(390); await p.goto(BASE + '/', { waitUntil: 'networkidle' });
   await p.evaluate(() => document.querySelector('#core svg').scrollIntoView({ block: 'center' })); await p.waitForTimeout(5000);
   out.push(['#core: в конце 80 из 160', (await p.evaluate(() => document.querySelector('#core svg text').textContent)) === '80']); await p.close();
+  // раунд 81: мгновенный прыжок в конец (End / #якорь) — блоки и цифры в экране видны; «Контакты» показывают блок контактов
+  for (const u of ['/', '/ai/', '/projects/', '/en/']) {
+    p = await page(1440); await p.goto(BASE + u, { waitUntil: 'networkidle' });
+    await p.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, document.documentElement.scrollHeight); }); await p.waitForTimeout(1200);
+    const hid = await p.evaluate(() => [...document.querySelectorAll('.uc-reveal, [data-odo]')].filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && (getComputedStyle(e).opacity === '0' || (e.hasAttribute('data-odo') && !e.classList.contains('uc-on'))); }).length);
+    out.push([`прыжок в конец ${u}: всё видно`, hid === 0]); await p.close();
+  }
+  for (const w of [390, 1440]) {
+    p = await page(w); await p.goto(BASE + '/', { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
+    const z = await p.evaluate(() => [...document.querySelectorAll('[data-odo]')].filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && !e.classList.contains('uc-on'); }).length);
+    out.push([`цифры первого экрана ${w}px: крутятся сразу`, z === 0]);
+    await p.click('[data-form]:visible >> nth=0'); await p.waitForTimeout(400);
+    const c = await p.evaluate(() => { const r = document.getElementById('uc-lead').getBoundingClientRect(); return Math.abs(r.left + r.width / 2 - innerWidth / 2) < 2 && Math.abs(r.top + r.height / 2 - innerHeight / 2) < 2; });
+    out.push([`форма заявки ${w}px: по центру`, c]); await p.close();
+  }
   out.forEach(([n, ok]) => console.log(ok ? '✓' : '✗', n));
   console.log('ошибки JS:', errs.length ? errs.join(' | ') : 'нет');
   await b.close(); process.exit(out.every(([, ok]) => ok) && !errs.length ? 0 : 1);

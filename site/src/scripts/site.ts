@@ -398,30 +398,45 @@ function initMotion() {
       ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 160 + k * 90}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
       : `<span class="uc-odo-ch" aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
   });
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      const el = en.target as HTMLElement;
-      el.classList.add('uc-on');
-      el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
-      io.unobserve(el);
-    });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-  [...leaves, ...bars].forEach((el) => io.observe(el));
-  // цифры (раунд 74): запускаются, когда поднялись в верхние ~70% экрана, и крутятся дольше — их успевают увидеть
+  // раунд 81: появление и табло — наблюдатель + «страховка» по прокрутке. При мгновенном прыжке (клавиша End, переход по #якорю)
+  // наблюдатель может не сработать (блоки у самого низа страницы и пролистанные блоки оставались невидимыми / с «00»).
+  const pending = new Set<HTMLElement>([...leaves, ...bars]);
+  const pendingNum = new Set<HTMLElement>(odos);
+  const show = (el: HTMLElement) => { pending.delete(el); el.classList.add('uc-on'); io.unobserve(el); };
   const spin = (el: HTMLElement) => {
+    pendingNum.delete(el);
+    ioNum.unobserve(el);
     el.classList.add('uc-on');
     el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
   };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) show(en.target as HTMLElement); });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  // цифры (раунд 74): запускаются, когда поднялись в верхние ~85% экрана, — их успевают увидеть
   const ioNum = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (!en.isIntersecting) return;
-      spin(en.target as HTMLElement);
-      ioNum.unobserve(en.target);
-    });
+    entries.forEach((en) => { if (en.isIntersecting) spin(en.target as HTMLElement); });
   }, { rootMargin: '0px 0px -15% 0px', threshold: 0.4 });
-  // раунд 80: цифры первого экрана крутятся сразу при открытии страницы (на телефоне они у нижнего края и раньше стояли «00»)
-  odos.forEach((el) => (el.closest('#top') ? window.setTimeout(() => spin(el), 350) : ioNum.observe(el)));
+  pending.forEach((el) => io.observe(el));
+  // цифры, видимые сразу при открытии страницы (первый экран любой страницы), крутятся без ожидания прокрутки
+  const vh = () => window.innerHeight || document.documentElement.clientHeight;
+  pendingNum.forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (el.closest('#top') || (r.top < vh() && r.bottom > 0)) window.setTimeout(() => spin(el), 350);
+    else ioNum.observe(el);
+  });
+  let ticking = false;
+  const sweep = () => {
+    ticking = false;
+    const h = vh();
+    const atEnd = window.scrollY + h >= document.documentElement.scrollHeight - 4;
+    pending.forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top < h * 0.92 || (atEnd && r.top < h)) show(el); });
+    pendingNum.forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top < h * 0.85 || (atEnd && r.top < h)) spin(el); });
+    if (!pending.size && !pendingNum.size) { window.removeEventListener('scroll', onScroll); window.removeEventListener('hashchange', onScroll); }
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(sweep); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('hashchange', onScroll);
+  window.setTimeout(onScroll, 400); // открытие страницы сразу на #якоре или с восстановленной прокруткой
 }
 
 initScrollReset();
