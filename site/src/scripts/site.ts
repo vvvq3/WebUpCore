@@ -208,59 +208,54 @@ function initLeadForm() {
 
 /* ---------------- Слайдер скриншотов (главная) ---------------- */
 function initSlider() {
-  // Раунд 76: экраны быстро сменяют друг друга — голубая полоса идёт сверху вниз, выше неё уже новый экран, ниже ещё старый.
-  // Без кнопок и подписи; пауза при наведении мыши, когда слайдер вне экрана и когда вкладка скрыта.
+  // Раунд 77: полоса без остановок — проходит сверху вниз за 1,5 с и сразу начинает сверху со следующим экраном.
+  // Выше полосы уже новый экран, ниже — ещё старый. Пауза при наведении мыши, когда окно вне экрана и когда вкладка скрыта.
   document.querySelectorAll<HTMLElement>('[data-slider]').forEach((box) => {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
     const scan = box.querySelector<HTMLElement>('.uc-scan');
     const keyEl = box.querySelector('[data-slide-key]');
     const numEl = box.querySelector('[data-slide-num]');
     if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
-    const WIPE = 850; // проход полосы, мс
-    const STEP = 1900; // смена экрана, мс
+    const WIPE = 1500; // проход полосы = смена экрана, мс
     const n = imgs.length;
-    if (n < 2) return;
+    if (n < 2 || reduced || !imgs[0].animate) return;
     let idx = 0;
-    let timer = 0;
-    let running: Animation[] = [];
-    let cleanup: (() => void) | null = null;
-    imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
-    const finishWipe = () => { running.forEach((a) => a.finish()); running = []; cleanup?.(); cleanup = null; };
-    const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
-    const set = (i: number) => {
-      const prev = idx;
-      idx = (i + n) % n;
-      finishWipe();
-      preload();
-      const next = imgs[idx];
-      const old = imgs[prev];
-      if (reduced || !next.animate) {
-        imgs.forEach((im, k) => { im.style.visibility = k === idx ? 'visible' : 'hidden'; im.style.zIndex = k === idx ? '1' : '0'; });
-      } else {
-        old.style.visibility = 'visible'; old.style.zIndex = '1';
-        next.style.visibility = 'visible'; next.style.zIndex = '2';
-        const ease = 'cubic-bezier(.45,.05,.35,1)';
-        running.push(next.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: WIPE, easing: ease, fill: 'forwards' }));
-        if (scan) running.push(scan.animate([{ top: '0%', opacity: 0 }, { top: '4%', opacity: 1, offset: 0.06 }, { top: '96%', opacity: 1, offset: 0.94 }, { top: '100%', opacity: 0 }], { duration: WIPE, easing: ease, fill: 'forwards' }));
-        cleanup = () => { old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1'; next.getAnimations().forEach((a) => a.cancel()); next.style.clipPath = ''; };
-        running[0].onfinish = () => { if (cleanup) { cleanup(); cleanup = null; } running = []; };
-      }
-      if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
-      if (numEl) numEl.textContent = String(idx + 1).padStart(2, '0');
-    };
+    let busy = false;
     let hover = false;
     let visible = true;
-    const tick = () => { if (!timer) timer = window.setInterval(() => set(idx + 1), STEP); };
-    const halt = () => { window.clearInterval(timer); timer = 0; };
-    const sync = () => (!reduced && visible && !hover && !document.hidden ? tick() : halt());
+    imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
+    const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
+    const canRun = () => visible && !hover && !document.hidden;
+    const step = () => {
+      if (busy) return;
+      if (!canRun()) { if (scan) scan.style.opacity = '0'; return; }
+      busy = true;
+      const prev = idx;
+      idx = (idx + 1) % n;
+      preload();
+      const old = imgs[prev];
+      const next = imgs[idx];
+      old.style.visibility = 'visible'; old.style.zIndex = '1';
+      next.style.visibility = 'visible'; next.style.zIndex = '2';
+      if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
+      if (numEl) numEl.textContent = String(idx + 1).padStart(2, '0');
+      const wipe = next.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: WIPE, easing: 'linear', fill: 'forwards' });
+      if (scan) { scan.style.opacity = '1'; scan.animate([{ top: '0%' }, { top: '100%' }], { duration: WIPE, easing: 'linear' }); }
+      wipe.onfinish = () => {
+        old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1';
+        wipe.cancel(); next.style.clipPath = '';
+        busy = false;
+        step(); // сразу следующий проход — без паузы
+      };
+    };
     if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      box.addEventListener('mouseenter', () => { hover = true; sync(); });
-      box.addEventListener('mouseleave', () => { hover = false; sync(); });
+      box.addEventListener('mouseenter', () => { hover = true; });
+      box.addEventListener('mouseleave', () => { hover = false; step(); });
     }
-    document.addEventListener('visibilitychange', sync);
-    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }).observe(box);
+    document.addEventListener('visibilitychange', step);
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; step(); }).observe(box);
     preload();
-    sync();
+    window.setTimeout(step, 600);
   });
 }
 
