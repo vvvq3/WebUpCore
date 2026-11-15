@@ -409,16 +409,19 @@ function initMotion() {
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
   [...leaves, ...bars].forEach((el) => io.observe(el));
   // цифры (раунд 74): запускаются, когда поднялись в верхние ~70% экрана, и крутятся дольше — их успевают увидеть
+  const spin = (el: HTMLElement) => {
+    el.classList.add('uc-on');
+    el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
+  };
   const ioNum = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
       if (!en.isIntersecting) return;
-      const el = en.target as HTMLElement;
-      el.classList.add('uc-on');
-      el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
-      ioNum.unobserve(el);
+      spin(en.target as HTMLElement);
+      ioNum.unobserve(en.target);
     });
   }, { rootMargin: '0px 0px -15% 0px', threshold: 0.4 });
-  odos.forEach((el) => ioNum.observe(el));
+  // раунд 80: цифры первого экрана крутятся сразу при открытии страницы (на телефоне они у нижнего края и раньше стояли «00»)
+  odos.forEach((el) => (el.closest('#top') ? window.setTimeout(() => spin(el), 350) : ioNum.observe(el)));
 }
 
 initScrollReset();

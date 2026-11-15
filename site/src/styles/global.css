@@ -28,9 +28,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* ---------- Шапка: липкая, при прокрутке — ниже, фон с размытием (анимация 07) ---------- */
 .uc-site-header { position: sticky; top: 0; z-index: 40; transition: padding .3s var(--ease-out-soft); }
-.uc-site-header::before { content: ''; position: absolute; inset: 0 -100vmax; z-index: -1; background: rgba(13, 12, 21, 0); border-bottom: 1px solid transparent; transition: background .3s var(--ease-out-soft), border-color .3s var(--ease-out-soft), backdrop-filter .3s; }
+/* фон шапки уходит на 320 px вверх: в Safari на iPhone страница прокручивается под адресной строкой — там тоже фон меню, а не текст (раунд 80) */
+.uc-site-header::before { content: ''; position: absolute; inset: -320px -100vmax 0; z-index: -1; background: rgba(13, 12, 21, 0); border-bottom: 1px solid transparent; transition: background .3s var(--ease-out-soft), border-color .3s var(--ease-out-soft), backdrop-filter .3s; }
 .uc-scrolled .uc-site-header { padding-top: 12px !important; padding-bottom: 12px !important; }
-.uc-scrolled .uc-site-header::before { background: rgba(13, 12, 21, .82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom-color: rgba(255, 255, 255, .1); }
+.uc-scrolled .uc-site-header::before { background: rgba(13, 12, 21, .94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom-color: rgba(255, 255, 255, .1); }
 .uc-site-header a { transition: background-color .2s, color .2s, box-shadow .2s, filter .2s; }
 .uc-site-header > a:first-child { min-height: 44px; }
 .uc-site-header nav a:not([aria-current]):hover { color: #fff !important; background: rgba(255, 255, 255, .06); border-radius: 10px; }
