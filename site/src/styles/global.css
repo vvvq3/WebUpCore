@@ -204,4 +204,5 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* 4 карточки под «Как работает модель»: описания начинаются на одной высоте */
 @media (min-width: 1101px) and (max-width: 1279px) { .uc-core4__t { min-height: 2.5em; } } /* с 1280 px все заголовки в одну строку */
 /* карточки «Подключение за минуты»: заголовки одной высоты — описания на одной линии */
-@media (min-width: 1101px) { .uc-saas-t { min-height: 2.5em; } }
+@media (min-width: 1101px) { .g2 > :nth-child(-n+2) .uc-saas-t { min-height: 2.5em; } } /* первый ряд: «On-Premise в закрытом контуре» в 2 строки */
+@media (min-width: 1101px) and (max-width: 1159px) { .uc-saas-t { min-height: 2.5em; } }
