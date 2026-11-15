@@ -12,8 +12,6 @@ export function getStaticPaths() {
     const m = file.match(/generated\/(ru|en)\/([\w-]+)\.html$/);
     if (!m) continue;
     const lang = m[1] as Lang;
-    // раунд 82: прежняя главная для сравнения — /old/, без индексации, в остальном как главная
-    if (m[2] === 'home-old' && lang === 'ru') { out.push({ params: { path: 'old' }, props: { lang, key: 'home', html, noindex: true } }); continue; }
     const key = m[2] as PageKey;
     if (!(key in ROUTES)) continue;
     const route = ROUTES[key].replace(/\/$/, '');

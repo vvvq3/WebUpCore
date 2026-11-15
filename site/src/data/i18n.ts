@@ -4,7 +4,7 @@ export type Lang = 'ru' | 'en';
 export const ui = {
   ru: {
     menu: 'Меню', close: 'Закрыть меню', platform: 'Платформа', blog: 'Блог', contacts: 'Контакты',
-    connect: 'Подключить', demo: 'Провести демо',
+    connect: 'Открыть демо', demo: 'Провести демо',  // раунд 86: новая версия — как в шапке
     products: {
       grade: 'грейд и рейтинг разработчиков',
       ai: 'эффективность ИИ и вайбкодинга',
@@ -13,11 +13,12 @@ export const ui = {
     },
     form: {
       close: 'Закрыть',
-      titles: { demo: 'Провести демо', report: 'Получить демо-отчёт', audit: 'Заказать аудит' },
+      titles: { demo: 'Провести демо', report: 'Получить пример отчёта', audit: 'Заказать аудит', pilot: 'Заказать бесплатный пилот' },
       leads: {
         demo: 'Покажем UpCore на демо-данных и ответим на вопросы. Оставьте контакты — свяжемся в течение рабочего дня.',
         report: 'Пришлём пример отчёта UpCore и расскажем, что он покажет по вашей команде.',
         audit: 'Посчитаем объективную трудоёмкость и бюджет проекта по коду. Расскажите о проекте — свяжемся и обсудим аудит.',
+        pilot: 'Проверим точность UpCore на 2–3 ваших репозиториях по истории кода за 6 месяцев. Оставьте контакты — свяжемся в течение рабочего дня.',
       },
       name: 'Имя', company: 'Компания', team: 'Размер команды', teamPh: 'Выберите',
       teamOpts: ['до 10 разработчиков', '10–50', '50–200', 'более 200'],
@@ -48,11 +49,12 @@ export const ui = {
     },
     form: {
       close: 'Close',
-      titles: { demo: 'Book a demo', report: 'Get a sample report', audit: 'Order an audit' },
+      titles: { demo: 'Book a demo', report: 'Get a sample report', audit: 'Order an audit', pilot: 'Book a free pilot' },
       leads: {
         demo: 'We will walk you through UpCore on demo data and answer your questions. Leave your contacts — we will reply within one business day.',
         report: 'We will send you a sample UpCore report and explain what it will show for your team.',
         audit: 'We will calculate the objective effort and budget of your project from its code. Tell us about the project and we will get in touch.',
+        pilot: 'We will verify UpCore accuracy on 2–3 of your repositories using 6 months of code history. Leave your contacts — we will reply within one business day.',
       },
       name: 'Name', company: 'Company', team: 'Team size', teamPh: 'Select',
       teamOpts: ['up to 10 developers', '10–50', '50–200', '200+'],

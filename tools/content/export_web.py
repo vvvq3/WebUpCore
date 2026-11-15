@@ -29,10 +29,11 @@ PAGES = {
     'blog-2': ('blog/2/', lambda: bp.blog_page2(2)),
     'blog-3': ('blog/3/', lambda: bp.blog_page2(3)),
 }
-# Раунд 82: русская главная — новая версия по ТЗ владельца (home_v2); прежняя — по адресу /old/ для сравнения (noindex).
-# EN-главная пока прежняя. Откатить: убрать 'home' из RU_OVERRIDES (и 'home-old' из RU_EXTRA, если сравнение не нужно).
-RU_OVERRIDES = {'home': bp.home_v2}
-RU_EXTRA = {'home-old': ('', lambda: bp.home('A'))}
+# Раунды 82–86: русские страницы — новая версия по ТЗ владельца; EN пока прежняя.
+# Весь прежний сайт (RU + EN) — статичный снимок в site/public/old/ (адрес /old/, noindex).
+# Откатить страницу к прежней версии — убрать её из RU_OVERRIDES.
+RU_OVERRIDES = {'home': bp.home_v2, 'grade': bp.grade_v2, 'ai': bp.ai_v2, 'projects': bp.proj_v2, 'mentor': bp.mentor_v2}
+RU_EXTRA = {}
 ANCHORS = {'#top': '', '#grade': 'grade/', '#ai': 'ai/', '#projects': 'projects/', '#mentor': 'mentor/', '#blog': 'blog/',
            '#grade-page': 'grade/', '#ai-page': 'ai/', '#projects-page': 'projects/', '#mentor-page': 'mentor/'}
 FONTS = [("'Bricolage Grotesque'", "'Bricolage Grotesque Variable'"), ("'Onest'", "'Onest Variable'"), ("'JetBrains Mono'", "'JetBrains Mono Variable'"),

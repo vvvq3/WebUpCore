@@ -8,7 +8,7 @@ python3 tools/content/build_pages.py <out_dc_dir> [<out_preview_dir>]
   out_dc_dir      — .dc.html для холста (картинки как /_blob/<id>)
   out_preview_dir — обычный HTML с локальными картинками для замера и проверки вёрстки
 """
-import os, sys, html as H
+import os, re, sys, html as H
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 LOGO = '8c539bd29559b45927b81ec6072a2f13'
@@ -202,7 +202,7 @@ def btn(text, href, primary=True, dark=False):
         st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF;'
     form = ''
     if MODE == 'web' and href.startswith('mailto:'):  # на сайте кнопки с почтой открывают форму заявки
-        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit', 'Заказать бесплатный пилот': 'audit'}.get(text, 'demo')
+        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit', 'Заказать бесплатный пилот': 'pilot', 'Получить пример отчёта': 'report'}.get(text, 'demo')
     return ('<a href="%s"%s style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, form, st, e(text)))
 
 REG = 'https://demo.up-core.ru/'
@@ -1668,12 +1668,12 @@ def drill_visual():
 
 GRADE_STATS = [('96%', 'точность экспертной оценки на 300+ тыс. MR'), ('10+', 'факторов грейда, главный — эффективность в часах'), ('3 мес.', 'до объективного грейда'), ('1 день', 'до первых результатов')]
 
-def grade_hero(h1, sub, visual, kicker=None, st=None):
+def grade_hero(h1, sub, visual, kicker=None, st=None, ctas=None):
     line, txt = ACC['grade']
     name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
             '<span style="color: #63D5FF;">&gt;</span><span>UpCore<span style="color: #63D5FF;">.Grade</span></span></div>')
     kick = ('<div style="font-size: 19px; color: rgba(255,255,255,0.72); font-style: italic;">' + e(kicker) + '</div>') if kicker else ''
-    ctas = btn('Подключить UpCore', REG) + btn('Получить демо-отчёт', MAIL, False)
+    ctas = ctas or (btn('Подключить UpCore', REG) + btn('Получить демо-отчёт', MAIL, False))
     return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">' + CHEVRON +
             '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 24px;">'
             '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; ' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.62);"><span style="color: #63D5FF;">01 · ОБЪЕКТИВНАЯ ОЦЕНКА РАЗРАБОТЧИКА</span><span>CTO · HRD · ТИМЛИДЫ</span></div>'
@@ -1866,20 +1866,13 @@ def core_v2():
     rep('</section>', '<div class="g4" style="margin-top: 16px;">%s</div></section>' % cards)
     return out
 
-def home_v2():
-    h1 = 'Цифровой тимлид для [[автоматической оценки эффективности]] вашей разработки'
-    sub = 'Математическая модель переводит каждый Merge Request в реальные человеко-часы и рубли — напрямую по коду из Git, без тайм-трекеров и отчётов.'
-    st = [('96%', 'совпадение с оценкой Senior'), ('1500+', 'разработчиков проанализировано'),
-          ('+14%', 'рост выработки команды за первые 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')]
-    visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
-    hdr = header(None)
+# ---------------------------------------------------------------- раунд 86: общие блоки новой версии сайта (главная + 4 продукта)
+def header_v2(active):
+    hdr = header(active)
     assert hdr.count('>Подключить</a>') == 1
-    hdr = hdr.replace('>Подключить</a>', '>Открыть демо</a>')  # шапка: «Провести демо» (форма) + «Открыть демо» (демо-стенд)
-    results = results_v6(2, head=('ЭКОНОМИЧЕСКИЙ ЭФФЕКТ', 'Окупаемость платформы на команде из 100 инженеров'), banner_on=False,
-                         tiles_data=[('до +30%', 'рост фактической выработки за счёт прозрачности'), ('−20%', 'time-to-market: потери в процессах становятся видны'),
-                                     ('2,5 ставки', 'тимлидов на 100 инженеров освобождается от рутинного ревью')],
-                         foot='База консервативного расчёта: 100 разработчиков при минимальной базовой ставке 250 тыс. ₽/мес (ФОТ 25 млн ₽/мес) и ставке тимлида 400 тыс. ₽/мес. '
-                              'При корпоративном ФОТ 400–600 тыс. ₽/мес на инженера экономический эффект увеличивается в 1,6–2,4 раза.')
+    return hdr.replace('>Подключить</a>', '>Открыть демо</a>')  # шапка: «Провести демо» (форма) + «Открыть демо» (демо-стенд)
+
+def saas_v2():
     saas = saas_variant(2, left_title='Развёртывание и первый отчёт за 1 час',
                         steps_data=[('01', 'Облако или On-Premise', 'подключение к GitHub, GitLab, Bitbucket или локальному Git'),
                                     ('02', 'Только Read-Only доступ', 'без прав на изменение репозиториев'),
@@ -1888,16 +1881,223 @@ def home_v2():
                                 ('link', 'Простая интеграция', 'Система легко интегрируется с уже существующими корпоративными трекерами, дашбордами, отчётами и MCP.'),
                                 ('shield', 'Готовы к проверке ИБ', 'Простая установка и документация, карта модулей для ИБ. Все доступы только на чтение, код не переносится. Ролевая модель и полное логирование.'),
                                 ('wallet', 'Оплата после пилота', 'Бесплатный пилот на 2–3 проектах. Платите, когда подтвердите точность на своих данных.')])
+    t19 = '<div style="font-size: 19px; font-weight: 700; line-height: 1.25;">'
+    assert saas.count(t19) == 4
+    return saas.replace(t19, '<div class="uc-saas-t" style="font-size: 19px; font-weight: 700; line-height: 1.25;">')  # заголовки карточек — одной высоты (global.css)
+
+def cta_v2(h2, sub):
+    return cta(h2, sub, ('Заказать бесплатный пилот', MAIL), second=('Открыть демо-стенд', REG))
+
+def hero_ctas_v2(second):
+    return btn('Открыть демо-стенд', REG) + btn(second, MAIL, False)
+
+def rich(t):
+    """Текст с **жирным** началом: экранирование + <b>."""
+    return re.sub(r'\*\*(.+?)\*\*', r'<b style="color: #FFFFFF; font-weight: 700;">\1</b>', e(t))
+
+def roles_v2(label, h2, items, acc_key):
+    _, txt = ACC[acc_key]
+    cards = [card('<div style="%s font-size: 13px; color: %s;">%s</div><p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 17px; line-height: 1.55;">%s</p>' % (MONO, txt, e(r.upper()), rich(p))) for r, p in items]
+    return section(sec_head(label, h2, None, acc_key) + '<div class="g4">%s</div>' % ''.join(cards))
+
+def faq_v2(items, acc_key, h2='Честные ответы на неудобные вопросы'):
+    qa = (' data-faq-q', ' data-faq-a') if MODE == 'web' else ('', '')
+    cards = [card(('<div' + qa[0] + ' style="font-size: 20px; font-weight: 700; line-height: 1.3;">%s</div><p' + qa[1] + ' style="margin: 0; color: %s; font-size: 16px; line-height: 1.6;">%s</p>') % (e(q), DIM, rich(a)), pad='28px 30px') for q, a in items]
+    return section(sec_head('ВОПРОСЫ', h2, None, acc_key) + '<div class="g2">%s</div>' % ''.join(cards))
+
+def subst(html, pairs, regex=False):
+    for a, b in pairs:
+        if regex:
+            html, n = re.subn(a, b, html, count=1, flags=re.S)
+            assert n == 1, a
+        else:
+            assert a in html, a
+            html = html.replace(a, b)
+    return html
+
+def bullets(items, col, size=16):
+    return ('<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px;">' + ''.join(
+        '<li style="display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: %dpx; line-height: 1.5; color: rgba(255,255,255,0.78);">'
+        '<span aria-hidden="true" style="color: %s; font-weight: 800;">&gt;</span><span>%s</span></li>' % (size, col, rich(t)) for t in items) + '</ul>')
+
+# ---------------------------------------------------------------- раунд 86: Grade v2 по ТЗ-2 владельца
+GRADE_ROLES_V2 = [('CTO', '**Карта сильных инженеров и узких мест** по командам и стекам для точного распределения задач.'),
+                  ('HRD', '**Объективная база для пересмотра окладов,** матрица грейдов и закрытия испытательного срока.'),
+                  ('Тимлид', '**Готовая аналитика к Performance Review** без ручного сбора статистики и споров.'),
+                  ('Разработчик', '**Прозрачные критерии роста до Senior** с оценкой реального вклада без тайм-трекеров.')]
+GRADE_FAQ_V2 = [('Это слежка за сотрудниками?', '**Нет:** никаких агентов на ПК и скриншотов. Оценивается только код в Git.'),
+                ('Можно ли накрутить рейтинг?', '**Нет:** бойлерплейт, автогенерация, ренеймы и переписанный код получают 0 часов.'),
+                ('Что если модель ошибётся на задаче?', '**Грейд строится на окне в 3–6 месяцев,** а каждый MR открывается до строчки с правом апелляции.'),
+                ('Как реагирует команда?', '**Сильные инженеры поддерживают прозрачность:** их сложные задачи в ядре наконец оцифрованы.')]
+
+def grade_v2():
+    vis = ('<div style="flex: 1 1 460px; min-width: 0;"><div style="border-radius: 24px; background: #12111C; border: 1px solid rgba(99,213,255,0.4); box-shadow: 0 40px 120px rgba(99,213,255,0.10); padding: 22px;">'
+           + subst(rating_card(), [('20% ОТСТАЮЩИХ — С НИМИ РАБОТАТЬ В ПЕРВУЮ ОЧЕРЕДЬ', 'ЗОНА РИСКА (20%) — ФОКУС ДЛЯ КОД-РЕВЬЮ И РОТАЦИИ')]) + '</div></div>')
+    top = grade_hero('Объективный грейд и рейтинг команды каждый месяц',
+                     'Автоматический расчёт выработки в нормо-часах и подтверждённый грейд Junior–Senior по 50+ параметрам кода из Git.', vis,
+                     st=[('96%', 'совпадение с Senior-ревью'), ('50+', 'факторов грейда'), ('1500+', 'инженеров оценено'), ('1 час', 'расчёт за полгода')],
+                     ctas=hero_ctas_v2('Получить пример отчёта'))
+    method = subst(method_example('Прозрачный профиль грейда по 50+ факторам', insights_on=False, list_label='10 ОСНОВНЫХ ФАКТОРОВ'),
+                   [(r'Реальный профиль из демо UpCore: не просто «Senior»[^<]*', 'Динамика компетенций за 6 месяцев и позиция инженера внутри компании, стека и проекта.')], regex=True)
+    fac = factors_deep()
+    fac = subst(fac, [(r'Мы анализируем каждую строчку кода\.[^<]*', 'Три базовых параметра, которые невозможно оценить по Jira или резюме.')], regex=True)
+    cards = [('ФАКТОР 01', 'Где написан код: в ядре или на периферии', 'Архитектура (AST-граф)', ['Разделяем правки в бизнес-ядре, middle-слое и на периферии.', '20 строк в ядре весят больше 200 строк вёрстки.']),
+             ('ФАКТОР 02', 'Какие технологии и в каком объёме', 'Сложность стека и технологий', ['Считаем часы по карте компетенций каждого языка и фреймворка.', 'Повышающий коэффициент за сложный legacy и внедрение новых библиотек.']),
+             ('ФАКТОР 03', 'Сколько кода дошло до релиза', 'Выживаемость кода (Code Churn)', ['В зачёт идут только строки, дошедшие до продакшена без переписывания.', 'Автоматически отсекает мусорную генерацию и накрутку коммитов.'])]
+    for old_lab, old_t, new_t, lis in cards:
+        lab = {'ФАКТОР 01': 'ФАКТОР · АРХИТЕКТУРА', 'ФАКТОР 02': 'ФАКТОР · ТЕХНОЛОГИИ', 'ФАКТОР 03': 'ФАКТОР · РЕЗУЛЬТИРУЮЩИЙ КОД'}[old_lab]
+        fac = subst(fac, [('>' + lab + '<', '>' + old_lab + '<'), ('<div style="font-size: 22px; font-weight: 800; line-height: 1.2;">' + e(old_t) + '<', '<div class="uc-t2" style="font-size: 22px; font-weight: 800; line-height: 1.2;">' + e(new_t) + '<')])
+    # абзацы под визуализациями → по 2 пункта
+    it = iter(cards)
+    fac, n = re.subn(r'<p style="margin: 0; color: rgba\(255,255,255,0\.78\); font-size: 15px; line-height: 1\.55;">[^<]*</p></article>',
+                     lambda m: bullets(next(it)[3], '#63D5FF', 15) + '</article>', fac)
+    assert n == 3
+    body = [header_v2('grade'), top, method, fac,
+            roles_v2('ДЛЯ КОГО', 'Одна цифра для CTO, HR, тимлида и разработчика', GRADE_ROLES_V2, 'grade'),
+            faq_v2(GRADE_FAQ_V2, 'grade'), saas_v2(),
+            cta_v2('Узнайте реальные грейды вашей команды за 1 час', 'Бесплатный пилот на 2–3 репозиториях с ретро-анализом истории кода за последние 6 месяцев.'),
+            footer()]
+    return page('UpCore Grade — v2', '\n'.join(body), 5000, name='Grade-v2')
+
+# ---------------------------------------------------------------- раунд 86: AI v2 по ТЗ-2 (11 секций → 5 экранов)
+AI_RANGES_V2 = [('Senior + ИИ', 50, 150, '+50…150%', GREEN), ('Middle + ИИ', -20, 50, '−20…+50%', AMBER), ('Junior + ИИ', -50, 0, '−50…0%', RED_T)]
+AI_ROLES_V2 = [('CTO', '**Видит, где ИИ ускоряет команду,** а где плодит переделки и техдолг.'),
+               ('CFO', '**Защищает бюджет на лицензии и токены** отдачей в часах и рублях.'),
+               ('Тимлид', '**Знает, кому нужно обучение работе с ИИ,** а кому — сложные задачи.'),
+               ('Разработчик', '**Видит свою реальную скорость с ИИ** и время, потерянное на отладку.')]
+AI_FAQ_V2 = [('Можно без промпт-коллектора?', '**Да:** по одному коду UpCore определяет ИИ-код с точностью выше 92%.'),
+             ('Это не слежка за промптами?', '**Нет:** промпты разбираются только для ревью и обучения, доступ — строго по ролям.'),
+             ('Как вы считаете эффективность с ИИ?', '**Сравниваем нормо-часы задачи** с фактическим временем решения с ИИ по каждому MR.'),
+             ('Нужно ждать, пока накопится статистика?', '**Нет:** за 1 час анализируем полгода истории Git и показываем картину «до» и «после».')]
+
+def ai_roi_v2():
+    left = box(lbl('ДВА РЕАЛЬНЫХ СЛУЧАЯ') +
+               task_bar('Ускорение ×4 · Senior', 8, 2, '×4', GREEN, 'Задача на 8 нормо-часов закрыта с ИИ за 2 часа чистым кодом.') +
+               task_bar('Потеря времени · Junior', 2, 8, '−6 ч', RED_T, 'Задача на 2 нормо-часа отняла 8 часов из-за галлюцинаций и отладки.'), flex='1.2 1 440px')
+    right = box(lbl('ЧТО ВИДИТ РУКОВОДИТЕЛЬ') + bullets(['**Доля ИИ-кода в каждом MR** против ручной разработки', '**Чистая экономия ФОТ** в часах и рублях за вычетом переделок',
+                                                         '**Динамика ускорения команды** от месяца к месяцу'], '#B9AEFF', 19).replace('gap: 10px;', 'gap: 22px;', 1), strong=True, flex='1 1 360px')
+    right = right.replace('min-width: 0;', 'min-width: 0; justify-content: center;', 1)
+    return section(sec_head('ИЗМЕРЕНИЕ ROI ОТ ИИ', 'Эталонные нормо-часы против фактических часов с ИИ',
+                            'Модель знает, сколько часов задача требует вручную, и сверяет это с фактическим временем и чистотой кода после ИИ.', 'ai')
+                   + '<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch;">' + left + right + '</div>', 'measure')
+
+def ai_detect_v2():
+    items = [('АВТОДЕТЕКТ', '92%+', 'точность детекта по коду', 'Отличаем ИИ-генерацию от ручного кода напрямую по Git — без плагинов и промпт-коллектора.'),
+             ('ТОКЕНЫ', '−35%', 'расхода токенов', 'Норматив токенов на 1 нормо-час подсвечивает тех, кто сжигает лимиты впустую.'),
+             ('ВЫЖИВАЕМОСТЬ', 'Churn', 'фильтр выживаемости', 'Сгенерированный ИИ-код, который переписали на следующий день, не засчитывается в результат.')]
+    cards = ''.join(card('<div style="%s font-size: 12px; color: #B9AEFF; letter-spacing: 0.04em;">%s</div>'
+                         '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="font-size: clamp(34px, 3vw, 44px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: %s;">%s</span>'
+                         '<span style="font-size: 19px; font-weight: 700;">%s</span></div>'
+                         '<p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 16px; line-height: 1.55;">%s</p>' % (MONO, a, '#B9AEFF' if not b.startswith('−') else GREEN, b, e(t), e(p)), pad='28px') for a, b, t, p in items)
+    line, txt = ACC['mentor']
+    link = ('<a href="#mentor-page" class="uc-xcard" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin-top: 16px; border-radius: 24px; padding: 22px 28px; '
+            'background: linear-gradient(135deg, rgba(83,192,77,0.14), #1A1925 60%); border: 1px solid ' + line + '66; color: #FFFFFF; text-decoration: none;">'
+            '<span style="min-width: 0; font-size: 19px; font-weight: 700; line-height: 1.35;">Как научить команду писать сильные промпты <span style="color: ' + GREEN + '; white-space: nowrap;">(+32% к выработке)</span></span>'
+            '<span style="flex: 0 0 auto; font-weight: 700; color: ' + txt + ';">Перейти в UpCore.Mentor →</span></a>')
+    return section(sec_head('АВТОДЕТЕКТ И КОНТРОЛЬ ТОКЕНОВ', 'Контроль бюджета на токены и авто-детект ИИ (92%+)', None, 'ai') + '<div class="g3">' + cards + '</div>' + link, 'detect')
+
+def ai_v2():
+    vis = panel('ai', 'ai / разрыв эффективности', 'с ИИ', ai_range_rows(ranges=AI_RANGES_V2, hi=150, ticks=[(-50, '−50%'), (0, '0'), (50, '+50%'), (100, '+100%'), (150, '+150%')]))
+    top = mod_hero('ai', 'Реальная эффективность внедрения ИИ в вашу разработку',
+                   'Измеряем фактическую экономию часов от ИИ-ассистентов, долю выжившего ИИ-кода и окупаемость лицензий по каждому разработчику.', vis,
+                   [('до ×2–3', 'ускорение Senior-инженеров на типовых задачах'), ('92%+', 'точность детекта ИИ-кода напрямую по Git'), ('−35%', 'снижение пустого расхода токенов'), ('−20%', 'сокращение переделок (churn) после ИИ')],
+                   ctas=hero_ctas_v2('Получить пример отчёта'))
+    body = [header_v2('ai'), top, ai_roi_v2(), ai_detect_v2(),
+            roles_v2('ДЛЯ КОГО', 'Одни данные об ИИ для CTO, финансов, тимлида и разработчика', AI_ROLES_V2, 'ai'), faq_v2(AI_FAQ_V2, 'ai'), saas_v2(),
+            cta_v2('Посчитайте реальный эффект ИИ в своей команде', 'Бесплатный пилот на 2–3 репозиториях: сравним время «с ИИ» и «вручную» по истории кода за 6 месяцев.'),
+            footer()]
+    return page('UpCore AI — v2', '\n'.join(body), 5000, name='AI-v2')
+
+# ---------------------------------------------------------------- раунд 86: Projects v2 по ТЗ-2
+PROJ_FAQ_V2 = [('А если подрядчик не даст доступ к коду?', '**Код по договору обычно принадлежит заказчику,** а анализ можно провести on-premise.'),
+               ('Подходит для 1С и легаси?', '**Да:** C#, Java, Go, Python, PHP, JS/TS, C++ и 1С; легаси учитывается в оценке.'),
+               ('Это заменит приёмку работ?', '**Нет, но даст приёмке объективную основу:** сколько трудоёмкости в коде, а сколько в акте.'),
+               ('Можно оценить проект при покупке компании?', '**Да:** разовый аудит покажет стоимость кода, объём техдолга и силу команды.')]
+
+def scenarios_v2():
+    items = [('CEO · M&A', 'Разовый Due Diligence проекта за 2 дня', 'Оценка реальной стоимости кода и техдолга перед покупкой или приёмкой без внедрения.'),
+             ('CFO · Закупки', 'Ежемесячная верификация актов подрядчиков', 'Сверка часов в акте с фактической трудоёмкостью MR до оплаты счёта.'),
+             ('CTO · PMO', 'Управление портфелем и тех-картой команд', 'Прогноз дедлайнов, контроль техдолга по ISO 25010 и закрытие пробелов в стеке.')]
+    cards = ''.join(card('<div style="align-self: flex-start; padding: 6px 12px; border-radius: 10px; background: rgba(242,193,78,0.12); border: 1px solid rgba(242,193,78,0.35); %s font-size: 13px; color: #F7D88A;">%s</div>'
+                         '<div class="uc-t2" style="font-size: 22px; font-weight: 800; line-height: 1.2;">%s</div><p style="margin: 0; color: %s; font-size: 16px; line-height: 1.55;">%s</p>' % (MONO, e(r), e(t), DIM, e(p)), pad='32px') for r, t, p in items)
+    return section(sec_head('СЦЕНАРИИ ДЛЯ C-LEVEL', 'Три способа взять бюджет под контроль', None, 'projects') + '<div class="g3">%s</div>' % cards)
+
+def proj_v2():
+    top = mod_hero('projects', 'Бюджет проекта и контроль подрядчиков — в часах и рублях',
+                   'Объективная стоимость разработки, сверка актов подрядчиков, техдолг по ISO/IEC 25010 и радар срыва сроков — напрямую по коду из Git.',
+                   panel('projects', 'projects / аудит акта', 'пример', act_vs_code(1500, 860)),
+                   [('96%', 'точность оценки'), ('50+', 'факторов анализа MR'), ('1 час', 'расчёт полугода истории'), ('до −43%', 'выявление переплат по актам')],
+                   ctas=hero_ctas_v2('Заказать аудит'))
+    ex = subst(proj_px(1), [('размер сильно больше среднего', 'высоконагруженная архитектура'), ('тяжести найденных дефектов ушло в main', 'доля критичных дефектов, попавших в ветку main'),
+                            ('общий бюджет проекта — столько ценности создано по коду с учётом всех переделок и качества', 'подтверждённая стоимость чистого кода в релизе')])
+    audit = subst(proj_audit2(1), [(r'Так Dex сам работает со своими клиентами на аутстаффе\.[^<]*', 'Используйте отчёт UpCore как объективное приложение к акту T&amp;M или Fixed Price: вы оплачиваете только подтверждённый объём инженерной работы в коде.')], regex=True)
+    body = [header_v2('projects'), top, ex, audit, scenarios_v2(), faq_v2(PROJ_FAQ_V2, 'projects'), saas_v2(),
+            cta_v2('Проверьте, сколько на самом деле стоит ваш проект', 'Бесплатный пилот на 2–3 репозиториях: объективный бюджет проекта по коду — полгода истории за 1 час.'),
+            footer()]
+    return page('UpCore Projects — v2', '\n'.join(body), 5000, name='Projects-v2')
+
+# ---------------------------------------------------------------- раунд 86: Mentor v2 по ТЗ-2
+MENTOR_FAQ_V2 = [('Чем Mentor отличается от ИИ-ревьюера кода?', '**Ревьюер видит один MR,** Mentor — всю историю разработчика: задачи, промпты, код и оценки.'),
+                 ('Mentor заменит тимлида?', '**Нет:** он снимает рутину ревью, чтобы тимлид занимался архитектурой и сложными решениями.'),
+                 ('Это не очередной контроль?', '**Нет:** рекомендации видит сам разработчик, и они про рост, а не про наказание.'),
+                 ('Как Mentor учит работать с ИИ?', '**Разбирает промпты:** где не хватило контекста и где ИИ увёл в сторону.')]
+
+def mentor_ai_v2():
+    out = mentor_ai_combo()
+    out = subst(out, [('Промпты — новый язык программирования. Mentor ревьюит их так же, как код: видит, какие задачи с ИИ дали результат, а какие — день багов и переделок.',
+                       'Промпты — новый язык программирования: Mentor ревьюит их как код и видит, какие задачи с ИИ дали результат.')])
+    # «И сам добавляет в проект» — по одной короткой строке на пункт
+    short = [('Спецификации проекта', 'контекст один раз для всех задач'), ('Скилы под типовые задачи команды', 'приёмы сильных доступны каждому'),
+             ('Шаблон «сначала план, потом код»', 'план обязателен перед кодом'), ('Рекомендации по промптам каждому', 'где теряется время с ИИ')]
+    olds = [('Спецификации проекта', 'контекст собирается один раз и подключается к каждой задаче'), ('Скилы под типовые задачи команды', 'приёмы сильных разработчиков доступны каждому'),
+            ('Шаблон «сначала план, потом код»', 'план становится обязательным шагом, а не советом'), ('Рекомендации по промптам каждому', 'как ставить задачу ИИ и где теряется время')]
+    for (t, d0), (_, d1) in zip(olds, short):
+        out = subst(out, [('<div style="font-size: 16px; font-weight: 700;">' + e(t) + '</div><div style="font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.45; margin-top: 2px;">' + e(d0) + '</div>',
+                           '<div style="font-size: 16px; line-height: 1.45;"><b>' + e(t) + '</b> <span style="color: rgba(255,255,255,0.65);">— ' + e(d1) + '</span></div>')])
+    return out
+
+def mentor_ipr_v2():
+    line, txt = ACC['mentor']
+    steps = [('ШАГ 01', 'Диагностика в Grade', 'Система фиксирует просадку фактора (например, **Архитектурная сложность 3,1\u00a0/\u00a010**) и падение качества кода.'),
+             ('ШАГ 02', 'Рекомендации в MR', 'Mentor подсвечивает антипаттерны прямо в ходе ревью и предлагает готовые архитектурные скилы проекта.'),
+             ('ШАГ 03', 'Контроль прогресса', 'Тимлид и L&D видят рост метрики от спринта к спринту без ручного микроменеджмента.')]
+    cards = ''.join(card('<div style="%s font-size: 12px; color: %s; letter-spacing: 0.04em;">%s</div><div style="font-size: 22px; font-weight: 800; line-height: 1.2;">%s</div>'
+                         '<p style="margin: 0; color: rgba(255,255,255,0.78); font-size: 16px; line-height: 1.55;">%s</p>' % (MONO, txt, a, e(t), rich(p)), pad='32px', border=line + '40') for a, t, p in steps)
+    return section(sec_head('ОТ ГРЕЙДА К ПЛАНУ РОСТА', 'Как просадка в грейде превращается в план роста (ИПР)', None, 'mentor') + '<div class="g3">%s</div>' % cards, 'mentor-grade')
+
+def mentor_v2():
+    vis = panel('mentor', 'mentor / приоритизация ревью', 'онлайн', mentor_queue())
+    top = mod_hero('mentor', 'ИИ-наставник для каждого разработчика',
+                   'Автоматическое ревью каждого MR, задач и промптов: снимает с тимлидов до 80% рутинных проверок и формирует индивидуальный план развития инженера.', vis,
+                   [('до 80%', 'экономия времени тимлида на ревью'), ('+32%', 'рост выработки при внедрении скилов'), ('100%', 'охват всех MR код-ревью'), ('50+', 'метрик для плана развития')],
+                   ctas=hero_ctas_v2('Получить пример отчёта'))
+    ex = subst(ex_variant(2), [('7% времени UpCore', '7% рабочего времени за период')])
+    ex = subst(ex, [(r'Из системных ошибок Mentor собирает персональный план:[^<]*', 'Повторяющиеся дефекты автоматически собираются в персональный план обучения разработчика.')], regex=True)
+    body = [header_v2('mentor'), top, mentor_ai_v2(), ex, mentor_ipr_v2(),
+            roles('ДЛЯ КОГО', 'Наставник, который нужен каждому в команде', MENTOR_ROLES, 'mentor'), faq_v2(MENTOR_FAQ_V2, 'mentor'), saas_v2(),
+            cta_v2('Дайте каждому разработчику своего наставника', 'Подключите репозиторий — готовый разбор системных ошибок и промптов вашей команды по истории за 6 месяцев уже через 1 час.'),
+            footer()]
+    return page('UpCore Mentor — v2', '\n'.join(body), 5000, name='Mentor-v2')
+
+def home_v2():
+    h1 = 'Цифровой тимлид для [[автоматической оценки эффективности]] вашей разработки'
+    sub = 'Математическая модель переводит каждый Merge Request в реальные человеко-часы и рубли — напрямую по коду из Git, без тайм-трекеров и отчётов.'
+    st = [('96%', 'совпадение с оценкой Senior'), ('1500+', 'разработчиков проанализировано'),
+          ('+14%', 'рост выработки команды за первые 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')]
+    visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
+    hdr = header_v2(None)
+    results = results_v6(2, head=('ЭКОНОМИЧЕСКИЙ ЭФФЕКТ', 'Окупаемость платформы на команде из 100 инженеров'), banner_on=False,
+                         tiles_data=[('до +30%', 'рост фактической выработки за счёт прозрачности'), ('−20%', 'time-to-market: потери в процессах становятся видны'),
+                                     ('2,5 ставки', 'тимлидов на 100 инженеров освобождается от рутинного ревью')],
+                         foot='База консервативного расчёта: 100 разработчиков при минимальной базовой ставке 250 тыс. ₽/мес (ФОТ 25 млн ₽/мес) и ставке тимлида 400 тыс. ₽/мес. '
+                              'При корпоративном ФОТ 400–600 тыс. ₽/мес на инженера экономический эффект увеличивается в 1,6–2,4 раза.')
+    saas = saas_v2()
     top = hero('', h1, sub, [btn('Посмотреть демо-стенд', REG), btn('Заказать бесплатный пилот', MAIL, False)], st, visual)
     top = top.replace('<div class="uc-btns">', '<div class="uc-btns uc-btns--hero2">', 1)
     top = top.replace('<section id="top" style=', '<section id="top" class="uc-hero2" style=', 1).replace('<div style="flex: 1 1 500px;', '<div class="uc-hero2-l" style="flex: 1 1 500px;', 1)  # длинные подписи кнопок — в одну строку (site/src/styles/global.css)
-    t19 = '<div style="font-size: 19px; font-weight: 700; line-height: 1.25;">'
-    assert saas.count(t19) == 4
-    saas = saas.replace(t19, '<div class="uc-saas-t" style="font-size: 19px; font-weight: 700; line-height: 1.25;">')  # заголовки карточек — одной высоты (global.css)
     body = [hdr, top,
             platform_v2(), core_v2(), results, saas,
-            cta('Проведите бесплатный пилот на 2–3 репозиториях', 'Покажем реальную трудоёмкость проектов и окупаемость ИИ по истории вашего кода за последние 6 месяцев.',
-                ('Заказать бесплатный пилот', MAIL), second=('Открыть демо-стенд', REG)),
+            cta_v2('Проведите бесплатный пилот на 2–3 репозиториях', 'Покажем реальную трудоёмкость проектов и окупаемость ИИ по истории вашего кода за последние 6 месяцев.'),
             footer()]
     return page('UpCore — главная v2', '\n'.join(body), 4600, slider=True, name='Home-v2')
 
@@ -2115,7 +2315,7 @@ MODC = {'ai': ('AI', '02', 'ЭФФЕКТИВНОСТЬ ИИ И ВАЙБКОДИ�
         'projects': ('Projects', '03', 'БЮДЖЕТ ПРОЕКТА И КОНТРОЛЬ ПОДРЯДЧИКОВ', 'CEO · PMO · CFO'),
         'mentor': ('Mentor', '04', 'ИИ-НАСТАВНИК ДЛЯ КАЖДОГО РАЗРАБОТЧИКА', 'ТИМЛИДЫ · L&D · РАЗРАБОТЧИКИ')}
 
-def mod_hero(key, h1, sub, visual, st):
+def mod_hero(key, h1, sub, visual, st, ctas=None):
     line, txt = ACC[key]; mod, num, lab, rl = MODC[key]
     name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
             '<span style="color: ' + line + ';">&gt;</span><span>UpCore<span style="color: ' + txt + ';">.' + mod + '</span></span></div>')
@@ -2126,7 +2326,7 @@ def mod_hero(key, h1, sub, visual, st):
             + name +
             '<h1 style="margin: 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800;">' + h1 + '</h1>'
             '<p style="margin: 0; font-size: clamp(17px, 1.35vw, 20px); line-height: 1.55; color: rgba(255,255,255,0.8); max-width: 600px;">' + e(sub) + '</p>'
-            '<div class="uc-btns">' + btn('Подключить UpCore', REG) + sec + '</div>' + stats(st) + '</div>' + visual + '</section>')
+            '<div class="uc-btns">' + (ctas or (btn('Подключить UpCore', REG) + sec)) + '</div>' + stats(st) + '</div>' + visual + '</section>')
 
 def panel(key, path, right, body, flex='1.15 1 480px'):
     line, txt = ACC[key]
@@ -2530,17 +2730,17 @@ def blog_page2(pg):
 # ---------------------------------------------------------------- раунд 38: UpCore AI — 3 новых макета по материалу владельца (раздел 23)
 AI_RANGES = [('Senior + ИИ', 100, 300, '+100…300%', GREEN), ('Middle + ИИ', -20, 50, '−20…+50%', AMBER), ('Junior + ИИ', -50, 0, '−50…0%', RED_T)]
 
-def ai_range_rows(note=True):
-    lo, hi = -50, 300
+def ai_range_rows(note=True, ranges=None, hi=300, ticks=None):
+    lo = -50
     pos = lambda v: (v - lo) / (hi - lo) * 100
     out = ''
-    for nm, a, b, lab, c in AI_RANGES:
+    for nm, a, b, lab, c in (ranges or AI_RANGES):
         out += ('<div style="padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.07);"><div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px;"><b style="font-size: 16px;">' + e(nm) + '</b><b style="color: ' + c + '; font-size: 18px; white-space: nowrap;">' + lab + '</b></div>'
                 '<div style="position: relative; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.05);">'
                 '<div style="position: absolute; top: -4px; bottom: -4px; left: %.1f%%; width: 2px; background: rgba(255,255,255,0.45);"></div>' % pos(0) +
                 '<div style="position: absolute; top: 0; bottom: 0; left: %.1f%%; width: %.1f%%; border-radius: 7px; background: %s;"></div></div></div>' % (pos(a), pos(b) - pos(a), c))
     scale = ('<div style="position: relative; height: 18px; margin-top: 6px; ' + MONO + ' font-size: 12px; color: rgba(255,255,255,0.5);">'
-             + ''.join('<span style="position: absolute; left: %.1f%%; transform: translateX(-50%%);">%s</span>' % (pos(v), t) for v, t in [(-50, '−50%'), (0, '0'), (100, '+100%'), (200, '+200%'), (300, '+300%')]) + '</div>')
+             + ''.join('<span style="position: absolute; left: %.1f%%; transform: translateX(-50%%);">%s</span>' % (pos(v), t) for v, t in (ticks or [(-50, '−50%'), (0, '0'), (100, '+100%'), (200, '+200%'), (300, '+300%')])) + '</div>')
     tail = ('<div style="margin-top: 14px; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7);">Прирост эффективности с ИИ относительно ручной работы. Разрыв между людьми огромный — его важно измерять и контролировать.</div>' if note else '')
     return out + scale + tail
 

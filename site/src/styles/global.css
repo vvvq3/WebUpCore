@@ -206,3 +206,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* карточки «Подключение за минуты»: заголовки одной высоты — описания на одной линии */
 @media (min-width: 1101px) { .g2 > :nth-child(-n+2) .uc-saas-t { min-height: 2.5em; } } /* первый ряд: «On-Premise в закрытом контуре» в 2 строки */
 @media (min-width: 1101px) and (max-width: 1159px) { .uc-saas-t { min-height: 2.5em; } }
+/* раунд 86: заголовки карточек в 3 колонки одной высоты (2 строки) — содержимое ниже начинается на одной линии */
+@media (min-width: 1101px) { .g3 .uc-t2 { min-height: 2.4em; } }
+@media (min-width: 1101px) and (max-width: 1279px) { .g3 .uc-t2 { min-height: 3.6em; } } /* узкий компьютер: до 3 строк */
