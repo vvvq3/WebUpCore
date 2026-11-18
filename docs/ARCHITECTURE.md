@@ -116,6 +116,11 @@ WebUpCore/
 ### Поведение и анимации
 `site/src/scripts/site.ts` + `site/src/styles/global.css`. Правила анимаций — `docs/design/ANIMATIONS.md`.
 
+### Презентации для CTO (PDF, раунд 96)
+`tools/decks/build_decks.py` — слайды (функции `sl_*`), темы (тёмная по сайту и светлая `.light`) и состав 20 презентаций (`deck_*`, варианты 1–4); данные — из `tools/content/build_pages.py`.
+`node tools/decks/render.js [фильтр]` — PDF 1920×1080 в `docs/decks/`, проверка переполнения каждого слайда, превью `tools/decks/build/png/` (`--no-png` — без превью).
+`python3 tools/decks/index_page.py` — оглавление `docs/decks/index.html` и обложки. На Pages копируется в `/decks/` (шаг в `pages.yml`).
+
 ## 5. Как устроены ключевые части
 
 - **Шапка.** Липкая, при прокрутке становится ниже и получает фон с размытием.
