@@ -1,4 +1,4 @@
-# Презентации UpCore для CTO (раунд 96)
+# Презентации UpCore для CTO (раунды 96–97)
 
 20 PDF (16:9, 1920×1080, русский): платформа + 4 продукта × 4 варианта.
 
@@ -16,4 +16,19 @@
 Пересборка:
 ```bash
 python3 tools/decks/build_decks.py && node tools/decks/render.js && python3 tools/decks/index_page.py
+```
+
+## Новые версии из блоков сайта (раунд 97)
+
+| Папка | 5 — по сайту | 6 — с демо | 7 — с платформой |
+|---|---|---|---|
+| `01-platform` | 10 | 9 | 10 |
+| `02-grade` | 8 | 9 | 9 |
+| `03-ai` | 9 | 9 | 9 |
+| `04-projects` | 8 | 9 | 9 |
+| `05-mentor` | 9 | 9 | 9 |
+
+Слайды — настоящие блоки сайта (дизайн, тексты и цифры 1:1, без кнопок). Пересборка:
+```bash
+cd site && npm run build && cd .. && node tools/decks2/build.js && python3 tools/decks/index_page.py
 ```
