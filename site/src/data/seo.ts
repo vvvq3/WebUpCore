@@ -24,7 +24,7 @@ export const SEO: Record<Lang, Record<PageKey, Meta>> = {
     },
     ai: {
       title: 'UpCore AI — эффективность ИИ и вайбкодинга в разработке, в часах и деньгах',
-      description: 'Сколько на самом деле экономит ИИ: время «вручную» против времени с ИИ по каждой задаче, автодетект ИИ-кода (точность 92%+), нормы токенов, промпт-ревью. Senior +100…300%, Junior −50…0% — измеряем и разгоняем.',
+      description: 'Сколько на самом деле экономит ИИ: время «вручную» против времени с ИИ по каждой задаче, автодетект ИИ-кода (точность 92%+), нормы токенов, промпт-ревью. Senior +50…300%, Junior −50…0% — измеряем и разгоняем.',
       keywords: 'эффективность ИИ в разработке, вайбкодинг, AI-ассистенты программирования, оценка эффекта Copilot, детект ИИ-кода, расходы на токены, внедрение ИИ в разработку, продуктивность с ИИ',
     },
     projects: {
@@ -66,7 +66,7 @@ export const SEO: Record<Lang, Record<PageKey, Meta>> = {
     },
     ai: {
       title: 'UpCore AI — the real impact of AI and vibe coding, in hours and money',
-      description: 'How much AI actually saves: manual time vs. time with AI for every task, AI-code detection (92%+ accuracy), token budgets, prompt review. Seniors +100–300%, juniors −50–0% — we measure it and help you speed up.',
+      description: 'How much AI actually saves: manual time vs. time with AI for every task, AI-code detection (92%+ accuracy), token budgets, prompt review. Seniors +50–300%, juniors −50–0% — we measure it and help you speed up.',
       keywords: 'AI coding productivity, vibe coding, AI coding assistants ROI, measure Copilot impact, AI-generated code detection, LLM token costs, AI adoption in engineering',
     },
     projects: {

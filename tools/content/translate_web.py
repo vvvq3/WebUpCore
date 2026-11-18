@@ -74,6 +74,10 @@ def translate_html(html):
             lead = re.match(r'\s*', ch).group(0)
             trail = re.search(r'\s*$', ch).group(0)
             out.append(lead + H.escape(tr(ch), quote=False) + trail)
+        elif norm(ch) and norm(ch) in load():  # раунд 94: строки без кириллицы, но с поправкой в словаре («35 merge request»)
+            lead = re.match(r'\s*', ch).group(0)
+            trail = re.search(r'\s*$', ch).group(0)
+            out.append(lead + H.escape(load()[norm(ch)], quote=False) + trail)
         else:
             out.append(en_numbers(ch))
     return ''.join(out)

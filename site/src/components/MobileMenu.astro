@@ -30,9 +30,7 @@ const pre = lang === 'ru' ? '/' : '/en/';
   <div class="uc-menu__bottom">
     <div class="uc-menu__btns">
       <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--ghost">{t.demo}</a>
-      {lang === 'ru'
-        ? <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--primary">{t.connect}</a>
-        : <a href={CONTACTS.app} class="uc-mbtn uc-mbtn--primary">{t.connect}</a>}
+      <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--primary">{t.connect}</a>
     </div>
     <div class="uc-menu__meta">
       <a href={CONTACTS.phoneHref} class="uc-menu__phone">

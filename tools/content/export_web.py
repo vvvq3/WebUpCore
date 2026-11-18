@@ -29,7 +29,7 @@ PAGES = {
     'blog-2': ('blog/2/', lambda: bp.blog_page2(2)),
     'blog-3': ('blog/3/', lambda: bp.blog_page2(3)),
 }
-# Раунды 82–86: русские страницы — новая версия по ТЗ владельца; EN пока прежняя.
+# Раунды 82–94: страницы — новая версия по ТЗ владельца (RU и перевод EN).
 # Прежняя версия сайта снята с публикации (раунд 88) — есть в истории git (коммит 9b7d65c, папка site/public/old/).
 # Откатить страницу к прежней версии — убрать её из RU_OVERRIDES.
 RU_OVERRIDES = {'home': bp.home_v2, 'grade': bp.grade_v2, 'ai': bp.ai_v2, 'projects': bp.proj_v2, 'mentor': bp.mentor_v2,
@@ -113,7 +113,7 @@ def main():
         ru = fonts(RU_OVERRIDES[key]()) if key in RU_OVERRIDES else html
         open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(ru, 'ru', route))
         if tr:
-            open(os.path.join(GEN, 'en', key + '.html'), 'w').write(localize(tr.translate_html(html), 'en', route))
+            open(os.path.join(GEN, 'en', key + '.html'), 'w').write(localize(tr.translate_html(ru), 'en', route))  # раунд 94: EN — перевод новой версии
     for key, (route, fn) in RU_EXTRA.items():
         open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(fonts(fn()), 'ru', route))
     for key in os.listdir(os.path.join(GEN, 'ru')):  # убрать устаревшие дополнительные страницы

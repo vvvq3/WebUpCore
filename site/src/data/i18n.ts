@@ -40,7 +40,7 @@ export const ui = {
   },
   en: {
     menu: 'Menu', close: 'Close menu', platform: 'Platform', blog: 'Blog', contacts: 'Contacts',
-    connect: 'Connect', demo: 'Book a demo',
+    connect: 'See the demo', demo: 'Book a demo',  // раунд 94: как в шапке новой версии
     products: {
       grade: 'developer grades and ranking',
       ai: 'AI and vibe-coding efficiency',
@@ -51,10 +51,10 @@ export const ui = {
       close: 'Close',
       titles: { demo: 'Book a demo', report: 'Get a sample report', audit: 'Order an audit', pilot: 'Book a free pilot' },
       leads: {
-        demo: 'We will walk you through UpCore on demo data and answer your questions. Leave your contacts — we will reply within one business day.',
+        demo: 'We’ll run a quick test on your data and answer your questions. Leave your contacts and we’ll get back to you within one business day.',
         report: 'We will send you a sample UpCore report and explain what it will show for your team.',
         audit: 'We will calculate the objective effort and budget of your project from its code. Tell us about the project and we will get in touch.',
-        pilot: 'We will verify UpCore accuracy on 2–3 of your repositories using 6 months of code history. Leave your contacts — we will reply within one business day.',
+        pilot: 'We’ll show UpCore at work on 2–3 of your repositories using 6 months of code history. Leave your contacts and we’ll get back to you within one business day.',
       },
       name: 'Name', company: 'Company', team: 'Team size', teamPh: 'Select',
       teamOpts: ['up to 10 developers', '10–50', '50–200', '200+'],
