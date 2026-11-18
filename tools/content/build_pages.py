@@ -1861,8 +1861,8 @@ def core_v2():
     rep('−140 тыс. ₽ в месяц</b> <span style="color: rgba(255,255,255,0.72);">— переплата за одного разработчика</span>',
         '−140 тыс. ₽ / мес</b> <span style="color: rgba(255,255,255,0.72);">— скрытые потери бюджета на одном разработчике (техдолг, переделки и простой)</span>')
     cards = ''.join('<div class="uc-core4" style="min-width: 0; border-radius: 20px; border: 1px solid rgba(99,213,255,0.3); background: rgba(99,213,255,0.04); padding: 22px; display: flex; flex-direction: column; gap: 8px;">'
-                    '<div class="uc-core4__t" style="font-size: 19px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em;">%s</div>'
-                    '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (e(a), e(b)) for a, b in CORE_V2_CARDS)
+                    '<div class="uc-core4__t" style="font-size: 19px; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em;%s">%s</div>'
+                    '<div style="color: rgba(255,255,255,0.74); font-size: 15px; line-height: 1.5;">%s</div></div>' % (' color: #63D5FF;' if a in ('Фильтрация 100% шума', 'Математика вместо ИИ') else '', e(a), e(b)) for a, b in CORE_V2_CARDS)  # раунд 91: два заголовка — фирменным голубым
     rep('</section>', '<div class="g4" style="margin-top: 16px;">%s</div></section>' % cards)
     return out
 
