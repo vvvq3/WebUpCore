@@ -63,6 +63,32 @@ def en_numbers(t):
     t = re.sub(r'(?<=\d),(?=\d)', '.', t)
     return re.sub(r'(?<=\d)[ \u00a0\u202f](?=\d{3}(?!\d))', ',', t)
 
+
+RUB_PER_USD = 100
+RUB_RE = re.compile(r'₽(\d+(?:\.\d+)?)(?:–(\d+(?:\.\d+)?))?([KM])?')
+
+def _usd(v, unit=None):
+    unit = unit or ('M' if v >= 10_000_000 else 'K' if v >= 10_000 else '')
+    if unit == 'M':
+        return '%d' % round(v / 1e6), 'M'
+    if unit == 'K':
+        return '%d' % round(v / 1e3), 'K'
+    return '{:,}'.format(int(round(v))), ''
+
+def rub_to_usd(t):
+    """Раунд 95: суммы в рублях на английских страницах → доллары по курсу 100 ₽ = $1, целыми числами (₽780K → $7,800, ₽6.5M → $65K)."""
+    def conv(m):
+        mult = {'K': 1e3, 'M': 1e6}.get(m.group(3), 1)
+        a = float(m.group(1)) * mult / RUB_PER_USD
+        if m.group(2):
+            b = float(m.group(2)) * mult / RUB_PER_USD
+            unit = 'M' if b >= 10_000_000 else 'K' if b >= 10_000 else ''
+            (x, u), (y, _) = _usd(a, unit), _usd(b, unit)
+            return '$%s–%s%s' % (x, y, u)
+        x, u = _usd(a)
+        return '$' + x + u
+    return RUB_RE.sub(conv, t)
+
 def translate_html(html):
     out = []
     for is_tag, ch in split_html(html):
@@ -80,7 +106,7 @@ def translate_html(html):
             out.append(lead + H.escape(load()[norm(ch)], quote=False) + trail)
         else:
             out.append(en_numbers(ch))
-    return ''.join(out)
+    return rub_to_usd(''.join(out))
 
 if __name__ == '__main__':
     gen = os.path.join(REPO, 'site', 'src', 'generated', 'ru')

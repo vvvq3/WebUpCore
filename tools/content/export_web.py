@@ -57,7 +57,10 @@ def localize(html, lang, route):
         if h.startswith('/blog/') and lang == 'en':
             return 'href="/en' + h + '"'
         return m.group(0)
-    return re.sub(r'href="([^"]*)"', href, html)
+    html = re.sub(r'href="([^"]*)"', href, html)
+    if lang == 'en':  # раунд 95: в английской версии блога нет — ссылки на него убираем
+        html = re.sub(r'<a href="/en/blog/[^"]*"[^>]*>.*?</a>', '', html, flags=re.S)
+    return html
 
 def css():
     m = re.search(r'<style>(.*?)</style>', bp.HELMET, re.S)
@@ -112,8 +115,12 @@ def main():
         html = fonts(fn())
         ru = fonts(RU_OVERRIDES[key]()) if key in RU_OVERRIDES else html
         open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(ru, 'ru', route))
-        if tr:
-            open(os.path.join(GEN, 'en', key + '.html'), 'w').write(localize(tr.translate_html(ru), 'en', route))  # раунд 94: EN — перевод новой версии
+        enf = os.path.join(GEN, 'en', key + '.html')
+        if key.startswith('blog'):  # раунд 95: в английской версии блога нет
+            if os.path.exists(enf):
+                os.remove(enf)
+        elif tr:
+            open(enf, 'w').write(localize(tr.translate_html(ru), 'en', route))  # раунд 94: EN — перевод новой версии
     for key, (route, fn) in RU_EXTRA.items():
         open(os.path.join(GEN, 'ru', key + '.html'), 'w').write(localize(fonts(fn()), 'ru', route))
     for key in os.listdir(os.path.join(GEN, 'ru')):  # убрать устаревшие дополнительные страницы

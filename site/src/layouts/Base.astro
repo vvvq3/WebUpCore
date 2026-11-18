@@ -26,6 +26,7 @@ const site = Astro.site!.toString().replace(/\/$/, '');
 const ruUrl = `${site}/${route}`;
 const enUrl = `${site}/en/${route}`;
 const canonical = lang === 'ru' ? ruUrl : enUrl;
+const hasEn = !page.startsWith('blog'); // раунд 95: английского блога нет — без hreflang на /en/blog/
 const ogLang = lang === 'ru' ? 'ru_RU' : 'en_US';
 const ogKey = page === '404' ? 'home' : page.replace(/-\d$/, '');
 const ogImage = `${site}/og/${lang}-${ogKey}.png`;
@@ -42,9 +43,9 @@ const t = ui[lang];
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
-    {!noindex && <link rel="alternate" hreflang="ru" href={ruUrl} />}
-    {!noindex && <link rel="alternate" hreflang="en" href={enUrl} />}
-    {!noindex && <link rel="alternate" hreflang="x-default" href={ruUrl} />}
+    {!noindex && hasEn && <link rel="alternate" hreflang="ru" href={ruUrl} />}
+    {!noindex && hasEn && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {!noindex && hasEn && <link rel="alternate" hreflang="x-default" href={ruUrl} />}
     <meta name="theme-color" content="#0D0C15" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

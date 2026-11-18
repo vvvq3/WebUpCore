@@ -24,7 +24,7 @@ const pre = lang === 'ru' ? '/' : '/en/';
       </a>
     ))}
     <a href={pre} class="uc-menu__plain" aria-current={page === 'home' ? 'page' : undefined}>{t.platform}</a>
-    <a href={`${pre}blog/`} class="uc-menu__plain" aria-current={page.startsWith('blog') ? 'page' : undefined}>{t.blog}</a>
+    {lang === 'ru' && <a href={`${pre}blog/`} class="uc-menu__plain" aria-current={page.startsWith('blog') ? 'page' : undefined}>{t.blog}</a>}
     <a href="#contacts" class="uc-menu__plain" data-menu-close>{t.contacts}</a>
   </nav>
   <div class="uc-menu__bottom">
