@@ -25,7 +25,7 @@
   шрифты Bricolage Grotesque + Onest (кириллица — Onest); мотив — голубой шеврон из логотипа `UP > CORE`. Ассеты — `docs/brand/`.
 - Контакты: +7 (985) 848-35-55, +7 (930) 066-46-20, office@dex-it.ru, Telegram @IvanGel_Dex, канал @upcore_ai.
 
-## Текущий статус (18.11.2026) — release1 (ветка и тег `release1`, развёртывание — `docs/DEPLOY.md`)
+## Текущий статус (18.11.2026) — release1 (ветка `release1`, развёртывание — `docs/DEPLOY.md`)
 - Холст: https://claude.ai/artifact/57F1KYxREb3qKCN4yMdioJ (страницы: дизайн главной, главная, Grade, AI, Projects, Mentor, Блог). Дизайн v3 «Командный центр» утверждён.
 - Снимки: **v1** (№51, `docs/design/v1/`), **v2** (№61, `docs/design/v2/`), **v3** (№76, id `1794664471-d8a6`, `docs/design/v3/`), **v4** (№99, id `1794687677-50ff`, `docs/design/v4/`), **v5** (№106, id `1794696370-ef90`, `docs/design/v5/`, ветка-снимок `upcore-v5` — свёрстанный сайт).
 - ✅ **Утверждены все страницы (раунд 63):** главная (`Home-A`), Grade (`Grade-3`), AI (`AI-main`), Projects (`Projects-main`), Mentor (`Mentor-main`), блог (`Blog-1..3`) — не менять без просьбы владельца.

@@ -1,6 +1,6 @@
 # Версия release1 — 18.11.2026
 
-Первая версия сайта UpCore, готовая к выкладке на боевой хостинг. Git: ветка **`release1`** и тег **`release1`**.
+Первая версия сайта UpCore, готовая к выкладке на боевой хостинг. Git: ветка **`release1`** (тег можно добавить на GitHub: Releases → Draft a new release → тег `release1`, цель — ветка `release1`).
 Показ: https://vvvq3.github.io/WebUpCore/ · Развёртывание — `docs/DEPLOY.md` · Устройство и правка — `docs/ARCHITECTURE.md`.
 
 ## Что входит
