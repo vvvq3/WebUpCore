@@ -298,7 +298,7 @@ function initCore() {
       };
       requestAnimationFrame(tick);
     }
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.42 });
+  }, { rootMargin: '0px 0px -15% 0px', threshold: 0 }); // раунд 90: старт, как только верх карточки поднялся выше 85% экрана (на телефоне карточка высокая)
   io.observe(box);
 }
 
