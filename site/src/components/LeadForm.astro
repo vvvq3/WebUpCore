@@ -32,7 +32,6 @@ const email = import.meta.env.PUBLIC_FORM_EMAIL || CONTACTS.email;
         </select>
       </label>
       <label class="uc-field"><span>{t.contact} *</span><input name="contact" required maxlength="160" placeholder={t.contactPh} /></label>
-      <label class="uc-field"><span>{t.comment}</span><textarea name="comment" rows="3" maxlength="2000" placeholder={t.commentPh}></textarea></label>
       <input type="text" name="website" tabindex="-1" autocomplete="off" class="uc-hp" aria-hidden="true" />
       <p class="uc-lead__error" role="alert" data-lead-error hidden></p>
       <button type="submit" class="uc-mbtn uc-mbtn--primary uc-lead__submit" data-lead-submit>{t.submit}</button>

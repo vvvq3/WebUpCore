@@ -197,7 +197,7 @@ function initLeadForm() {
     const labels = lang === 'ru'
       ? { name: 'Имя', company: 'Компания', team: 'Размер команды', contact: 'Контакт', comment: 'Комментарий', page: 'Страница' }
       : { name: 'Name', company: 'Company', team: 'Team size', contact: 'Contact', comment: 'Comment', page: 'Page' };
-    const lines = (['name', 'company', 'team', 'contact', 'comment'] as const)
+    const lines = (['name', 'company', 'team', 'contact'] as const)
       .map((k) => `${labels[k]}: ${String(fd.get(k) || '—')}`).concat(`${labels.page}: ${location.href}`);
     const subject = `UpCore — ${titles[topic]}`;
     location.href = `mailto:${dlg.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;

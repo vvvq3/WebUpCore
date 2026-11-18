@@ -30,9 +30,10 @@ PAGES = {
     'blog-3': ('blog/3/', lambda: bp.blog_page2(3)),
 }
 # Раунды 82–86: русские страницы — новая версия по ТЗ владельца; EN пока прежняя.
-# Весь прежний сайт (RU + EN) — статичный снимок в site/public/old/ (адрес /old/, noindex).
+# Прежняя версия сайта снята с публикации (раунд 88) — есть в истории git (коммит 9b7d65c, папка site/public/old/).
 # Откатить страницу к прежней версии — убрать её из RU_OVERRIDES.
-RU_OVERRIDES = {'home': bp.home_v2, 'grade': bp.grade_v2, 'ai': bp.ai_v2, 'projects': bp.proj_v2, 'mentor': bp.mentor_v2}
+RU_OVERRIDES = {'home': bp.home_v2, 'grade': bp.grade_v2, 'ai': bp.ai_v2, 'projects': bp.proj_v2, 'mentor': bp.mentor_v2,
+                'blog': lambda: bp.blog_v2(1), 'blog-2': lambda: bp.blog_v2(2), 'blog-3': lambda: bp.blog_v2(3)}
 RU_EXTRA = {}
 ANCHORS = {'#top': '', '#grade': 'grade/', '#ai': 'ai/', '#projects': 'projects/', '#mentor': 'mentor/', '#blog': 'blog/',
            '#grade-page': 'grade/', '#ai-page': 'ai/', '#projects-page': 'projects/', '#mentor-page': 'mentor/'}

@@ -188,7 +188,7 @@ def header(active=None):
     return ('<header style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; justify-content: space-between;">\n'
             '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;"><img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;"></a>\n'
             '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
-            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><a href="#lang" class="uc-hide-m uc-lang-d" style="color: rgba(255,255,255,0.78); text-decoration: none; ' + MONO + ' font-size: 13px; padding: 10px 6px; white-space: nowrap;">RU / EN</a>'
+            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">'
             '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else '') + ' class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
             '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a>' + burger + '</div>\n'
             '</header>')
@@ -202,7 +202,7 @@ def btn(text, href, primary=True, dark=False):
         st = 'background: #63D5FF; color: #0D0C15;' if primary else 'border: 1px solid rgba(255,255,255,0.22); color: #FFFFFF;'
     form = ''
     if MODE == 'web' and href.startswith('mailto:'):  # на сайте кнопки с почтой открывают форму заявки
-        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit', 'Заказать бесплатный пилот': 'pilot', 'Получить пример отчёта': 'report'}.get(text, 'demo')
+        form = ' data-form="%s"' % {'Провести демо': 'demo', 'Получить демо-отчёт': 'report', 'Заказать аудит': 'audit', 'Заказать бесплатный пилот': 'pilot', 'Получить пример отчёта': 'report', 'Открыть демо-стенд': 'demo', 'Посмотреть демо-стенд': 'demo'}.get(text, 'demo')
     return ('<a href="%s"%s style="display: inline-flex; align-items: center; box-sizing: border-box; min-height: 52px; padding: 0 28px; border-radius: 16px; %s font-weight: 700; font-size: 17px; text-decoration: none;">%s</a>' % (href, form, st, e(text)))
 
 REG = 'https://demo.up-core.ru/'
@@ -1869,8 +1869,9 @@ def core_v2():
 # ---------------------------------------------------------------- раунд 86: общие блоки новой версии сайта (главная + 4 продукта)
 def header_v2(active):
     hdr = header(active)
-    assert hdr.count('>Подключить</a>') == 1
-    return hdr.replace('>Подключить</a>', '>Открыть демо</a>')  # шапка: «Провести демо» (форма) + «Открыть демо» (демо-стенд)
+    assert hdr.count('>Подключить</a>') == 1 and hdr.count('<a href="' + REG + '"') == 1
+    # раунд 88: «Открыть демо» — как и «Провести демо», открывает форму «Провести демо» (не демо-стенд)
+    return hdr.replace('>Подключить</a>', '>Открыть демо</a>').replace('<a href="' + REG + '"', '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else ''))
 
 def saas_v2():
     saas = saas_variant(2, left_title='Развёртывание и первый отчёт за 1 час',
@@ -1886,10 +1887,19 @@ def saas_v2():
     return saas.replace(t19, '<div class="uc-saas-t" style="font-size: 19px; font-weight: 700; line-height: 1.25;">')  # заголовки карточек — одной высоты (global.css)
 
 def cta_v2(h2, sub):
-    return cta(h2, sub, ('Заказать бесплатный пилот', MAIL), second=('Открыть демо-стенд', REG))
+    return cta(h2, sub, ('Заказать бесплатный пилот', MAIL), second=('Открыть демо-стенд', DEMO))
 
 def hero_ctas_v2(second):
-    return btn('Открыть демо-стенд', REG) + btn(second, MAIL, False)
+    return btn('Открыть демо-стенд', DEMO) + btn(second, MAIL, False)
+
+def blog_v2(n):
+    """Раунд 88: блог в новой шапке и с нижним блоком как на остальных страницах."""
+    html = blog_page2(n)
+    old_h = header('blog')
+    old_c = cta('Посмотрите на свою команду глазами цифрового тимлида', 'Подключите репозиторий — первые результаты за 1 день.', ('Подключить UpCore', REG))
+    assert old_h in html and old_c in html
+    return html.replace(old_h, header_v2('blog')).replace(old_c, cta_v2('Посмотрите на свою команду глазами цифрового тимлида',
+                                                                       'Бесплатный пилот на 2–3 репозиториях — первые результаты по истории кода за 6 месяцев уже через 1 час.'))
 
 def rich(t):
     """Текст с **жирным** началом: экранирование + <b>."""
@@ -2081,8 +2091,8 @@ def mentor_v2():
     return page('UpCore Mentor — v2', '\n'.join(body), 5000, name='Mentor-v2')
 
 def home_v2():
-    h1 = 'Цифровой тимлид для [[автоматической оценки эффективности]] вашей разработки'
-    sub = 'Математическая модель переводит каждый Merge Request в реальные человеко-часы и рубли — напрямую по коду из Git, без тайм-трекеров и отчётов.'
+    h1 = 'Цифровой тимлид [[автоматически оценивает эффективность]] вашей разработки'
+    sub = 'Математическая модель переводит код в реальные человеко-часы и рубли, без тайм-трекеров и отчётов.'
     st = [('96%', 'совпадение с оценкой Senior'), ('1500+', 'разработчиков проанализировано'),
           ('+14%', 'рост выработки команды за первые 3 месяца'), ('≈780 тыс. ₽', 'экономии в год на каждого разработчика')]
     visual = slider_console() if MODE == 'dc' else (slider_web() if MODE == 'web' else static_slider_preview())
@@ -2093,7 +2103,7 @@ def home_v2():
                          foot='База консервативного расчёта: 100 разработчиков при минимальной базовой ставке 250 тыс. ₽/мес (ФОТ 25 млн ₽/мес) и ставке тимлида 400 тыс. ₽/мес. '
                               'При корпоративном ФОТ 400–600 тыс. ₽/мес на инженера экономический эффект увеличивается в 1,6–2,4 раза.')
     saas = saas_v2()
-    top = hero('', h1, sub, [btn('Посмотреть демо-стенд', REG), btn('Заказать бесплатный пилот', MAIL, False)], st, visual)
+    top = hero('', h1, sub, [btn('Посмотреть демо-стенд', DEMO), btn('Заказать бесплатный пилот', MAIL, False)], st, visual)
     top = top.replace('<div class="uc-btns">', '<div class="uc-btns uc-btns--hero2">', 1)
     top = top.replace('<section id="top" style=', '<section id="top" class="uc-hero2" style=', 1).replace('<div style="flex: 1 1 500px;', '<div class="uc-hero2-l" style="flex: 1 1 500px;', 1)  # длинные подписи кнопок — в одну строку (site/src/styles/global.css)
     body = [hdr, top,
