@@ -147,7 +147,9 @@ function initLeadForm() {
     (form.elements.namedItem('topic') as HTMLInputElement).value = topic;
     body.hidden = false; done.hidden = true; errEl.hidden = true;
     if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
-    (form.elements.namedItem('name') as HTMLInputElement).focus();
+    // раунд 89: на телефоне курсор в поле не ставим — человек сначала видит всю форму (без клавиатуры)
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) (form.elements.namedItem('name') as HTMLInputElement).focus();
+    else { dlg.setAttribute('tabindex', '-1'); dlg.focus({ preventScroll: true }); dlg.scrollTop = 0; } // фокус на окне, а не в поле — клавиатура не открывается
     goal('form_open_' + topic);
   };
   document.addEventListener('click', (ev) => {
