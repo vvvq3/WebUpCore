@@ -27,6 +27,9 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - name: Сборка сайта
         working-directory: site
+        env:
+          # Заявки с формы — письмом на office@dex-it.ru через FormSubmit (без своего сервера). Первую заявку подтверждают по ссылке из письма FormSubmit.
+          PUBLIC_FORM_ENDPOINT: https://formsubmit.co/ajax/office@dex-it.ru
         run: npm ci && npm run build
       - name: Копия для GitHub Pages
         run: python3 tools/content/preview_bundle.py --pages ghp

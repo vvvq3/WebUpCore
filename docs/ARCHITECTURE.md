@@ -121,7 +121,8 @@ WebUpCore/
   - ≥ 1360 px — полная: «Платформа · [UpCore. ● Grade ● AI ● Projects ● Mentor] · Блог · Контакты», RU/EN, «Провести демо», «Подключить».
   - 1161–1359 px — компактная (без подписи «UpCore.»); 1161–1239 px — ещё без RU/EN.
   - ≤ 1160 px — логотип, «Подключить» и бургер → меню на весь экран (`MobileMenu.astro`).
-- **Форма заявки.** Кнопки с `data-form="demo|report|audit"` открывают одну форму с нужной темой. Поля: имя, компания, размер команды, контакт, комментарий.
+- **Форма заявки.** Кнопки с `data-form="demo|report|audit|pilot"` открывают одну форму с нужной темой. Поля: имя, компания, размер команды, контакт.
+  На GitHub Pages заявки уходят письмом на office@dex-it.ru через FormSubmit (`PUBLIC_FORM_ENDPOINT` в `.github/workflows/pages.yml`; один раз подтвердить письмо «Activate Form»). На хостинге в РФ — `site/deploy/form-handler.php` (почта + Telegram по TG_BOT_TOKEN / TG_CHAT_ID). Если отправка не удалась — открывается письмо с заполненной заявкой.
   Если задан `PUBLIC_FORM_ENDPOINT` — отправка POST на этот адрес, иначе открывается письмо на `PUBLIC_FORM_EMAIL` с заполненными полями.
 - **Яндекс Метрика.** `PUBLIC_YM_ID` → появляется cookie-баннер; счётчик грузится только после согласия.
   Цели: `connect`, `form_open_*`, `form_sent_*`, `phone`, `telegram`, `email`, `channel`.

@@ -180,28 +180,39 @@ function initLeadForm() {
       done.querySelector('[data-lead-done-title]')!.textContent = title;
       done.querySelector('[data-lead-done-text]')!.textContent = text;
     };
+    const labels = lang === 'ru'
+      ? { name: 'Имя', company: 'Компания', team: 'Размер команды', contact: 'Контакт', page: 'Страница', topic: 'Тема' }
+      : { name: 'Name', company: 'Company', team: 'Team size', contact: 'Contact', page: 'Page', topic: 'Topic' };
+    const subject = `UpCore — ${titles[topic]}`;
     if (endpoint) {
       submit.disabled = true; submit.textContent = dlg.dataset.msgSending || '';
+      let sent = false;
       try {
-        const r = await fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-        if (!r.ok) throw new Error(String(r.status));
+        // раунд 92: FormSubmit (письмо на почту без своего сервера) — поля с русскими подписями, тема письма, без капчи
+        let payload: FormData = fd;
+        if (endpoint.includes('formsubmit.co')) {
+          payload = new FormData();
+          payload.append(labels.topic, titles[topic]);
+          (['name', 'company', 'team', 'contact'] as const).forEach((k) => payload.append(labels[k], String(fd.get(k) || '—')));
+          payload.append(labels.page, location.href);
+          payload.append('_subject', subject); payload.append('_template', 'table'); payload.append('_captcha', 'false');
+        }
+        const r = await fetch(endpoint, { method: 'POST', body: payload, headers: { Accept: 'application/json' } });
+        const j = await r.json().catch(() => ({}));
+        sent = r.ok && j.success !== false && j.success !== 'false' && j.ok !== false;
+      } catch { sent = false; }
+      submit.disabled = false; submit.textContent = dlg.dataset.msgSubmit || '';
+      if (sent) {
         goal('form_sent_' + topic);
         form.reset();
         showDone(dlg.dataset.msgOkTitle || '', dlg.dataset.msgOkText || '');
-      } catch {
-        errEl.textContent = dlg.dataset.msgError || ''; errEl.hidden = false;
-      } finally {
-        submit.disabled = false; submit.textContent = dlg.dataset.msgSubmit || '';
+        return;
       }
-      return;
+      // не дошло (сервис недоступен или форма ещё не активирована) — заявку не теряем: открываем письмо с заполненными полями
     }
     // Нет обработчика — письмо на почту с заполненной заявкой.
-    const labels = lang === 'ru'
-      ? { name: 'Имя', company: 'Компания', team: 'Размер команды', contact: 'Контакт', comment: 'Комментарий', page: 'Страница' }
-      : { name: 'Name', company: 'Company', team: 'Team size', contact: 'Contact', comment: 'Comment', page: 'Page' };
     const lines = (['name', 'company', 'team', 'contact'] as const)
       .map((k) => `${labels[k]}: ${String(fd.get(k) || '—')}`).concat(`${labels.page}: ${location.href}`);
-    const subject = `UpCore — ${titles[topic]}`;
     location.href = `mailto:${dlg.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
     goal('form_sent_' + topic, { via: 'mailto' });
     showDone(dlg.dataset.msgMailTitle || '', dlg.dataset.msgMailText || '');
