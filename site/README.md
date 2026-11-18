@@ -1,5 +1,7 @@
 # Сайт UpCore (up-core.ru)
 
+**Развёртывание на боевом хостинге (up-core.ru) — `docs/DEPLOY.md`.** Конфиги: `deploy/nginx.conf`, `deploy/form-handler.php`, `deploy/deploy.yml.example`.
+
 > Полная архитектура, правка и публикация — **`docs/ARCHITECTURE.md`** в корне репозитория.
 
 Astro + TypeScript + Tailwind. Статический сайт: RU (`/`) и EN (`/en/`), 8 страниц на язык —

@@ -12,7 +12,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'ru', locales: { ru: 'ru-RU', en: 'en-US' } },
-      filter: (page) => !page.includes('/404') && !page.includes('/old/'),
+      filter: (page) => !page.includes('/404'),
     }),
   ],
   // приведение типа: у @tailwindcss/vite и Astro разные версии типов Vite (на сборку не влияет)

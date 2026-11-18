@@ -1,0 +1,44 @@
+# Шаблон автодеплоя на боевой хостинг (up-core.ru). Скопировать в .github/workflows/deploy.yml и заполнить.
+# Секреты репозитория (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST, DEPLOY_USER, DEPLOY_PATH (например /var/www/up-core.ru), DEPLOY_SSH_KEY (закрытый ключ),
+#   PUBLIC_YM_ID (номер счётчика Метрики, по желанию).
+# Обработчик формы: положить site/deploy/form-handler.php в site/public/api/lead.php — тогда он выкладывается вместе с сайтом.
+name: Deploy up-core.ru
+
+on:
+  push:
+    branches: [release1]        # ветка, из которой выкладывается боевой сайт
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Сборка
+        working-directory: site
+        env:
+          PUBLIC_FORM_ENDPOINT: /api/lead.php
+          PUBLIC_FORM_EMAIL: office@dex-it.ru
+          PUBLIC_YM_ID: ${{ secrets.PUBLIC_YM_ID }}
+        run: npm ci && npm run build
+      - name: Выкладка по SSH (rsync)
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && echo "$SSH_KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy" site/dist/ "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/"
+      # Вариант для Yandex Object Storage вместо rsync (секреты YC_KEY_ID, YC_SECRET, YC_BUCKET):
+      # - name: Выкладка в Object Storage
+      #   env: { AWS_ACCESS_KEY_ID: '${{ secrets.YC_KEY_ID }}', AWS_SECRET_ACCESS_KEY: '${{ secrets.YC_SECRET }}', AWS_DEFAULT_REGION: ru-central1 }
+      #   run: aws s3 sync site/dist/ "s3://${{ secrets.YC_BUCKET }}/" --endpoint-url=https://storage.yandexcloud.net --delete
