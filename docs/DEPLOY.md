@@ -10,6 +10,7 @@
 - Ветки: `develop` (рабочая), `main`, `feat/proto`; **`old-site`** — сохранённая прежняя версия (лендинг на Next.js, коммит `ffaf580`).
 - Устройство: в корне репозитория — проект сайта (содержимое нашей папки `site/` без `deploy/`), **`Dockerfile`** (node:22-alpine → `npm ci` → `npm run build` → nginx:alpine со статикой из `dist/`), **`nginx.conf`**, `.dockerignore`, `.gitversion.yml` (их, версии образов по веткам), `README.md` (= наш `site/README.landing.md`).
 - Форма — FormSubmit (`PUBLIC_FORM_ENDPOINT` задан по умолчанию в Dockerfile); Метрика — `--build-arg PUBLIC_YM_ID=…`.
+- Залито 19.11.2026: ветка `feature/new-site` (коммит `a0ec1db`) → **Merge Request !1 в `develop`**: https://git.dextechnology.com/ai/rnd/upcore/landing/-/merge_requests/1 (конфликтов нет; после принятия выкладка — их обычным способом).
 - Обновление: правки в нашем репозитории → `site/` → те же файлы в `landing` (ветка `feature/…` → Merge Request в `develop`). Docker-сборка и nginx проверены локально (14 страниц, `check_layout`/`check_interactions` — 0 проблем).
 
 ## 0. Коротко: что такое этот сайт
