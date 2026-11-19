@@ -11,6 +11,7 @@
 - Устройство: в корне репозитория — проект сайта (содержимое нашей папки `site/` без `deploy/`), **`Dockerfile`** (node:22-alpine → `npm ci` → `npm run build` → nginx:alpine со статикой из `dist/`), **`nginx.conf`**, `.dockerignore`, `.gitversion.yml` (их, версии образов по веткам), `README.md` (= наш `site/README.landing.md`).
 - Форма (раунд 99): письмо — FormSubmit (`PUBLIC_FORM_ENDPOINT` в Dockerfile; в GitLab — на личную почту владельца), копия — в Telegram через `nginx/lead.js` (`/api/lead`). **На хостинге при запуске контейнера задать `TG_BOT_TOKEN` и `TG_CHAT_ID`** (секреты, в репозиторий не класть) и разрешить исходящие запросы к `api.telegram.org:443`. Метрика — `--build-arg PUBLIC_YM_ID=…`.
 - Залито 19.11.2026: ветка `feature/new-site` (коммит `a0ec1db`) → **Merge Request !1 в `develop`**: https://git.dextechnology.com/ai/rnd/upcore/landing/-/merge_requests/1 (конфликтов нет). **19.11.2026 по решению владельца слито в `develop`** (fast-forward, `develop` = `5e9a4ed`, вместе с обновлённым README); MR !1 закрывается как слитый.
+- **R3 (19.11.2026):** `develop` = `8dd21f5` — версия R3 (ветка `release3` у нас): спокойные анимации, быстрая загрузка. Для выкладки — обычная сборка образа из `develop` + переменные `TG_BOT_TOKEN` / `TG_CHAT_ID`.
 - Обновление: правки в нашем репозитории → `site/` → те же файлы в `landing` (ветка `feature/…` → Merge Request в `develop`). Docker-сборка и nginx проверены локально (14 страниц, `check_layout`/`check_interactions` — 0 проблем).
 
 ## 0. Коротко: что такое этот сайт
