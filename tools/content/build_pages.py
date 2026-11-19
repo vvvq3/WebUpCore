@@ -267,11 +267,21 @@ def slider_console():
 </div>
 </div>"""
 
+def compact_logo(svg):
+    paths = re.findall(r'<path[^>]*d="([^"]*)"[^>]*fill="([^"]*)"', svg)
+    def rnd(d):
+        d = re.sub(r'-?\d+\.\d+', lambda m: ('%.2f' % float(m.group(0))).rstrip('0').rstrip('.'), d)
+        d = re.sub(r'(?<=[A-Za-z])\s+', '', d)
+        d = re.sub(r'\s+(?=[A-Za-z])', '', d)
+        return d.replace(' -', '-')
+    return ('<svg xmlns="http://www.w3.org/2000/svg" width="269" height="42" viewBox="0 0 268.356 41.7232" fill="none">'
+            + ''.join('<path d="%s" fill="%s"/>' % (rnd(d), '#fff' if f == 'white' else f) for d, f in paths) + '</svg>\n')
+
 def header_logo():
     """Раунд 102: логотип в шапке встроен в HTML (SVG), а не отдельной картинкой — появляется сразу вместе со страницей."""
     if MODE != 'web':
         return '<img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;">'
-    svg = open(os.path.join(REPO, 'site', 'public', 'img', 'logo.svg'), encoding='utf-8').read().strip()
+    svg = compact_logo(open(os.path.join(REPO, 'docs', 'brand', 'logo.svg'), encoding='utf-8').read()).strip()
     return svg.replace('<svg ', '<svg class="uc-hlogo" role="img" aria-label="UpCore" style="height: 28px; width: auto; display: block;" ', 1)
 
 def slider_web():
