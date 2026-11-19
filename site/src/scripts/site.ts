@@ -310,7 +310,7 @@ function initTheme() {
     const isLight = root.getAttribute('data-theme') === 'light';
     btns.forEach((b) => {
       b.setAttribute('aria-pressed', String(isLight));
-      if (b.classList.contains('uc-theme')) {
+      if (b.classList.contains('uc-theme') || b.classList.contains('uc-theme-m')) {
         const label = isLight ? 'Включить тёмную тему' : 'Включить светлую тему';
         b.setAttribute('aria-label', label); b.title = isLight ? 'Тёмная тема' : 'Светлая тема';
       }

@@ -30,16 +30,14 @@ const pre = lang === 'ru' ? '/' : '/en/';
   </nav>
   <div class="uc-menu__bottom">
     <div class="uc-menu__btns">
-      <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--ghost">{t.demo}</a>
-      <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--primary">{t.connect}</a>
+      <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--primary">{t.demo}</a>
+      {lang === 'ru' && (
+        <button type="button" class="uc-mbtn uc-mbtn--ghost uc-theme-m" data-theme-toggle aria-label="Включить светлую тему" title="Светлая тема">
+          <svg class="uc-ic-sun" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
+          <svg class="uc-ic-moon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" /></svg>
+        </button>
+      )}
     </div>
-    {lang === 'ru' && (
-      <button type="button" class="uc-mbtn uc-mbtn--ghost uc-theme-m" data-theme-toggle aria-label="Сменить тему">
-        <svg class="uc-ic-sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
-        <svg class="uc-ic-moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" /></svg>
-        <span class="uc-t-light">Светлая тема</span><span class="uc-t-dark">Тёмная тема</span>
-      </button>
-    )}
     <div class="uc-menu__meta">
       <a href={CONTACTS.phoneHref} class="uc-menu__phone">
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z" fill="currentColor"/></svg>
