@@ -5,6 +5,13 @@
 
 ---
 
+## ⭐ Репозиторий компании для хостинга (раунд 98)
+Сайт выкладывается из GitLab Dex: **https://git.dextechnology.com/ai/rnd/upcore/landing** (доступ — только из сети/VPN компании; из облачной сессии Claude — 403, работа идёт через Mac владельца, клон `~/upcore-landing`).
+- Ветки: `develop` (рабочая), `main`, `feat/proto`; **`old-site`** — сохранённая прежняя версия (лендинг на Next.js, коммит `ffaf580`).
+- Устройство: в корне репозитория — проект сайта (содержимое нашей папки `site/` без `deploy/`), **`Dockerfile`** (node:22-alpine → `npm ci` → `npm run build` → nginx:alpine со статикой из `dist/`), **`nginx.conf`**, `.dockerignore`, `.gitversion.yml` (их, версии образов по веткам), `README.md` (= наш `site/README.landing.md`).
+- Форма — FormSubmit (`PUBLIC_FORM_ENDPOINT` задан по умолчанию в Dockerfile); Метрика — `--build-arg PUBLIC_YM_ID=…`.
+- Обновление: правки в нашем репозитории → `site/` → те же файлы в `landing` (ветка `feature/…` → Merge Request в `develop`). Docker-сборка и nginx проверены локально (14 страниц, `check_layout`/`check_interactions` — 0 проблем).
+
 ## 0. Коротко: что такое этот сайт
 
 - **Полностью статический сайт.** После сборки получается папка `site/dist/` с готовыми HTML, CSS, JS, шрифтами и картинками (~5,5 МБ, 17 страниц). Серверный код не нужен — только раздача файлов.
