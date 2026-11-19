@@ -238,16 +238,17 @@ function initLeadForm() {
 
 /* ---------------- Слайдер скриншотов (главная) ---------------- */
 function initSlider() {
-  // Раунд 100: спокойнее — экран держится 5 с, затем плавно сменяется следующим (0,7 с), без бегущей полосы.
+  // Раунд 101: возвращён эффект раунда 77 — голубая полоса идёт сверху вниз за 1,5 с и «рисует» новый экран
+  // (выше полосы уже новый, ниже — ещё старый). Между сменами экран держится 5 с (раунд 100 — спокойнее).
   // Пауза при наведении мыши, когда окно вне экрана и когда вкладка скрыта; при «уменьшить движение» — без автосмены.
   document.querySelectorAll<HTMLElement>('[data-slider]').forEach((box) => {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
     const scan = box.querySelector<HTMLElement>('.uc-scan');
     const keyEl = box.querySelector('[data-slide-key]');
     const numEl = box.querySelector('[data-slide-num]');
-    if (scan) scan.remove();
-    const HOLD = 5000; // сколько показывается экран, мс
-    const FADE = 700;  // смена экрана, мс
+    if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
+    const WIPE = 1500; // проход полосы = смена экрана, мс
+    const HOLD = 5000; // сколько показывается экран между сменами, мс
     const n = imgs.length;
     if (n < 2 || reduced || !imgs[0].animate) return;
     let idx = 0;
@@ -258,7 +259,7 @@ function initSlider() {
     imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
     const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
     const canRun = () => visible && !hover && !document.hidden;
-    const schedule = () => { window.clearTimeout(timer); if (canRun()) timer = window.setTimeout(step, HOLD); };
+    const schedule = () => { window.clearTimeout(timer); if (!busy && canRun()) timer = window.setTimeout(step, HOLD); };
     const step = () => {
       if (busy || !canRun()) return;
       busy = true;
@@ -271,10 +272,12 @@ function initSlider() {
       next.style.visibility = 'visible'; next.style.zIndex = '2';
       if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
       if (numEl) numEl.textContent = String(idx + 1).padStart(2, '0');
-      const fade = next.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE, easing: 'ease-in-out', fill: 'forwards' });
-      fade.onfinish = () => {
+      const wipe = next.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: WIPE, easing: 'linear', fill: 'forwards' });
+      if (scan) { scan.style.opacity = '1'; scan.animate([{ top: '0%' }, { top: '100%' }], { duration: WIPE, easing: 'linear' }); }
+      wipe.onfinish = () => {
         old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1';
-        fade.cancel(); next.style.opacity = '';
+        wipe.cancel(); next.style.clipPath = '';
+        if (scan) scan.style.opacity = '0';
         busy = false;
         schedule();
       };
