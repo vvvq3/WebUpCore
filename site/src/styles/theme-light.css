@@ -9,6 +9,9 @@ html[data-theme="light"] .uc-logo-l { display: inline !important; }
 /* раунд 107: логотип в шапке (встроенный SVG) — UP и шеврон чуть темнее на светлом фоне */
 html[data-theme="light"] .uc-hlogo [fill="#63D5FF"] { fill: #1FA8E0; }
 
+/* раунд 108: Grade в названиях продукта — цвета логотипа */
+html[data-theme="light"] .uc-pm-grade { color: #1FA8E0 !important; }
+
 /* переключатель темы: в тёмной теме — солнце («включить светлую»), в светлой — луна («включить тёмную») */
 .uc-theme .uc-ic-moon, .uc-theme-m .uc-ic-moon { display: none; }
 html[data-theme="light"] .uc-theme .uc-ic-sun, html[data-theme="light"] .uc-theme-m .uc-ic-sun { display: none; }

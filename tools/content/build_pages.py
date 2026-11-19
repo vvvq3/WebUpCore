@@ -176,9 +176,9 @@ def header(active=None):
     for name, key in [('Grade', 'grade'), ('AI', 'ai'), ('Projects', 'projects'), ('Mentor', 'mentor')]:
         c = ACC[key][1]
         if key == active:
-            chips += '<a href="#' + key + '" aria-current="page" style="display: inline-flex; align-items: center; padding: 8px 11px; border-radius: 10px; background: ' + c + '; color: #0D0C15; font-weight: 700; text-decoration: none;">' + name + '</a>'
+            chips += '<a href="#' + key + '" aria-current="page" class="uc-pname" style="display: inline-flex; align-items: center; padding: 8px 11px; border-radius: 10px; background: ' + c + '; color: #0D0C15; font-weight: 700; text-decoration: none;">' + name + '</a>'
         else:
-            chips += ('<a href="#' + key + '" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; color: #FFFFFF; text-decoration: none;">'
+            chips += ('<a href="#' + key + '" class="uc-pname" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border-radius: 10px; color: #FFFFFF; text-decoration: none;">'
                       '<span style="width: 8px; height: 8px; border-radius: 50%; background: ' + c + ';"></span>' + name + '</a>')
     capsule = ('<span style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; margin: 0 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03);">'
                '<span class="uc-cap-l" style="' + MONO + ' font-size: 13px; color: rgba(255,255,255,0.5); padding: 0 6px 0 8px;">UpCore.</span>' + chips + '</span>')
@@ -1300,8 +1300,8 @@ def mod_name(key, mod, size='clamp(34px, 8.6vw, 60px)', whole=False):
     """Название модуля через точку: UpCore.Grade — крупно, модуль акцентным цветом."""
     line, txt = ACC[key]
     head_col = txt if whole else '#FFFFFF'
-    return ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: %s; line-height: 0.95; letter-spacing: -0.035em;">'
-            '<span style="color: %s;">UpCore</span><span style="color: %s;">.<wbr>%s</span></div>') % (size, head_col, txt, mod)
+    return ('<div class="uc-pname" style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: %s; line-height: 0.95; letter-spacing: -0.035em;">'
+            '<span style="color: %s;">UpCore</span><span class="uc-pm uc-pm-%s" style="color: %s;">.<wbr>%s</span></div>') % (size, head_col, key, txt, mod)
 
 def more_link(key, more):
     return ('<a href="#%s-page" style="font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; color: %s;">%s</a>' % (key, ACC[key][1], e(more)))
@@ -1349,12 +1349,12 @@ def platform_variant(n):
             line, txt = ACC[key]
             cards.append('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1F 0%%, #1A1925 45%%); border: 1px solid %s55; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
                          '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; %s font-size: 13px; color: rgba(255,255,255,0.62);"><span>%s</span><span>%s</span></div>'
-                         '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
+                         '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span class="uc-pname uc-pm uc-pm-%s" style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
                          '<h3 style="margin: 0; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -0.01em; line-height: 1.2; color: #FFFFFF;">%s</h3>'
                          '<p style="%s">%s</p>'
                          '<div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">'
                          '<span style="font-size: 16px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span>%s</div></article>' % (
-                             line, line, MONO, num, e(roles), line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), P_DESC, e(p), e(q), more_link(key, more)))
+                             line, line, MONO, num, e(roles), key, line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), P_DESC, e(p), e(q), more_link(key, more)))
         body = '<div class="g2">%s</div>' % ''.join(cards)
     return section(sec_head(*PLATFORM_HEAD) + body, 'products')
 
@@ -1704,8 +1704,8 @@ GRADE_STATS = [('96%', 'точность экспертной оценки на 
 
 def grade_hero(h1, sub, visual, kicker=None, st=None, ctas=None):
     line, txt = ACC['grade']
-    name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
-            '<span style="color: #63D5FF;">&gt;</span><span>UpCore<span style="color: #63D5FF;">.Grade</span></span></div>')
+    name = ('<div class="uc-pname" style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
+            '<span class="uc-pm uc-pm-grade" style="color: #63D5FF;">&gt;</span><span>UpCore<span class="uc-pm uc-pm-grade" style="color: #63D5FF;">.Grade</span></span></div>')
     kick = ('<div style="font-size: 19px; color: rgba(255,255,255,0.72); font-style: italic;">' + e(kicker) + '</div>') if kicker else ''
     ctas = ctas or (btn('Подключить UpCore', REG) + btn('Получить демо-отчёт', MAIL, False))
     return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">' + CHEVRON +
@@ -1864,13 +1864,13 @@ def platform_v2():
                         '<span aria-hidden="true" style="color: %s; font-weight: 800;">&gt;</span><span><b style="color: #FFFFFF; font-weight: 700;">%s</b> %s</span></li>' % (txt, e(a), e(b)) for a, b in lis)
         cards.append('<article style="min-width: 0; border-radius: 28px; background: linear-gradient(160deg, %s1F 0%%, #1A1925 45%%); border: 1px solid %s55; padding: clamp(24px, 3vw, 40px); display: flex; flex-direction: column; gap: 16px;">'
                      '<div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; %s font-size: 13px; color: rgba(255,255,255,0.62);"><span>%s</span><span>%s</span></div>'
-                     '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
+                     '<div style="display: flex; align-items: baseline; gap: 10px; min-width: 0;"><span class="uc-pname uc-pm uc-pm-%s" style="font-family: \'Bricolage Grotesque\', sans-serif; font-weight: 800; font-size: clamp(30px, 7vw, 48px); color: %s; line-height: 1;">&gt;</span><div style="min-width: 0;">%s</div></div>'
                      '<h3 style="margin: 0; font-size: clamp(20px, 1.8vw, 24px); letter-spacing: -0.01em; line-height: 1.2; color: #FFFFFF;">%s</h3>'
                      '<div style="border-radius: 12px; background: %s14; border-left: 3px solid %s; padding: 12px 16px; font-size: 16px; line-height: 1.5; color: rgba(255,255,255,0.88);"><b style="color: %s;">Факт:</b> %s</div>'
                      '<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px;">%s</ul>'
                      '<div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 0 12px; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">'
                      '<span style="flex: 1 1 200px; min-width: 0; font-size: 16px; color: rgba(255,255,255,0.62); font-style: italic;">%s</span><span style="flex: 0 0 auto;">%s</span></div></article>' % (
-                         line, line, MONO, num, e(roles), line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), line, line, txt, e(fact), items, e(q), more_link(key, more)))
+                         line, line, MONO, num, e(roles), key, line, mod_name(key, mod, 'clamp(32px, 7.6vw, 54px)'), e(t), line, line, txt, e(fact), items, e(q), more_link(key, more)))
     head = ('ПЛАТФОРМА UPCORE', 'Одна платформа — четыре задачи C-Level', 'Один read-only коннект к Git закрывает контроль грейдов, ROI от ИИ, бюджетов и код-ревью.')
     return section(sec_head(*head) + '<div class="g2">%s</div>' % ''.join(cards), 'products')
 
@@ -1905,7 +1905,11 @@ def header_v2(active):
     hdr = header(active)
     assert hdr.count('>Подключить</a>') == 1 and hdr.count('<a href="' + REG + '"') == 1
     # раунд 88: «Открыть демо» — как и «Провести демо», открывает форму «Провести демо» (не демо-стенд)
-    return hdr.replace('>Подключить</a>', '>Открыть демо</a>').replace('<a href="' + REG + '"', '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else ''))
+    hdr = hdr.replace('>Подключить</a>', '>Открыть демо</a>').replace('<a href="' + REG + '"', '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else ''))
+    # раунд 108: в шапке одна синяя кнопка «Провести демо» (контурная «Провести демо» убрана)
+    ghost = re.search(r'<a href="[^"]*"(?: data-form="demo")? class="uc-hide-m"[^>]*>Провести демо</a>', hdr)
+    assert ghost, 'нет контурной кнопки в шапке'
+    return hdr.replace(ghost.group(0), '', 1).replace('>Открыть демо</a>', '>Провести демо</a>', 1)
 
 def saas_v2():
     saas = saas_variant(2, left_title='Развёртывание и первый отчёт за 1 час',
@@ -2362,8 +2366,8 @@ MODC = {'ai': ('AI', '02', 'ЭФФЕКТИВНОСТЬ ИИ И ВАЙБКОДИ�
 
 def mod_hero(key, h1, sub, visual, st, ctas=None):
     line, txt = ACC[key]; mod, num, lab, rl = MODC[key]
-    name = ('<div style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
-            '<span style="color: ' + line + ';">&gt;</span><span>UpCore<span style="color: ' + txt + ';">.' + mod + '</span></span></div>')
+    name = ('<div class="uc-pname" style="font-family: \'Bricolage Grotesque\', \'Onest\', sans-serif; font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.035em; display: flex; align-items: baseline; gap: 12px;">'
+            '<span class="uc-pm uc-pm-' + key + '" style="color: ' + line + ';">&gt;</span><span>UpCore<span class="uc-pm uc-pm-' + key + '" style="color: ' + txt + ';">.' + mod + '</span></span></div>')
     sec = btn('Заказать аудит', MAIL, False) if key == 'projects' else btn('Получить демо-отчёт', MAIL, False)
     return ('<section id="top" style="position: relative; max-width: 1280px; margin: 0 auto; padding: 40px 32px 96px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center;">' + CHEVRON +
             '<div style="flex: 1 1 500px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 24px;">'
@@ -2792,7 +2796,7 @@ def ai_range_rows(note=True, ranges=None, hi=300, ticks=None):
 def xlink(key, text):
     line, txt = ACC[key]; mod = {'grade': 'Grade', 'ai': 'AI', 'projects': 'Projects', 'mentor': 'Mentor'}[key]
     return ('<a href="#' + key + '-page" style="display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; max-width: 100%; box-sizing: border-box; min-height: 44px; padding: 11px 16px; border-radius: 14px; border: 1px solid ' + line + '66; background: ' + line + '14; color: #FFFFFF; text-decoration: none; font-size: 15px; line-height: 1.35;">'
-            '<span style="white-space: nowrap;"><b style="color: ' + line + ';">&gt;</b> UpCore<b style="color: ' + txt + ';">.' + mod + '</b></span><span style="min-width: 0; color: rgba(255,255,255,0.7);">' + e(text) + '</span></a>')
+            '<span class="uc-pname" style="white-space: nowrap;"><b class="uc-pm uc-pm-' + key + '" style="color: ' + line + ';">&gt;</b> UpCore<b class="uc-pm uc-pm-' + key + '" style="color: ' + txt + ';">.' + mod + '</b></span><span style="min-width: 0; color: rgba(255,255,255,0.7);">' + e(text) + '</span></a>')
 
 def box(inner, key='ai', strong=False, flex=None):
     line, _ = ACC[key]

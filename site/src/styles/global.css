@@ -112,6 +112,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .uc-card:hover { transform: none; }
 }
 
+/* ---------- Названия продуктов «UpCore.Grade» и т. п. (раунд 108): шрифт проще — Onest, в обеих темах ---------- */
+.uc-pname, .uc-pname *, .uc-menu__name { font-family: 'Onest Variable', 'Onest', system-ui, sans-serif !important; }
+div.uc-pname { letter-spacing: -0.025em !important; }
+
 /* ---------- Меню на телефоне ---------- */
 .uc-menu { position: fixed; inset: 0; z-index: 60; background: #0D0C15; display: flex; flex-direction: column; padding: 0 16px 20px; overflow-y: auto; }
 .uc-menu[hidden] { display: none; }

@@ -18,7 +18,7 @@ const pre = lang === 'ru' ? '/' : '/en/';
     {PRODUCT_KEYS.map((k) => (
       <a href={`${pre}${k}/`} class="uc-menu__product" aria-current={page === k ? 'page' : undefined}>
         <span>
-          <span class="uc-menu__name"><b style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>&gt;</b> UpCore<span style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>.{PRODUCT_NAMES[k]}</span></span>
+          <span class="uc-menu__name"><b class={`uc-pm uc-pm-${k}`} style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>&gt;</b> UpCore<span class={`uc-pm uc-pm-${k}`} style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>.{PRODUCT_NAMES[k]}</span></span>
           <span class="uc-menu__desc">{t.products[k]}</span>
         </span>
         <span aria-hidden="true" class="uc-menu__arrow">→</span>
