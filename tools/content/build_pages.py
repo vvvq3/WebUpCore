@@ -186,7 +186,7 @@ def header(active=None):
     burger = ('<a href="#menu" class="uc-burger" aria-label="Меню" style="display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.22);">'
               '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/></svg></a>')
     return ('<header style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; justify-content: space-between;">\n'
-            '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;"><img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;"></a>\n'
+            '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;">' + header_logo() + '</a>\n'
             '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
             '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">'
             '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else '') + ' class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
@@ -267,12 +267,20 @@ def slider_console():
 </div>
 </div>"""
 
+def header_logo():
+    """Раунд 102: логотип в шапке встроен в HTML (SVG), а не отдельной картинкой — появляется сразу вместе со страницей."""
+    if MODE != 'web':
+        return '<img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;">'
+    svg = open(os.path.join(REPO, 'site', 'public', 'img', 'logo.svg'), encoding='utf-8').read().strip()
+    return svg.replace('<svg ', '<svg class="uc-hlogo" role="img" aria-label="UpCore" style="height: 28px; width: auto; display: block;" ', 1)
+
 def slider_web():
     """Слайдер скриншотов для сайта (раунд 76): только окно со скриншотами — без подписи, кнопок и паузы внизу.
     Экраны быстро сменяют друг друга голубой полосой-сканером; переключение — site/src/scripts/site.ts ([data-slider])."""
     n_all = len(SCREENS)
-    imgs = ''.join('<img src="/img/screens/v2/%s" alt="%s — %s" loading="%s" decoding="async" width="1600" height="800" data-slide="%d" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top left; display: block;%s">'
-                   % (f.replace('.png', '.webp'), e(t), e(c), 'eager' if n == 0 else 'lazy', n, '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, f) in enumerate(SCREENS))
+    # раунд 102: сразу грузится только первый экран (fetchpriority=high), остальные — по одному, когда до них доходит очередь (data-src → src в site.ts)
+    imgs = ''.join('<img %s="/img/screens/v2/%s" alt="%s — %s" %sdecoding="async" width="1280" height="640" data-slide="%d" style="position: absolute; inset: 0; width: 100%%; height: 100%%; object-fit: cover; object-position: top left; display: block;%s">'
+                   % ('src' if n == 0 else 'data-src', f.replace('.png', '.webp'), e(t), e(c), 'fetchpriority="high" ' if n == 0 else '', n, '' if n == 0 else ' visibility: hidden;') for n, (k, t, c, f) in enumerate(SCREENS))
     k0 = SCREENS[0][0]
     meta = ' '.join('data-k%d="%s"' % (n, e(k)) for n, (k, t, c, f) in enumerate(SCREENS))
     return ('<div data-slider ' + meta + ' style="flex: 1.15 1 520px; min-width: 0; position: relative;">'

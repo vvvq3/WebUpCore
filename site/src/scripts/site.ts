@@ -239,7 +239,8 @@ function initLeadForm() {
 /* ---------------- Слайдер скриншотов (главная) ---------------- */
 function initSlider() {
   // Раунд 101: возвращён эффект раунда 77 — голубая полоса идёт сверху вниз за 1,5 с и «рисует» новый экран
-  // (выше полосы уже новый, ниже — ещё старый). Между сменами экран держится 5 с (раунд 100 — спокойнее).
+  // (выше полосы уже новый, ниже — ещё старый). Между сменами экран держится 3,5 с (раунд 102: было 5 с, −30%).
+  // Раунд 102: сразу грузится только первый экран; следующий подгружается заранее, пока показывается текущий (data-src → src).
   // Пауза при наведении мыши, когда окно вне экрана и когда вкладка скрыта; при «уменьшить движение» — без автосмены.
   document.querySelectorAll<HTMLElement>('[data-slider]').forEach((box) => {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
@@ -248,7 +249,7 @@ function initSlider() {
     const numEl = box.querySelector('[data-slide-num]');
     if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
     const WIPE = 1500; // проход полосы = смена экрана, мс
-    const HOLD = 5000; // сколько показывается экран между сменами, мс
+    const HOLD = 3500; // сколько показывается экран между сменами, мс
     const n = imgs.length;
     if (n < 2 || reduced || !imgs[0].animate) return;
     let idx = 0;
@@ -257,17 +258,21 @@ function initSlider() {
     let visible = true;
     let timer = 0;
     imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
-    const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
+    const load = (im: HTMLImageElement) => { if (!im.getAttribute('src') && im.dataset.src) im.src = im.dataset.src; };
+    const ready = (im: HTMLImageElement) => new Promise<void>((res) => { load(im); if (im.complete && im.naturalWidth) res(); else { im.addEventListener('load', () => res(), { once: true }); im.addEventListener('error', () => res(), { once: true }); } });
+    const preload = () => load(imgs[(idx + 1) % n]); // следующий экран — заранее, пока показывается текущий
     const canRun = () => visible && !hover && !document.hidden;
     const schedule = () => { window.clearTimeout(timer); if (!busy && canRun()) timer = window.setTimeout(step, HOLD); };
-    const step = () => {
+    const step = async () => {
       if (busy || !canRun()) return;
       busy = true;
+      const next = imgs[(idx + 1) % n];
+      await ready(next); // смена начинается, только когда следующий экран загружен
+      if (!canRun()) { busy = false; return; }
       const prev = idx;
       idx = (idx + 1) % n;
       preload();
       const old = imgs[prev];
-      const next = imgs[idx];
       old.style.visibility = 'visible'; old.style.zIndex = '1';
       next.style.visibility = 'visible'; next.style.zIndex = '2';
       if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
@@ -288,7 +293,8 @@ function initSlider() {
     }
     document.addEventListener('visibilitychange', schedule);
     if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; schedule(); }).observe(box);
-    preload();
+    // следующий экран начинаем грузить после полной загрузки страницы — не мешаем логотипу, шрифтам и первому экрану
+    if (document.readyState === 'complete') preload(); else window.addEventListener('load', preload, { once: true });
     schedule();
   });
 }

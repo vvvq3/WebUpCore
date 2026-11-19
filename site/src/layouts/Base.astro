@@ -65,7 +65,6 @@ const t = ui[lang];
     <meta name="twitter:image" content={ogImage} />
     <link rel="preload" href={bricolageLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={lang === 'ru' ? onestCyr : onestLatin} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/img/logo.svg" as="image" type="image/svg+xml" />
     {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <Analytics />
   </head>

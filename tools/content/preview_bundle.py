@@ -36,7 +36,7 @@ def main(out):
             if f.endswith('.html'):
                 depth = r.count('/')
                 t = open(src).read()
-                t = re.sub(r'(href|src)="(/(?!/)[^"]*)"', lambda m: '%s="%s"' % (m.group(1), rel(m.group(2), depth)), t)
+                t = re.sub(r'(href|src|data-src)="(/(?!/)[^"]*)"', lambda m: '%s="%s"' % (m.group(1), rel(m.group(2), depth)), t)
                 t = re.sub(r'url\((/(?!/)[^)]*)\)', lambda m: 'url(%s)' % rel(m.group(1), depth), t)  # шрифты во встроенных стилях
                 if PAGES:  # копия для показа — не индексировать (основной адрес сайта — up-core.ru)
                     t = t.replace('<head>', '<head><meta name="robots" content="noindex, nofollow">', 1)
