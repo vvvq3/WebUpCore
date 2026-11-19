@@ -36,44 +36,33 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .uc-site-header > a:first-child { min-height: 44px; }
 .uc-site-header nav a:not([aria-current]):hover { color: #fff !important; background: rgba(255, 255, 255, .06); border-radius: 10px; }
 
-/* ---------- Кнопки при наведении (анимация 06; раунд 74 — заметнее, на всех кнопках) ---------- */
+/* ---------- Кнопки при наведении (анимация 06; раунд 100 — спокойнее: только цвет, без подъёма и свечения) ---------- */
 .uc-btn, .uc-mbtn, .uc-filter, .uc-chip, .uc-icon-btn, .uc-burger, [data-slide-play] {
-  transition: transform .22s var(--ease-out-soft), box-shadow .22s var(--ease-out-soft), filter .22s, background-color .22s, border-color .22s, color .22s;
+  transition: filter .2s, background-color .2s, border-color .2s, color .2s;
 }
 @media (hover: hover) {
-  .uc-btn:not(.uc-btn--ghost):hover, .uc-mbtn--primary:hover {
-    transform: translateY(-2px); filter: brightness(1.12) saturate(1.05);
-    box-shadow: 0 14px 34px color-mix(in srgb, var(--glow, #63D5FF) 50%, transparent), 0 0 0 1px color-mix(in srgb, var(--glow, #63D5FF) 60%, transparent);
-  }
+  .uc-btn:not(.uc-btn--ghost):hover, .uc-mbtn--primary:hover { filter: brightness(1.08); }
   .uc-btn--ghost:hover, .uc-mbtn--ghost:hover, .uc-icon-btn:hover, .uc-burger:hover, [data-slide-play]:hover {
-    transform: translateY(-2px); border-color: color-mix(in srgb, var(--acc-line) 85%, transparent) !important;
-    background-color: color-mix(in srgb, var(--acc-line) 12%, transparent) !important; color: #fff;
-    box-shadow: 0 10px 26px color-mix(in srgb, var(--acc-line) 22%, transparent);
+    border-color: color-mix(in srgb, var(--acc-line) 75%, transparent) !important;
+    background-color: color-mix(in srgb, var(--acc-line) 8%, transparent) !important; color: #fff;
   }
   /* в цветном блоке контактов — тёмные кнопки */
-  .uc-btn--on-color:not(.uc-btn--ghost):hover { box-shadow: 0 14px 30px rgba(13, 12, 21, .45); filter: brightness(1.35); }
-  .uc-btn--on-color.uc-btn--ghost:hover { background-color: rgba(13, 12, 21, .12) !important; border-color: #0D0C15 !important; color: #0D0C15; box-shadow: 0 10px 24px rgba(13, 12, 21, .25); }
-  .uc-filter:hover, .uc-chip:hover { border-color: rgba(99, 213, 255, .75) !important; background-color: rgba(99, 213, 255, .1); color: #fff; transform: translateY(-1px); }
-  /* ссылки «Читать в Telegram →», «Подробнее о …» — стрелка уезжает вправо */
-  main a.uc-btn--ghost:hover { letter-spacing: .01em; }
+  .uc-btn--on-color:not(.uc-btn--ghost):hover { filter: brightness(1.25); }
+  .uc-btn--on-color.uc-btn--ghost:hover { background-color: rgba(13, 12, 21, .08) !important; border-color: #0D0C15 !important; color: #0D0C15; }
+  .uc-filter:hover, .uc-chip:hover { border-color: rgba(99, 213, 255, .6) !important; background-color: rgba(99, 213, 255, .06); color: #fff; }
 }
-.uc-btn:active, .uc-mbtn:active, .uc-filter:active, .uc-chip:active { transform: translateY(0) scale(.98); }
 
-/* ---------- Карточки при наведении (анимация 04) ---------- */
-.uc-card { transition: transform .25s var(--ease-out-soft), box-shadow .25s var(--ease-out-soft), border-color .25s var(--ease-out-soft); }
+/* ---------- Карточки при наведении (анимация 04; раунд 100 — без подъёма и тени, только рамка) ---------- */
+.uc-card { transition: border-color .25s var(--ease-out-soft); }
 @media (hover: hover) {
-  .uc-card:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--acc-line) 70%, transparent) !important; box-shadow: 0 18px 40px color-mix(in srgb, var(--acc-line) 18%, transparent); }
+  .uc-card:hover { border-color: color-mix(in srgb, var(--acc-line) 55%, transparent) !important; }
 }
-
-/* ---------- Подсветка за курсором (анимация 05, только мышь) ---------- */
-@media (hover: hover) and (pointer: fine) {
-  .uc-spot { background-image: radial-gradient(240px circle at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--spot, #63D5FF) 16%, transparent), transparent 65%) !important; }
-}
+/* подсветка за курсором (анимация 05) — снята в раунде 100 */
 
 /* ---------- Появление блоков (анимация 01) и шкалы (03) ---------- */
-.uc-js .uc-reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s var(--ease-out-soft), transform .6s var(--ease-out-soft); transition-delay: var(--d, 0ms); }
+.uc-js .uc-reveal { opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease-out-soft), transform .5s var(--ease-out-soft); transition-delay: var(--d, 0ms); }
 .uc-js .uc-reveal.uc-on { opacity: 1; transform: none; }
-.uc-js .uc-bar { transform: scaleX(0); transform-origin: left center; transition: transform 1s var(--ease-out-soft); transition-delay: var(--d, 0ms); }
+.uc-js .uc-bar { transform: scaleX(0); transform-origin: left center; transition: transform .8s var(--ease-out-soft); transition-delay: var(--d, 0ms); }
 .uc-js .uc-bar.uc-on { transform: none; }
 
 /* ---------- Главная: блок «UpCore не считает строчки кода» (#core) ----------
@@ -83,11 +72,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .uc-js .uc-strike::after { content: ''; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; border-radius: 1px; background: rgba(240, 138, 138, .9); transform: scaleX(0); transform-origin: left; }
 .uc-js .uc-core-on .uc-strike { color: rgba(255, 255, 255, .5) !important; transition: color .45s var(--d, 0ms); }
 .uc-js .uc-core-on .uc-strike::after { transform: scaleX(1); transition: transform .45s var(--ease-out-soft) var(--d, 0ms); }
-.uc-js .uc-core-arc { transition: stroke-dasharray 1.9s cubic-bezier(.65, 0, .35, 1) 1.3s; }
-.uc-js .uc-core-row { opacity: 0; transform: translateX(-12px); }
-.uc-js .uc-core-on .uc-core-row { opacity: 1; transform: none; transition: opacity .5s var(--ease-out-soft) var(--d, 0ms), transform .5s var(--ease-out-soft) var(--d, 0ms); }
-.uc-js .uc-core-loss { display: inline-block; opacity: 0; transform: scale(.92); }
-.uc-js .uc-core-on .uc-core-loss { opacity: 1; transform: none; text-shadow: 0 0 24px rgba(240, 138, 138, .45); transition: opacity .55s var(--ease-out-soft) 3.3s, transform .65s cubic-bezier(.34, 1.56, .64, 1) 3.3s, text-shadow .85s 3.6s; }
+.uc-js .uc-core-arc { transition: stroke-dasharray 1.1s cubic-bezier(.65, 0, .35, 1) .6s; }
+.uc-js .uc-core-row { opacity: 0; }
+.uc-js .uc-core-on .uc-core-row { opacity: 1; transition: opacity .45s var(--ease-out-soft) var(--d, 0ms); }
+.uc-js .uc-core-loss { display: inline-block; opacity: 0; }
+.uc-js .uc-core-on .uc-core-loss { opacity: 1; transition: opacity .5s var(--ease-out-soft) 1.8s; }
 
 /* ---------- Первый экран на телефоне компактнее — ключевые цифры помещаются в экран (раунд 74) ---------- */
 @media (max-width: 720px) {
@@ -102,12 +91,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .uc-btn:active, .uc-mbtn:active { transform: scale(.97); }
 }
 
-/* ---------- Цифры-табло (анимация 02) ---------- */
-.uc-odo, .uc-odo-ch { display: inline-block; height: 1.1em; line-height: 1.1; vertical-align: top; }
-.uc-odo { overflow: hidden; }
-[data-odo] { line-height: 1.1 !important; }
-.uc-odo__col { display: flex; flex-direction: column; transition: transform 1.9s cubic-bezier(.16, 1, .3, 1); transition-delay: var(--d, 0ms); }
-.uc-odo__col > span { height: 1.1em; line-height: 1.1; }
+/* ---------- Цифры (раунд 100: без «табло» — цифры статичные, появляются вместе с блоком) ---------- */
 
 /* ---------- Слайдер скриншотов на главной ---------- */
 /* подпись — ровно две строки при любой длине текста, чтобы высота блока не менялась при смене слайда */
@@ -124,7 +108,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 @media (prefers-reduced-motion: reduce) {
   .uc-js .uc-reveal, .uc-js .uc-bar { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .uc-odo__col, .uc-card, .uc-btn, .uc-core-arc, .uc-core-row, .uc-core-loss, .uc-strike, .uc-strike::after { transition: none !important; }
+  .uc-card, .uc-btn, .uc-core-arc, .uc-core-row, .uc-core-loss, .uc-strike, .uc-strike::after { transition: none !important; }
   .uc-card:hover { transform: none; }
 }
 

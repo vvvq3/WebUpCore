@@ -3,7 +3,6 @@
 
 const root = document.documentElement;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const lang = (document.body.dataset.lang || 'ru') as 'ru' | 'en';
 // класс анимаций ставится сразу, до разметки элементов — иначе скрытие запустится переходом с задержкой
 if (!reduced && 'IntersectionObserver' in window) root.classList.add('uc-js');
@@ -239,27 +238,29 @@ function initLeadForm() {
 
 /* ---------------- Слайдер скриншотов (главная) ---------------- */
 function initSlider() {
-  // Раунд 77: полоса без остановок — проходит сверху вниз за 1,5 с и сразу начинает сверху со следующим экраном.
-  // Выше полосы уже новый экран, ниже — ещё старый. Пауза при наведении мыши, когда окно вне экрана и когда вкладка скрыта.
+  // Раунд 100: спокойнее — экран держится 5 с, затем плавно сменяется следующим (0,7 с), без бегущей полосы.
+  // Пауза при наведении мыши, когда окно вне экрана и когда вкладка скрыта; при «уменьшить движение» — без автосмены.
   document.querySelectorAll<HTMLElement>('[data-slider]').forEach((box) => {
     const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-slide]')];
     const scan = box.querySelector<HTMLElement>('.uc-scan');
     const keyEl = box.querySelector('[data-slide-key]');
     const numEl = box.querySelector('[data-slide-num]');
-    if (scan) { scan.classList.remove('uc-scan'); scan.style.top = '0'; scan.style.opacity = '0'; scan.style.zIndex = '3'; }
-    const WIPE = 1500; // проход полосы = смена экрана, мс
+    if (scan) scan.remove();
+    const HOLD = 5000; // сколько показывается экран, мс
+    const FADE = 700;  // смена экрана, мс
     const n = imgs.length;
     if (n < 2 || reduced || !imgs[0].animate) return;
     let idx = 0;
     let busy = false;
     let hover = false;
     let visible = true;
+    let timer = 0;
     imgs.forEach((im, k) => { im.style.zIndex = k === 0 ? '1' : '0'; });
     const preload = () => { for (let d = 1; d <= 2; d++) imgs[(idx + d) % n].loading = 'eager'; };
     const canRun = () => visible && !hover && !document.hidden;
+    const schedule = () => { window.clearTimeout(timer); if (canRun()) timer = window.setTimeout(step, HOLD); };
     const step = () => {
-      if (busy) return;
-      if (!canRun()) { if (scan) scan.style.opacity = '0'; return; }
+      if (busy || !canRun()) return;
       busy = true;
       const prev = idx;
       idx = (idx + 1) % n;
@@ -270,23 +271,22 @@ function initSlider() {
       next.style.visibility = 'visible'; next.style.zIndex = '2';
       if (keyEl) keyEl.textContent = box.dataset['k' + idx] || '';
       if (numEl) numEl.textContent = String(idx + 1).padStart(2, '0');
-      const wipe = next.animate([{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)' }], { duration: WIPE, easing: 'linear', fill: 'forwards' });
-      if (scan) { scan.style.opacity = '1'; scan.animate([{ top: '0%' }, { top: '100%' }], { duration: WIPE, easing: 'linear' }); }
-      wipe.onfinish = () => {
+      const fade = next.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE, easing: 'ease-in-out', fill: 'forwards' });
+      fade.onfinish = () => {
         old.style.visibility = 'hidden'; old.style.zIndex = '0'; next.style.zIndex = '1';
-        wipe.cancel(); next.style.clipPath = '';
+        fade.cancel(); next.style.opacity = '';
         busy = false;
-        step(); // сразу следующий проход — без паузы
+        schedule();
       };
     };
     if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      box.addEventListener('mouseenter', () => { hover = true; });
-      box.addEventListener('mouseleave', () => { hover = false; step(); });
+      box.addEventListener('mouseenter', () => { hover = true; window.clearTimeout(timer); });
+      box.addEventListener('mouseleave', () => { hover = false; schedule(); });
     }
-    document.addEventListener('visibilitychange', step);
-    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; step(); }).observe(box);
+    document.addEventListener('visibilitychange', schedule);
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { visible = es[0].isIntersecting; schedule(); }).observe(box);
     preload();
-    window.setTimeout(step, 600);
+    schedule();
   });
 }
 
@@ -295,7 +295,7 @@ function initCore() {
   const core = document.querySelector<HTMLElement>('#core');
   if (!core || reduced || !('IntersectionObserver' in window)) return;
   const strikes = [...core.querySelectorAll<HTMLElement>('span')].filter((s) => (s.getAttribute('style') || '').includes('line-through'));
-  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 250 + i * 285 + 'ms'); });
+  strikes.forEach((s, i) => { s.classList.add('uc-strike'); s.style.setProperty('--d', 100 + i * 150 + 'ms'); });
   const circles = core.querySelectorAll<SVGCircleElement>('svg circle');
   const arc = circles[1];
   const full = arc ? (arc.getAttribute('stroke-dasharray') || '').split(' ').map(Number) : [];
@@ -306,7 +306,7 @@ function initCore() {
     requestAnimationFrame(() => arc.classList.add('uc-core-arc'));
   }
   const rows = [...core.querySelectorAll<HTMLElement>('svg + div > div')];
-  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 1350 + i * 550 + 'ms'); });
+  rows.forEach((r, i) => { r.classList.add('uc-core-row'); r.style.setProperty('--d', 700 + i * 200 + 'ms'); });
   const loss = [...core.querySelectorAll<HTMLElement>('b')].find((b) => /140/.test(b.textContent || ''));
   loss?.classList.add('uc-core-loss');
   const target = Number(num?.textContent || 0);
@@ -318,7 +318,7 @@ function initCore() {
     box.classList.add('uc-core-on');
     if (arc && full.length === 2) requestAnimationFrame(() => { arc.style.strokeDasharray = `${full[0]} ${full[1]}`; });
     if (num && target) {
-      const from = target * 2; const t0 = performance.now() + 1300; const dur = 1900;
+      const from = target * 2; const t0 = performance.now() + 600; const dur = 1100;
       const tick = (t: number) => {
         const k = Math.min(1, Math.max(0, (t - t0) / dur));
         const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -373,27 +373,10 @@ function tagElements() {
   });
   // карточки
   main.querySelectorAll<HTMLElement>('article').forEach((el) => el.classList.add('uc-card'));
-  // подсветка за курсором: карточки продуктов на главной и плашки «> UpCore.X»
-  const spots: HTMLElement[] = [];
-  if (document.body.dataset.page === 'home') main.querySelectorAll<HTMLElement>('#products article').forEach((el) => spots.push(el));
-  main.querySelectorAll<HTMLAnchorElement>('a[href*="/grade/"], a[href*="/ai/"], a[href*="/projects/"], a[href*="/mentor/"]').forEach((a) => {
-    if (!a.closest('header') && a.textContent?.includes('UpCore')) spots.push(a);
-  });
-  spots.forEach((el) => {
-    el.classList.add('uc-spot');
-    const c = getComputedStyle(el).borderTopColor;
-    if (c) el.style.setProperty('--spot', c.replace(/rgba?\(([^)]+)\)/, (_m, v) => `rgb(${v.split(',').slice(0, 3).join(',')})`));
-  });
-  if (finePointer) {
-    spots.forEach((el) => el.addEventListener('pointermove', (ev) => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', ev.clientX - r.left + 'px');
-      el.style.setProperty('--my', ev.clientY - r.top + 'px');
-    }));
-  }
+  // подсветка за курсором — снята в раунде 100
 }
 
-/* ---------------- Появление, шкалы, табло ---------------- */
+/* ---------------- Появление и шкалы ---------------- */
 function initMotion() {
   if (reduced || !('IntersectionObserver' in window)) return;
   const main = document.getElementById('main')!;
@@ -404,65 +387,33 @@ function initMotion() {
   const leaves = [...cands].filter((el) => ![...cands].some((o) => o !== el && el.contains(o)));
   leaves.forEach((el) => {
     const sibs = [...(el.parentElement?.children || [])].filter((s) => leaves.includes(s as HTMLElement));
-    el.style.setProperty('--d', Math.min(sibs.indexOf(el), 6) * 80 + 'ms');
+    el.style.setProperty('--d', Math.min(sibs.indexOf(el), 3) * 60 + 'ms');
     el.classList.add('uc-reveal');
   });
   // шкалы: div с шириной в % и высотой 100% внутри дорожки
   const bars = [...main.querySelectorAll<HTMLElement>('div[style*="height: 100%"][style*="width:"]')].filter((el) => /width:\s*\d+(\.\d+)?%/.test(el.getAttribute('style') || '') && (el.parentElement?.getBoundingClientRect().height || 99) <= 24);
   bars.forEach((el) => {
     const sibs = bars.filter((b) => b.closest('section') === el.closest('section'));
-    el.style.setProperty('--d', Math.min(sibs.indexOf(el), 8) * 100 + 'ms');
+    el.style.setProperty('--d', Math.min(sibs.indexOf(el), 5) * 60 + 'ms');
     el.classList.add('uc-bar');
   });
-  // главная: крупные цифры блоков «Принцип и точность» и «Результаты для бизнеса» — тоже табло
-  if (document.body.dataset.page === 'home') {
-    main.querySelectorAll<HTMLElement>('#trust *, #results *').forEach((el) => {
-      if (el.children.length || !/\d/.test(el.textContent || '') || (el.textContent || '').trim().length > 16 || el.closest('[data-odo]')) return;
-      if (parseFloat(getComputedStyle(el).fontSize) >= 24) el.setAttribute('data-odo', '');
-    });
-  }
-  // цифры-табло: ключевые цифры первых экранов (data-odo)
-  const odos = [...main.querySelectorAll<HTMLElement>('[data-odo]')];
-  odos.forEach((el, i) => {
-    const text = el.textContent || '';
-    el.innerHTML = `<span class="uc-sr">${text}</span>` + [...text].map((ch, k) => (/\d/.test(ch)
-      ? `<span class="uc-odo" aria-hidden="true"><span class="uc-odo__col" style="--d:${(i % 4) * 160 + k * 90}ms" data-digit="${ch}">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span></span>`
-      : `<span class="uc-odo-ch" aria-hidden="true">${ch === ' ' ? '&nbsp;' : ch}</span>`)).join('');
-  });
-  // раунд 81: появление и табло — наблюдатель + «страховка» по прокрутке. При мгновенном прыжке (клавиша End, переход по #якорю)
-  // наблюдатель может не сработать (блоки у самого низа страницы и пролистанные блоки оставались невидимыми / с «00»).
+  // цифры-табло сняты в раунде 100: цифры статичные и появляются вместе со своим блоком.
+  // Раунд 81: наблюдатель + «страховка» по прокрутке — при мгновенном прыжке (клавиша End, переход по #якорю)
+  // наблюдатель может не сработать, и пролистанные блоки оставались бы невидимыми.
   const pending = new Set<HTMLElement>([...leaves, ...bars]);
-  const pendingNum = new Set<HTMLElement>(odos);
   const show = (el: HTMLElement) => { pending.delete(el); el.classList.add('uc-on'); io.unobserve(el); };
-  const spin = (el: HTMLElement) => {
-    pendingNum.delete(el);
-    ioNum.unobserve(el);
-    el.classList.add('uc-on');
-    el.querySelectorAll<HTMLElement>('.uc-odo__col').forEach((c) => { c.style.transform = `translateY(-${Number(c.dataset.digit) * 1.1}em)`; });
-  };
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) show(en.target as HTMLElement); });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-  // цифры (раунд 74): запускаются, когда поднялись в верхние ~85% экрана, — их успевают увидеть
-  const ioNum = new IntersectionObserver((entries) => {
-    entries.forEach((en) => { if (en.isIntersecting) spin(en.target as HTMLElement); });
-  }, { rootMargin: '0px 0px -15% 0px', threshold: 0.4 });
   pending.forEach((el) => io.observe(el));
-  // цифры, видимые сразу при открытии страницы (первый экран любой страницы), крутятся без ожидания прокрутки
   const vh = () => window.innerHeight || document.documentElement.clientHeight;
-  pendingNum.forEach((el) => {
-    const r = el.getBoundingClientRect();
-    if (el.closest('#top') || (r.top < vh() && r.bottom > 0)) window.setTimeout(() => spin(el), 350);
-    else ioNum.observe(el);
-  });
   let ticking = false;
   const sweep = () => {
     ticking = false;
     const h = vh();
     const atEnd = window.scrollY + h >= document.documentElement.scrollHeight - 4;
     pending.forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top < h * 0.92 || (atEnd && r.top < h)) show(el); });
-    pendingNum.forEach((el) => { const r = el.getBoundingClientRect(); if (r.bottom < 0 || r.top < h * 0.85 || (atEnd && r.top < h)) spin(el); });
-    if (!pending.size && !pendingNum.size) { window.removeEventListener('scroll', onScroll); window.removeEventListener('hashchange', onScroll); }
+    if (!pending.size) { window.removeEventListener('scroll', onScroll); window.removeEventListener('hashchange', onScroll); }
   };
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(sweep); } };
   window.addEventListener('scroll', onScroll, { passive: true });

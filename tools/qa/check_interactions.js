@@ -30,24 +30,27 @@ const BASE = process.env.BASE || 'http://localhost:4321';
   for (const w of [390, 1440]) {
     p = await page(w); await p.goto(BASE + '/', { waitUntil: 'networkidle' }); const hs = new Set(); await p.evaluate(() => document.querySelector('[data-slider]').scrollIntoView({ block: 'center' }));
     for (let i = 0; i < 6; i++) { await p.waitForTimeout(1000); hs.add(await p.evaluate(() => Math.round(document.querySelector('[data-slider]').getBoundingClientRect().height))); }
-    const nums = new Set(); for (let i = 0; i < 4; i++) { nums.add(await p.evaluate(() => document.querySelector('[data-slide-num]').textContent)); await p.waitForTimeout(1000); } out.push([`слайдер ${w}px: экраны сменяются сами`, nums.size >= 2]);
+    // раунд 100: экран держится 5 с, смена — 0,7 с
+    const nums = new Set(); for (let i = 0; i < 7; i++) { nums.add(await p.evaluate(() => document.querySelector('[data-slide-num]').textContent)); await p.waitForTimeout(1000); } out.push([`слайдер ${w}px: экраны сменяются сами`, nums.size >= 2]);
     out.push([`слайдер ${w}px: высота постоянна`, hs.size === 1]); await p.close();
   }
   // анимация #core
   p = await page(390); await p.goto(BASE + '/', { waitUntil: 'networkidle' });
-  await p.evaluate(() => document.querySelector('#core svg').scrollIntoView({ block: 'center' })); await p.waitForTimeout(5000);
+  await p.evaluate(() => document.querySelector('#core svg').scrollIntoView({ block: 'center' })); await p.waitForTimeout(3000);
   out.push(['#core: в конце 80 из 160', (await p.evaluate(() => document.querySelector('#core svg text').textContent)) === '80']); await p.close();
   // раунд 81: мгновенный прыжок в конец (End / #якорь) — блоки и цифры в экране видны; «Контакты» показывают блок контактов
   for (const u of ['/', '/ai/', '/projects/', '/en/']) {
     p = await page(1440); await p.goto(BASE + u, { waitUntil: 'networkidle' });
     await p.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, document.documentElement.scrollHeight); }); await p.waitForTimeout(1200);
-    const hid = await p.evaluate(() => [...document.querySelectorAll('.uc-reveal, [data-odo]')].filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && (getComputedStyle(e).opacity === '0' || (e.hasAttribute('data-odo') && !e.classList.contains('uc-on'))); }).length);
+    const hid = await p.evaluate(() => [...document.querySelectorAll('.uc-reveal')].filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && getComputedStyle(e).opacity === '0'; }).length);
     out.push([`прыжок в конец ${u}: всё видно`, hid === 0]); await p.close();
   }
   for (const w of [390, 1440]) {
     p = await page(w); await p.goto(BASE + '/', { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
-    const z = await p.evaluate(() => [...document.querySelectorAll('[data-odo]')].filter((e) => { const r = e.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0 && !e.classList.contains('uc-on'); }).length);
-    out.push([`цифры первого экрана ${w}px: крутятся сразу`, z === 0]);
+    // раунд 100: цифры без «табло» — видны сразу и с настоящим значением (не «0»), без подсветки за курсором
+    const z = await p.evaluate(() => [...document.querySelectorAll('#top [data-odo]')].filter((e) => { const r = e.getBoundingClientRect(); return !(r.top < innerHeight && r.bottom > 0 && getComputedStyle(e).opacity !== '0' && /[1-9]/.test(e.textContent || '') && !e.querySelector('.uc-odo')); }).length);
+    out.push([`цифры первого экрана ${w}px: видны сразу, без «табло»`, z === 0]);
+    out.push([`${w}px: нет подсветки за курсором`, await p.evaluate(() => !document.querySelector('.uc-spot'))]);
     await p.click('[data-form]:visible >> nth=0'); await p.waitForTimeout(400);
     const c = await p.evaluate(() => { const r = document.getElementById('uc-lead').getBoundingClientRect(); return Math.abs(r.left + r.width / 2 - innerWidth / 2) < 2 && Math.abs(r.top + r.height / 2 - innerHeight / 2) < 2; });
     out.push([`форма заявки ${w}px: по центру`, c]); await p.close();
