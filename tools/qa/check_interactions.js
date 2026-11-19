@@ -6,12 +6,17 @@ const BASE = process.env.BASE || 'http://localhost:4321';
   const b = await chromium.launch(); const out = []; const errs = [];
   const page = async (w) => { const p = await b.newPage({ viewport: { width: w, height: 844 } }); p.on('pageerror', (e) => errs.push(e.message)); return p; };
   // меню + форма
-  let p = await page(390); await p.goto(BASE + '/mentor/', { waitUntil: 'networkidle' });
+  let p = await page(390);
+  // отправку формы подменяем: тест не должен слать настоящие письма (FormSubmit) и сообщения в Telegram (/api/lead)
+  await p.route('https://formsubmit.co/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":"true"}' }));
+  await p.route('**/api/lead', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
+  await p.goto(BASE + '/mentor/', { waitUntil: 'networkidle' });
   await p.click('.uc-burger'); out.push(['меню открывается', await p.isVisible('#uc-menu')]);
   await p.click('#uc-menu a[data-form]'); out.push(['форма открывается из меню', await p.isVisible('#uc-lead')]);
   await p.click('[data-lead-submit]'); out.push(['форма проверяет поля', !(await p.isHidden('[data-lead-error]'))]);
   await p.fill('input[name=name]', 'Тест'); await p.fill('input[name=contact]', '@test'); await p.click('[data-lead-submit]');
-  await p.waitForTimeout(300); out.push(['форма: экран «готово»', await p.isVisible('[data-lead-done]')]); await p.close();
+  await p.waitForSelector('[data-lead-done]:not([hidden])', { timeout: 5000 }).catch(() => {});
+  out.push(['форма: экран «готово»', await p.isVisible('[data-lead-done]')]); await p.close();
   // фильтр блога
   p = await page(390); await p.goto(BASE + '/blog/', { waitUntil: 'networkidle' });
   await p.click('[data-filter="ИИ"]'); await p.waitForTimeout(200);

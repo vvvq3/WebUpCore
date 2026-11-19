@@ -175,6 +175,7 @@ function initLeadForm() {
     if (fd.get('website')) return; // защита от ботов
     errEl.hidden = true;
     const endpoint = dlg.dataset.endpoint;
+    const tgEndpoint = dlg.dataset.tg;
     const showDone = (title: string, text: string) => {
       body.hidden = true; done.hidden = false;
       done.querySelector('[data-lead-done-title]')!.textContent = title;
@@ -184,23 +185,40 @@ function initLeadForm() {
       ? { name: 'Имя', company: 'Компания', team: 'Размер команды', contact: 'Контакт', page: 'Страница', topic: 'Тема' }
       : { name: 'Name', company: 'Company', team: 'Team size', contact: 'Contact', page: 'Page', topic: 'Topic' };
     const subject = `UpCore — ${titles[topic]}`;
-    if (endpoint) {
+    if (endpoint || tgEndpoint) {
       submit.disabled = true; submit.textContent = dlg.dataset.msgSending || '';
-      let sent = false;
-      try {
-        // раунд 92: FormSubmit (письмо на почту без своего сервера) — поля с русскими подписями, тема письма, без капчи
-        let payload: FormData = fd;
-        if (endpoint.includes('formsubmit.co')) {
-          payload = new FormData();
-          payload.append(labels.topic, titles[topic]);
-          (['name', 'company', 'team', 'contact'] as const).forEach((k) => payload.append(labels[k], String(fd.get(k) || '—')));
-          payload.append(labels.page, location.href);
-          payload.append('_subject', subject); payload.append('_template', 'table'); payload.append('_captcha', 'false');
-        }
-        const r = await fetch(endpoint, { method: 'POST', body: payload, headers: { Accept: 'application/json' } });
-        const j = await r.json().catch(() => ({}));
-        sent = r.ok && j.success !== false && j.success !== 'false' && j.ok !== false;
-      } catch { sent = false; }
+      // раунд 92: письмо через FormSubmit — поля с русскими подписями, тема письма, без капчи
+      const sendMail = async (): Promise<boolean> => {
+        if (!endpoint) return false;
+        try {
+          let payload: FormData = fd;
+          if (endpoint.includes('formsubmit.co')) {
+            payload = new FormData();
+            payload.append(labels.topic, titles[topic]);
+            (['name', 'company', 'team', 'contact'] as const).forEach((k) => payload.append(labels[k], String(fd.get(k) || '—')));
+            payload.append(labels.page, location.href);
+            payload.append('_subject', subject); payload.append('_template', 'table'); payload.append('_captcha', 'false');
+          }
+          const r = await fetch(endpoint, { method: 'POST', body: payload, headers: { Accept: 'application/json' } });
+          const j = await r.json().catch(() => ({}));
+          return r.ok && j.success !== false && j.success !== 'false' && j.ok !== false;
+        } catch { return false; }
+      };
+      // раунд 99: копия заявки в Telegram через свой обработчик (nginx/lead.js)
+      const sendTg = async (): Promise<boolean> => {
+        if (!tgEndpoint) return false;
+        try {
+          const r = await fetch(tgEndpoint, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ topic: titles[topic], name: fd.get('name'), company: fd.get('company'), team: fd.get('team'),
+              contact: fd.get('contact'), page: location.href, lang }),
+          });
+          const j = await r.json().catch(() => ({}));
+          return r.ok && j.ok === true;
+        } catch { return false; }
+      };
+      const [mailOk, tgOk] = await Promise.all([sendMail(), sendTg()]);
+      const sent = mailOk || tgOk;
       submit.disabled = false; submit.textContent = dlg.dataset.msgSubmit || '';
       if (sent) {
         goal('form_sent_' + topic);

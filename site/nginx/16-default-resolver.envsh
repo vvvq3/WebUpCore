@@ -1,0 +1,4 @@
+#!/bin/sh
+# DNS для запросов обработчика заявок к api.telegram.org: берётся из /etc/resolv.conf контейнера
+# (15-local-resolvers.envsh), а если его нет — публичные DNS Яндекса и Google.
+export NGINX_LOCAL_RESOLVERS="${NGINX_LOCAL_RESOLVERS:-77.88.8.8 8.8.8.8}"

@@ -6,9 +6,11 @@ interface Props { lang: Lang; page: string }
 const { lang, page } = Astro.props;
 const t = ui[lang].form;
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || '';
+// раунд 99: копия заявки в Telegram — свой обработчик на сервере (nginx/lead.js → /api/lead); пусто — не отправляется
+const tgEndpoint = import.meta.env.PUBLIC_TG_ENDPOINT || '';
 const email = import.meta.env.PUBLIC_FORM_EMAIL || CONTACTS.email;
 ---
-<dialog id="uc-lead" class="uc-lead" aria-labelledby="uc-lead-title" data-endpoint={endpoint} data-email={email} data-page={page}
+<dialog id="uc-lead" class="uc-lead" aria-labelledby="uc-lead-title" data-endpoint={endpoint} data-tg={tgEndpoint} data-email={email} data-page={page}
   data-titles={JSON.stringify(t.titles)} data-leads={JSON.stringify(t.leads)}
   data-msg-required={t.required} data-msg-sending={t.sending} data-msg-submit={t.submit} data-msg-error={t.error}
   data-msg-ok-title={t.okTitle} data-msg-ok-text={t.okText} data-msg-mail-title={t.mailTitle} data-msg-mail-text={t.mailText}>
