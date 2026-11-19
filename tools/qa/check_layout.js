@@ -22,7 +22,7 @@ for(const pth of all){for(const w of widths){
       if(cs.overflow=='visible'&&el.scrollWidth>el.clientWidth+3&&el.clientWidth>0&&cs.display!='inline'&&!el.closest('svg'))clipped.push('spill:'+(el.textContent||'').trim().slice(0,25));}
     out.clipped=[...new Set(clipped)].slice(0,4);
     out.h1=document.querySelectorAll('h1').length;
-    out.imgs=[...document.images].filter(i=>!(i.dataset.src&&!i.getAttribute('src'))).filter(i=>!i.complete||(!i.naturalWidth&&i.loading!='lazy')).map(i=>i.src.slice(-30));/* раунд 102: экраны слайдера с data-src грузятся по очереди — не ошибка */
+    out.imgs=[...document.images].filter(i=>!(i.dataset.src&&!i.getAttribute('src'))).filter(i=>getComputedStyle(i).display!=='none')/* раунд 105: логотип для другой темы скрыт и не грузится — не ошибка */.filter(i=>!i.complete||(!i.naturalWidth&&i.loading!='lazy')).map(i=>i.src.slice(-30));/* раунд 102: экраны слайдера с data-src грузятся по очереди — не ошибка */
     const hdr=document.querySelector('.uc-site-header');out.hdr=hdr?Math.round(hdr.getBoundingClientRect().height):0;
     const small=[...document.querySelectorAll('main a, main button, header a, header button')].filter(e=>{const r=e.getBoundingClientRect();const cs=getComputedStyle(e);return r.width&&cs.visibility!='hidden'&&(r.height<32)&&!e.closest('p')&&!e.closest('[class*=uc-tg-p]')}).map(e=>(e.textContent||e.getAttribute('aria-label')||'').trim().slice(0,20));
     out.small=small.slice(0,4);

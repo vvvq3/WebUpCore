@@ -1,0 +1,87 @@
+/* Светлая тема (раунд 105) — только для html[data-theme="light"]; тёмная тема этим файлом не затрагивается.
+   Цвета разметки страниц перекрашиваются переменными (src/data/theme.ts), здесь — общие элементы: страница, шапка, меню, форма, cookie. */
+
+/* логотип-картинка (подвал, меню на телефоне): в тёмной теме — прежний, в светлой — с тёмными буквами CORE */
+.uc-logo-l { display: none !important; }
+html[data-theme="light"] .uc-logo-d { display: none !important; }
+html[data-theme="light"] .uc-logo-l { display: inline !important; }
+
+/* переключатель темы: в тёмной теме — солнце («включить светлую»), в светлой — луна («включить тёмную») */
+.uc-theme .uc-ic-moon, .uc-theme-m .uc-ic-moon, .uc-theme-m .uc-t-dark { display: none; }
+html[data-theme="light"] .uc-theme .uc-ic-sun, html[data-theme="light"] .uc-theme-m .uc-ic-sun, html[data-theme="light"] .uc-theme-m .uc-t-light { display: none; }
+html[data-theme="light"] .uc-theme .uc-ic-moon, html[data-theme="light"] .uc-theme-m .uc-ic-moon { display: block; }
+html[data-theme="light"] .uc-theme-m .uc-t-dark { display: inline; }
+html[lang="en"] .uc-theme, html[lang="en"] .uc-theme-m { display: none !important; } /* светлая тема — только в русской версии */
+.uc-theme { transition: border-color .2s, background-color .2s, color .2s; }
+@media (hover: hover) {
+  .uc-theme:hover { border-color: color-mix(in srgb, var(--acc-line) 75%, transparent) !important; background-color: color-mix(in srgb, var(--acc-line) 8%, transparent) !important; }
+}
+.uc-theme-m { display: inline-flex; gap: 10px; width: 100%; }
+
+html[data-theme="light"] {
+  --color-bg: #F4F6FA; --color-card: #FFFFFF; --color-accent: #0A6F9C;
+  background: #F4F6FA; color: #0D0C15; color-scheme: light;
+}
+html[data-theme="light"] body { background: #F4F6FA; }
+html[data-theme="light"] :focus-visible { outline-color: #0A6F9C; }
+/* ссылки без своего цвета (вес как у a{} в generated.css — кнопки .uc-mbtn и пр. не перебиваются) */
+:where(html[data-theme="light"]) a { color: #0A6F9C; }
+:where(html[data-theme="light"]) a:hover { color: #075A80; }
+
+/* шапка при прокрутке */
+html[data-theme="light"] .uc-scrolled .uc-site-header::before { background: rgba(244, 246, 250, .94); border-bottom-color: rgba(13, 12, 21, .1); }
+html[data-theme="light"] .uc-site-header nav a:not([aria-current]):hover { color: #0D0C15 !important; background: rgba(13, 12, 21, .06); }
+
+/* кнопки и фильтры при наведении */
+@media (hover: hover) {
+  html[data-theme="light"] .uc-btn--ghost:hover, html[data-theme="light"] .uc-mbtn--ghost:hover, html[data-theme="light"] .uc-icon-btn:hover,
+  html[data-theme="light"] .uc-burger:hover { color: #0D0C15; }
+  html[data-theme="light"] .uc-filter:hover, html[data-theme="light"] .uc-chip:hover { color: #0D0C15; border-color: rgba(10, 111, 156, .6) !important; background-color: rgba(10, 111, 156, .06); }
+}
+html[data-theme="light"] .uc-filter { border-color: rgba(13, 12, 21, .16); color: #0D0C15; }
+html[data-theme="light"] .uc-filter[aria-pressed='true'] { border-color: #0A6F9C; background: rgba(10, 111, 156, .1); }
+html[data-theme="light"] .uc-chip { border-color: rgba(13, 12, 21, .16); color: rgba(13, 12, 21, .78); }
+html[data-theme="light"] .uc-chip[aria-selected='true'] { border-color: #0A6F9C; background: rgba(10, 111, 156, .1); color: #0D0C15; }
+
+/* главная, блок «160 → 80»: зачёркнутые метрики */
+html[data-theme="light"].uc-js .uc-strike { color: rgba(13, 12, 21, .85) !important; }
+html[data-theme="light"].uc-js .uc-core-on .uc-strike { color: rgba(13, 12, 21, .5) !important; }
+html[data-theme="light"].uc-js .uc-strike::after { background: rgba(192, 57, 43, .85); }
+
+/* подписи таблиц на телефоне (generated.css) */
+html[data-theme="light"] .uc-ml { color: rgba(13, 12, 21, .72) !important; }
+@media (max-width: 720px) { html[data-theme="light"] .uc-res tr { border-top-color: rgba(13, 12, 21, .12); } }
+
+/* меню на телефоне */
+html[data-theme="light"] .uc-menu { background: #F4F6FA; }
+html[data-theme="light"] .uc-icon-btn { border-color: rgba(13, 12, 21, .2); }
+html[data-theme="light"] .uc-menu__product { border-top-color: rgba(13, 12, 21, .1); color: #0D0C15; }
+html[data-theme="light"] .uc-menu__product[aria-current] { background: rgba(13, 12, 21, .04); }
+html[data-theme="light"] .uc-menu__desc { color: rgba(13, 12, 21, .72); }
+html[data-theme="light"] .uc-menu__arrow { color: rgba(13, 12, 21, .5); }
+html[data-theme="light"] .uc-menu__plain { border-top-color: rgba(13, 12, 21, .1); color: #0D0C15; }
+html[data-theme="light"] .uc-menu__plain[aria-current] { color: #0A6F9C; }
+html[data-theme="light"] .uc-lang { border-color: rgba(13, 12, 21, .18); }
+html[data-theme="light"] .uc-lang a, html[data-theme="light"] .uc-lang span { color: rgba(13, 12, 21, .72); }
+html[data-theme="light"] .uc-lang [aria-current] { background: #0D0C15; color: #FFFFFF; }
+html[data-theme="light"] .uc-menu__phone { color: #0D0C15; }
+html[data-theme="light"] .uc-menu__phone svg { color: #0A6F9C; }
+html[data-theme="light"] .uc-mbtn--ghost { border-color: rgba(13, 12, 21, .28); color: #0D0C15; }
+
+/* форма заявки */
+html[data-theme="light"] .uc-lead { background: #FFFFFF; color: #0D0C15; border-color: rgba(10, 111, 156, .3); box-shadow: 0 40px 120px rgba(13, 12, 21, .18); }
+html[data-theme="light"] .uc-lead::backdrop { background: rgba(13, 12, 21, .45); }
+html[data-theme="light"] .uc-lead__kicker { color: #0A6F9C; }
+html[data-theme="light"] .uc-lead__lead { color: rgba(13, 12, 21, .78); }
+html[data-theme="light"] .uc-field { color: rgba(13, 12, 21, .82); }
+html[data-theme="light"] .uc-field input, html[data-theme="light"] .uc-field select, html[data-theme="light"] .uc-field textarea { background: #F4F6FA; border-color: rgba(13, 12, 21, .16); color: #0D0C15; }
+html[data-theme="light"] .uc-field input::placeholder, html[data-theme="light"] .uc-field textarea::placeholder { color: rgba(13, 12, 21, .5); }
+html[data-theme="light"] .uc-field input:focus, html[data-theme="light"] .uc-field select:focus, html[data-theme="light"] .uc-field textarea:focus { border-color: #0A6F9C; box-shadow: 0 0 0 3px rgba(10, 111, 156, .18); }
+html[data-theme="light"] .uc-field [aria-invalid='true'] { border-color: #C0392B; }
+html[data-theme="light"] .uc-lead__note { color: rgba(13, 12, 21, .68); }
+html[data-theme="light"] .uc-lead__error { background: rgba(192, 57, 43, .08); color: #A93226; }
+html[data-theme="light"] .uc-lead__check { background: rgba(29, 122, 44, .12); color: #1D7A2C; }
+
+/* cookie-баннер */
+html[data-theme="light"] .uc-cookie { background: rgba(255, 255, 255, .97); border-color: rgba(13, 12, 21, .12); box-shadow: 0 20px 60px rgba(13, 12, 21, .16); }
+html[data-theme="light"] .uc-cookie p { color: rgba(13, 12, 21, .8); }

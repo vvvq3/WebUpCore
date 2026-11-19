@@ -1,6 +1,7 @@
 ---
 // Меню на телефоне — вариант 1 (раунд 64): на весь экран, продукты в своих цветах, кнопки внизу.
 import { ui, PRODUCT_KEYS, PRODUCT_NAMES, PRODUCT_COLORS, CONTACTS, type Lang } from '../data/i18n';
+import { themeColor } from '../data/theme';
 interface Props { lang: Lang; page: string; route: string }
 const { lang, page, route } = Astro.props;
 const t = ui[lang];
@@ -8,7 +9,7 @@ const pre = lang === 'ru' ? '/' : '/en/';
 ---
 <div id="uc-menu" class="uc-menu" role="dialog" aria-modal="true" aria-label={t.menu} hidden>
   <div class="uc-menu__bar">
-    <a href={pre} aria-label="UpCore"><img src="/img/logo.svg" alt="UpCore" width="140" height="22" style="height: 22px; width: auto;" /></a>
+    <a href={pre} aria-label="UpCore"><img src="/img/logo.svg" alt="UpCore" width="140" height="22" class="uc-logo-d" style="height: 22px; width: auto;" /><img src="/img/logo-ink.svg" alt="UpCore" width="140" height="22" class="uc-logo-l" loading="lazy" style="height: 22px; width: auto;" /></a>
     <button type="button" class="uc-icon-btn" data-menu-close aria-label={t.close}>
       <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
@@ -17,7 +18,7 @@ const pre = lang === 'ru' ? '/' : '/en/';
     {PRODUCT_KEYS.map((k) => (
       <a href={`${pre}${k}/`} class="uc-menu__product" aria-current={page === k ? 'page' : undefined}>
         <span>
-          <span class="uc-menu__name"><b style={`color: ${PRODUCT_COLORS[k].text}`}>&gt;</b> UpCore<span style={`color: ${PRODUCT_COLORS[k].text}`}>.{PRODUCT_NAMES[k]}</span></span>
+          <span class="uc-menu__name"><b style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>&gt;</b> UpCore<span style={`color: ${themeColor('t', PRODUCT_COLORS[k].text)}`}>.{PRODUCT_NAMES[k]}</span></span>
           <span class="uc-menu__desc">{t.products[k]}</span>
         </span>
         <span aria-hidden="true" class="uc-menu__arrow">→</span>
@@ -32,6 +33,13 @@ const pre = lang === 'ru' ? '/' : '/en/';
       <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--ghost">{t.demo}</a>
       <a href={`mailto:${CONTACTS.email}`} data-form="demo" class="uc-mbtn uc-mbtn--primary">{t.connect}</a>
     </div>
+    {lang === 'ru' && (
+      <button type="button" class="uc-mbtn uc-mbtn--ghost uc-theme-m" data-theme-toggle aria-label="Сменить тему">
+        <svg class="uc-ic-sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
+        <svg class="uc-ic-moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" /></svg>
+        <span class="uc-t-light">Светлая тема</span><span class="uc-t-dark">Тёмная тема</span>
+      </button>
+    )}
     <div class="uc-menu__meta">
       <a href={CONTACTS.phoneHref} class="uc-menu__phone">
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z" fill="currentColor"/></svg>

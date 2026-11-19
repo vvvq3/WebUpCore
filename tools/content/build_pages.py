@@ -188,7 +188,7 @@ def header(active=None):
     return ('<header style="max-width: 1280px; margin: 0 auto; padding: 22px 32px; display: flex; align-items: center; gap: 16px; justify-content: space-between;">\n'
             '<a href="#top" aria-label="UpCore — на главную" style="flex: 0 0 auto; display: flex; align-items: center;">' + header_logo() + '</a>\n'
             '<nav class="uc-nav" aria-label="Основное меню" style="display: flex; align-items: center; gap: 2px; font-size: 15px; white-space: nowrap;">' + nav + '</nav>\n'
-            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">'
+            '<div style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">' + (THEME_BTN if MODE == 'web' else '') +
             '<a href="' + DEMO + '"' + (' data-form="demo"' if MODE == 'web' else '') + ' class="uc-hide-m" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Провести демо</a>'
             '<a href="https://demo.up-core.ru/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 14px; background: #63D5FF; color: #0D0C15; font-weight: 700; text-decoration: none; font-size: 15px; white-space: nowrap;">Подключить</a>' + burger + '</div>\n'
             '</header>')
@@ -283,6 +283,22 @@ def header_logo():
         return '<img src="' + src('logo') + '" alt="UpCore" class="uc-hlogo" style="height: 28px; width: auto; display: block;">'
     svg = compact_logo(open(os.path.join(REPO, 'docs', 'brand', 'logo.svg'), encoding='utf-8').read()).strip()
     return svg.replace('<svg ', '<svg class="uc-hlogo" role="img" aria-label="UpCore" style="height: 28px; width: auto; display: block;" ', 1)
+
+def footer_logo():
+    """Раунд 105: в тёмной теме — прежняя картинка логотипа (вид без изменений); в светлой — вариант с тёмными буквами CORE (logo-ink.svg)."""
+    img = '<img src="%s" alt="UpCore" style="height: 22px; width: auto;">' % src('logo')
+    if MODE != 'web':
+        return img
+    return img.replace('<img ', '<img class="uc-logo-d" ', 1) + '<img src="/img/logo-ink.svg" alt="UpCore" class="uc-logo-l" loading="lazy" style="height: 22px; width: auto;">'
+
+THEME_BTN = (  # раунд 105: переключатель темы в шапке (только на компьютере; на телефоне — в мобильном меню); светлая тема — только в RU
+    '<button type="button" class="uc-theme uc-hide-m" data-theme-toggle aria-label="Включить светлую тему" title="Светлая тема" '
+    'style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border-radius: 14px; '
+    'border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #FFFFFF; cursor: pointer;">'
+    '<svg class="uc-ic-sun" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">'
+    '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>'
+    '<svg class="uc-ic-moon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+    '<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg></button>')
 
 def slider_web():
     """Слайдер скриншотов для сайта (раунд 76): только окно со скриншотами — без подписи, кнопок и паузы внизу.
@@ -1192,7 +1208,7 @@ def cta(h2, sub, primary=('Регистрация', REG), secondary=('office@dex
 
 def footer():
     return ('<footer style="border-top: 1px solid rgba(255,255,255,0.08); background: #171620;"><div style="max-width: 1280px; margin: 0 auto; padding: 32px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; font-size: 14px; color: rgba(255,255,255,0.7);">'
-            '<img src="%s" alt="UpCore" style="height: 22px; width: auto;"><span>Продукт компании Dex · +7 (930) 066-46-20 · office@dex-it.ru · @upcore_ai</span></div></footer>') % src('logo')
+            '%s<span>Продукт компании Dex · +7 (930) 066-46-20 · office@dex-it.ru · @upcore_ai</span></div></footer>') % footer_logo()
 
 PRODUCT_TEXTS = {  # раунд 20: три варианта абзаца и 3 пунктов в карточках продуктов
  1: ('РЕЗУЛЬТАТ ДЛЯ БИЗНЕСА', {

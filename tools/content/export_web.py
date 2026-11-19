@@ -73,6 +73,8 @@ def assets():
     os.makedirs(os.path.join(img, 'screens'), exist_ok=True)
     # раунд 102: логотип сжимается (без id и clip-path, координаты до сотых) — вид тот же, файл на четверть легче; он же встраивается в шапку
     open(os.path.join(img, 'logo.svg'), 'w', encoding='utf-8').write(bp.compact_logo(open(os.path.join(REPO, 'docs/brand/logo.svg'), encoding='utf-8').read()))
+    # раунд 105: логотип для светлой темы — буквы CORE тёмные (#0D0C15), шеврон и UP — фирменный голубой
+    open(os.path.join(img, 'logo-ink.svg'), 'w', encoding='utf-8').write(bp.compact_logo(open(os.path.join(REPO, 'docs/brand/logo.svg'), encoding='utf-8').read()).replace('fill="#fff"', 'fill="#0D0C15"'))
     shutil.copy(os.path.join(REPO, 'docs/brand/favicon.svg'), os.path.join(SITE, 'public', 'favicon.svg'))
     from PIL import Image
     # Слайды главной (раунд 72): все скриншоты приводятся к одной пропорции 16:10 (как окно слайдера) — показываются целиком,

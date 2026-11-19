@@ -299,6 +299,34 @@ function initSlider() {
   });
 }
 
+/* ---------------- Светлая / тёмная тема (раунд 105, только RU) ---------------- */
+// Тема по умолчанию — тёмная (исходная). Выбор хранится в localStorage («uc-theme»); при загрузке страницы его применяет
+// маленький скрипт в <head> (Base.astro) — до отрисовки, без мигания.
+function initTheme() {
+  const btns = [...document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')];
+  if (!btns.length || root.lang !== 'ru') return;
+  const meta = (n: string) => document.querySelector<HTMLMetaElement>(`meta[name="${n}"]`);
+  const sync = () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    btns.forEach((b) => {
+      b.setAttribute('aria-pressed', String(isLight));
+      if (b.classList.contains('uc-theme')) {
+        const label = isLight ? 'Включить тёмную тему' : 'Включить светлую тему';
+        b.setAttribute('aria-label', label); b.title = isLight ? 'Тёмная тема' : 'Светлая тема';
+      }
+    });
+    meta('theme-color')?.setAttribute('content', isLight ? '#F4F6FA' : '#0D0C15');
+    meta('color-scheme')?.setAttribute('content', isLight ? 'light' : 'dark');
+  };
+  btns.forEach((b) => b.addEventListener('click', () => {
+    const toLight = root.getAttribute('data-theme') !== 'light';
+    if (toLight) root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
+    try { localStorage.setItem('uc-theme', toLight ? 'light' : 'dark'); } catch { /* без сохранения */ }
+    sync();
+  }));
+  sync();
+}
+
 /* ---------------- Главная: анимация блока #core ---------------- */
 function initCore() {
   const core = document.querySelector<HTMLElement>('#core');
@@ -431,6 +459,7 @@ function initMotion() {
 }
 
 initScrollReset();
+initTheme();
 initHeader();
 initMenu();
 initSlider();

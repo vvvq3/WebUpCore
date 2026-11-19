@@ -1,6 +1,8 @@
 ---
 // Общий шаблон страницы: SEO, шрифты, стили, меню на телефоне, форма заявки, cookie-баннер, аналитика.
 import '../styles/global.css';
+import '../styles/theme-light.css';
+import { lightCss } from '../data/theme';
 // предзагрузка основных шрифтов (заголовки — Bricolage, кириллица — Onest)
 import bricolageLatin from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url';
 import onestCyr from '@fontsource-variable/onest/files/onest-cyrillic-wght-normal.woff2?url';
@@ -48,6 +50,7 @@ const t = ui[lang];
     {!noindex && hasEn && <link rel="alternate" hreflang="x-default" href={ruUrl} />}
     <meta name="theme-color" content="#0D0C15" />
     <meta name="color-scheme" content="dark" />
+    {lang === 'ru' && <script is:inline>(function(){try{if(localStorage.getItem('uc-theme')==='light'){var d=document.documentElement;d.setAttribute('data-theme','light');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#F4F6FA');var c=document.querySelector('meta[name="color-scheme"]');if(c)c.setAttribute('content','light');}}catch(e){}})();</script>}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content="website" />
@@ -67,6 +70,7 @@ const t = ui[lang];
     <link rel="preload" href={lang === 'ru' ? onestCyr : onestLatin} as="font" type="font/woff2" crossorigin />
     {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <Analytics />
+    <style is:global set:html={lightCss()} />
   </head>
   <body data-page={page} data-lang={lang}>
     <a class="uc-skip" href="#main">{t.skip}</a>

@@ -922,5 +922,7 @@
  "Управление портфелем и тех-картой команд": "Portfolio and team tech-map management",
  "Прогноз дедлайнов, контроль техдолга по ISO 25010 и закрытие пробелов в стеке.": "Deadline forecasts, tech debt control per ISO 25010 and closing skill gaps in the stack.",
  "Бесплатный пилот на 2–3 репозиториях: объективный бюджет проекта по коду — полгода истории за 1 час.": "A free pilot on 2–3 repositories: an objective project budget from the code — six months of history in one hour.",
- "35 merge request": "35 merge requests"
+ "35 merge request": "35 merge requests",
+ "Включить светлую тему": "Switch to light theme",
+ "Светлая тема": "Light theme"
 }
